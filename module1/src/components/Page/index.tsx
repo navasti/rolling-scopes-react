@@ -16,7 +16,7 @@ export class Page extends React.Component<Props, unknown> {
     return (
       <Styled.PageWrapper>
         <Header componentName={this.props.componentName} location={this.props.location} />
-        <div>{this.props.children}</div>
+        <Styled.Main>{this.props.children}</Styled.Main>
       </Styled.PageWrapper>
     );
   }

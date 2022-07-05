@@ -1,7 +1,6 @@
 import { INPUT_VALUE_KEY } from '../constants';
 import React, { ChangeEvent } from 'react';
 import { SearchBar } from 'components';
-import * as Styled from './styled';
 
 interface State {
   inputValue: string;
@@ -24,13 +23,11 @@ export class Home extends React.Component<unknown, State> {
   };
   render() {
     return (
-      <Styled.CenteredContainer>
-        <SearchBar
-          onChange={this.onChange}
-          label="Local Storage Input"
-          inputValue={this.state.inputValue}
-        />
-      </Styled.CenteredContainer>
+      <SearchBar
+        onChange={this.onChange}
+        label="Local Storage Input"
+        inputValue={this.state.inputValue}
+      />
     );
   }
 }
