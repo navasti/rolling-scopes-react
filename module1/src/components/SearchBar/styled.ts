@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const SearchBar = styled.div`
   flex-direction: column;
   align-items: center;
+  margin: 3rem 0;
   display: flex;
   width: 260px;
 `;
