@@ -11,7 +11,6 @@ interface Props {
 export class Header extends React.Component<Props, unknown> {
   constructor(props: Props) {
     super(props);
-    console.log(props);
   }
   render() {
     return (

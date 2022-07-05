@@ -9,7 +9,6 @@ interface Props {
 export class LocationBadge extends React.Component<Props, unknown> {
   constructor(props: Props) {
     super(props);
-    console.log(props);
   }
   render() {
     return (

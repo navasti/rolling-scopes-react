@@ -11,7 +11,6 @@ interface Props {
 export class Page extends React.Component<Props, unknown> {
   constructor(props: Props) {
     super(props);
-    console.log(props);
   }
   render() {
     return (
