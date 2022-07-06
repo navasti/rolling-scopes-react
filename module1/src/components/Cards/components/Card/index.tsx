@@ -14,10 +14,10 @@ export class Card extends React.Component<Props, unknown> {
     const { pokemon } = this.props;
     return (
       <Styled.Card>
-        <Styled.ImageWrapper>
-          <Styled.Image src={pokemon.sprites.front_default} alt={pokemon.name} />
-          <Styled.BaseInformation>
-            <Styled.Title>Base:</Styled.Title>
+        <Styled.ImageWrapper title="image-wrapper">
+          <Styled.Image role="img" src={pokemon.sprites.front_default} alt={pokemon.name} />
+          <Styled.BaseInformation title="base">
+            <Styled.Title title="base-title">Base:</Styled.Title>
             <Styled.Paragraph>Name: {pokemon.name}</Styled.Paragraph>
             <Styled.Paragraph>
               Types:{' '}
@@ -36,17 +36,17 @@ export class Card extends React.Component<Props, unknown> {
             <Styled.Paragraph>Height: {pokemon.height}</Styled.Paragraph>
           </Styled.BaseInformation>
         </Styled.ImageWrapper>
-        <Styled.Abilities>
-          <Styled.Title>Pokemon abilities</Styled.Title>
+        <Styled.Abilities title="abilities">
+          <Styled.Title title="abilities-title">Pokemon abilities</Styled.Title>
           {pokemon.abilities.map((ability) => (
             <Styled.Paragraph key={`${pokemon.id}-${ability.ability.name}`}>
-              {ability.ability.name.toUpperCase()}, hidden: {ability.is_hidden}, slot:{' '}
-              {ability.slot}
+              {ability.ability.name.toUpperCase()}, hidden: {ability.is_hidden ? 'yes' : 'no'},
+              slot: {ability.slot}
             </Styled.Paragraph>
           ))}
         </Styled.Abilities>
-        <Styled.Stats>
-          <Styled.Title>Pokemon statisics</Styled.Title>
+        <Styled.Stats title="stats">
+          <Styled.Title title="stats-title">Pokemon statisics</Styled.Title>
           {pokemon.stats.map((stat) => (
             <Styled.Paragraph key={`${pokemon.id}-${stat.stat.name}`}>
               {stat.stat.name.toUpperCase()}, power: {stat.base_stat}, effort: {stat.effort}
