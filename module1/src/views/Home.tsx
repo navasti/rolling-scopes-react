@@ -1,5 +1,5 @@
 import { Pokemon, PokemonData, PokemonDetails } from 'types';
-import { INPUT_VALUE_KEY } from '../constants';
+import { API_URL, INPUT_VALUE_KEY } from 'appConstants';
 import { Cards, SearchBar } from 'components';
 import React, { ChangeEvent } from 'react';
 import * as Styled from './styled';
@@ -21,7 +21,7 @@ export class Home extends React.Component<unknown, State> {
     if (value != null) {
       this.setState({ inputValue: value });
     }
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=50&offset=0')
+    fetch(API_URL)
       .then((response) => response.json())
       .then(({ results }: PokemonData) => {
         const detailed = results.map(async (pokemon: Pokemon) => {
