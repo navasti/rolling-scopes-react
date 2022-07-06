@@ -15,15 +15,21 @@ export class Header extends React.Component<Props, unknown> {
   render() {
     return (
       <Styled.Header>
-        <Styled.Nav>
+        <Styled.Nav role="navigation">
           <Styled.LinkWrapper>
-            <Link to="/">Home</Link>
+            <Link role="link" to="/">
+              Home
+            </Link>
           </Styled.LinkWrapper>
           <Styled.LinkWrapper>
-            <Link to="/about">About</Link>
+            <Link role="link" to="/about">
+              About
+            </Link>
           </Styled.LinkWrapper>
           <Styled.LinkWrapper>
-            <Link to="/invalid">Invalid</Link>
+            <Link role="link" to="/invalid">
+              Invalid
+            </Link>
           </Styled.LinkWrapper>
         </Styled.Nav>
         <LocationBadge componentName={this.props.componentName} location={this.props.location} />
