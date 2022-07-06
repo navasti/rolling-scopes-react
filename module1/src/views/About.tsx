@@ -1,11 +1,12 @@
+import * as Styled from './styled';
 import React from 'react';
 
 export class About extends React.Component {
   render() {
     return (
-      <div>
-        <h1>about us</h1>
-      </div>
+      <Styled.CommonViewLayout>
+        <Styled.CommonMessage>About us page</Styled.CommonMessage>
+      </Styled.CommonViewLayout>
     );
   }
 }

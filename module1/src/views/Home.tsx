@@ -30,6 +30,7 @@ export class Home extends React.Component<unknown, State> {
         });
         Promise.all(detailed).then((pokemons) => this.setState({ pokemons }));
       })
+      .catch((error) => console.error(error))
       .finally(() => setTimeout(() => this.setState({ isLoading: false }), 1000));
   }
   onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +43,11 @@ export class Home extends React.Component<unknown, State> {
     return (
       <Styled.HomeViewLayout>
         <SearchBar onChange={this.onChange} label="Local Storage Input" inputValue={inputValue} />
-        <Cards isLoading={isLoading} pokemons={pokemons} />
+        {!isLoading && !pokemons.length ? (
+          <Styled.CommonMessage>No pokemons found</Styled.CommonMessage>
+        ) : (
+          <Cards isLoading={isLoading} pokemons={pokemons} />
+        )}
       </Styled.HomeViewLayout>
     );
   }

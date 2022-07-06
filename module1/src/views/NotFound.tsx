@@ -1,7 +1,12 @@
+import * as Styled from './styled';
 import React from 'react';
 
 export class NotFound extends React.Component {
   render() {
-    return <h1>404 Not found</h1>;
+    return (
+      <Styled.CommonViewLayout>
+        <Styled.CommonMessage>404. Unfortunately page was not found</Styled.CommonMessage>
+      </Styled.CommonViewLayout>
+    );
   }
 }

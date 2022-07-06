@@ -7,3 +7,14 @@ export const HomeViewLayout = styled.div`
   align-items: center;
   display: flex;
 `;
+
+export const CommonViewLayout = styled.div`
+  justify-content: center;
+  display: flex;
+`;
+
+export const CommonMessage = styled.p`
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 2rem;
+`;

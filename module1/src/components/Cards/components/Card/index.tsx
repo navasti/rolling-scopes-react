@@ -36,14 +36,6 @@ export class Card extends React.Component<Props, unknown> {
             <Styled.Paragraph>Height: {pokemon.height}</Styled.Paragraph>
           </Styled.BaseInformation>
         </Styled.ImageWrapper>
-        <Styled.Stats>
-          <Styled.Title>Pokemon statisics</Styled.Title>
-          {pokemon.stats.map((stat) => (
-            <Styled.Paragraph key={`${pokemon.id}-${stat.stat.name}`}>
-              {stat.stat.name.toUpperCase()}, power: {stat.base_stat}, effort: {stat.effort}
-            </Styled.Paragraph>
-          ))}
-        </Styled.Stats>
         <Styled.Abilities>
           <Styled.Title>Pokemon abilities</Styled.Title>
           {pokemon.abilities.map((ability) => (
@@ -53,6 +45,14 @@ export class Card extends React.Component<Props, unknown> {
             </Styled.Paragraph>
           ))}
         </Styled.Abilities>
+        <Styled.Stats>
+          <Styled.Title>Pokemon statisics</Styled.Title>
+          {pokemon.stats.map((stat) => (
+            <Styled.Paragraph key={`${pokemon.id}-${stat.stat.name}`}>
+              {stat.stat.name.toUpperCase()}, power: {stat.base_stat}, effort: {stat.effort}
+            </Styled.Paragraph>
+          ))}
+        </Styled.Stats>
       </Styled.Card>
     );
   }

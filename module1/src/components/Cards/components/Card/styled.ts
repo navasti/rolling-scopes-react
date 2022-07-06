@@ -16,6 +16,9 @@ export const ImageWrapper = styled.div`
 export const Paragraph = styled.p``;
 
 export const Image = styled.img`
+  border-bottom-right-radius: 1rem;
+  border-bottom: 1px solid #aaa;
+  border-right: 1px solid #aaa;
   align-self: center;
 `;
 
@@ -25,7 +28,7 @@ export const Title = styled.span`
 `;
 
 export const BaseInformation = styled.div`
-  margin-left: 0.5rem;
+  margin-left: 1rem;
 `;
 
 export const Stats = styled.div`
