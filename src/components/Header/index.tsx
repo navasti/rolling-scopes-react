@@ -1,7 +1,7 @@
-import React from 'react';
-import * as Styled from './styled';
+import { LocationBadge } from './components';
 import { Link } from 'react-router-dom';
-import { LocationBadge } from 'components';
+import * as Styled from './styled';
+import React from 'react';
 
 interface Props {
   componentName: string;
