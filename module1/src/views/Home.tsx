@@ -1,7 +1,8 @@
-import { Pokemon, PokemonData, PokemonDetails } from 'types';
-import { API_URL, INPUT_VALUE_KEY } from 'appConstants';
+import { INPUT_VALUE_KEY } from 'appConstants';
 import { Cards, SearchBar } from 'components';
+import { fetchDetailedPokemons } from 'utils';
 import React, { ChangeEvent } from 'react';
+import { PokemonDetails } from 'types';
 import * as Styled from './styled';
 
 interface State {
@@ -21,16 +22,8 @@ export class Home extends React.Component<unknown, State> {
     if (value != null) {
       this.setState({ inputValue: value });
     }
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then(({ results }: PokemonData) => {
-        const detailed = results.map(async (pokemon: Pokemon) => {
-          const data: PokemonDetails = await fetch(pokemon.url).then((res) => res.json());
-          return data;
-        });
-        Promise.all(detailed).then((pokemons) => this.setState({ pokemons }));
-      })
-      .catch((error) => console.error(error))
+    fetchDetailedPokemons()
+      .then((pokemons) => this.setState({ pokemons }))
       .finally(() => setTimeout(() => this.setState({ isLoading: false }), 1000));
   }
   onChange = (event: ChangeEvent<HTMLInputElement>) => {
