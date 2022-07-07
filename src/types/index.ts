@@ -1,4 +1,4 @@
-export interface PokemonDetails {
+export type PokemonDetails = {
   abilities: Array<Ability>;
   base_experience: number;
   types: Array<Type>;
@@ -8,56 +8,44 @@ export interface PokemonDetails {
   weight: number;
   name: string;
   id: number;
-}
+};
 
-export interface PokemonData {
+export type PokemonData = {
   previous: null | string;
   results: Array<Pokemon>;
   count: number;
   next: string;
-}
+};
 
-export interface Pokemon {
+export type Pokemon = {
   name: string;
   url: string;
-}
+};
 
-export interface Ability {
+export type Ability = {
   ability: {
     name: string;
   };
   is_hidden: boolean;
   slot: number;
-}
+};
 
-export interface Stat {
+export type Stat = {
   base_stat: number;
   effort: number;
   stat: {
     name: string;
   };
-}
+};
 
-export interface Type {
+export type Type = {
   slot: number;
   type: {
     name: string;
   };
-}
+};
 
-export interface Sprites {
+export type Sprites = {
   back_default: string;
   front_default: string;
-}
-
-export interface PokemonDetails {
-  abilities: Array<Ability>;
-  base_experience: number;
-  types: Array<Type>;
-  stats: Array<Stat>;
-  sprites: Sprites;
-  height: number;
-  weight: number;
-  name: string;
-  id: number;
-}
+};

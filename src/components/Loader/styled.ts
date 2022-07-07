@@ -38,10 +38,10 @@ export const Loader = styled.div`
   text-indent: -9999em;
   border-radius: 50%;
   position: relative;
-  margin: 7rem auto;
+  margin: 70px auto;
   overflow: hidden;
-  font-size: 5rem;
-  height: 5rem;
+  font-size: 50px;
+  height: 50px;
   color: #222;
-  width: 5rem;
+  width: 50px;
 `;

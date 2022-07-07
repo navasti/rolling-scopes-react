@@ -1,8 +1,8 @@
 import React from 'react';
-import * as Styled from './styled';
+import * as S from './styled';
 
 export class Loader extends React.Component {
   render() {
-    return <Styled.Loader />;
+    return <S.Loader />;
   }
 }

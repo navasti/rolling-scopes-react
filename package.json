@@ -14,7 +14,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.5",
-    "typescript": "^4.4.2",
+    "styled-normalize": "^8.0.7",
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
@@ -52,12 +52,6 @@
     "src/**/*.{js,jsx,ts,tsx}": [
       "npm run lint:eslint",
       "npm run lint:prettier"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
     ]
   },
   "browserslist": {
