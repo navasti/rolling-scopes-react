@@ -32,3 +32,23 @@ export const pokemons: Array<PokemonDetails> = [
     id: 35,
   },
 ];
+
+type Store = Record<string, string>;
+
+export const localStorageMock = (() => {
+  let store: Store = {};
+  return {
+    getItem(key: string) {
+      return store[key];
+    },
+    setItem(key: string, value: string) {
+      store[key] = value.toString();
+    },
+    clear() {
+      store = {};
+    },
+    removeItem(key: string) {
+      delete store[key];
+    },
+  };
+})();

@@ -10,7 +10,7 @@ export class Card extends React.Component<Props, unknown> {
   render() {
     const { pokemon } = this.props;
     return (
-      <S.Card>
+      <S.Card title="card">
         <S.ImageWrapper title="image-wrapper">
           <S.Image role="img" src={pokemon.sprites.front_default} alt={pokemon.name} />
           <S.BaseInformation title="base">
