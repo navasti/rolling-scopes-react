@@ -14,7 +14,7 @@ export class Layout extends React.Component<Props, unknown> {
     return (
       <S.LayoutWrapper>
         <Header location={location} componentName={componentName} />
-        <S.Main>{children}</S.Main>
+        <S.Main role="main">{children}</S.Main>
       </S.LayoutWrapper>
     );
   }
