@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { detailedPokemons, localStorageMock } from 'utils';
 import { Card, SearchBar, SearchPage } from 'modules';
-import { pokemons, localStorageMock } from 'utils';
 import { BrowserRouter } from 'react-router-dom';
 import { INPUT_VALUE_KEY } from 'appConstants';
 
@@ -78,7 +78,7 @@ describe('Search page and related components', () => {
 
 describe('SearchPage components', () => {
   it('Card', () => {
-    const pokemon = pokemons[0];
+    const pokemon = detailedPokemons[0];
     render(<Card pokemon={pokemon} />);
     cardExpectations(pokemon);
   });

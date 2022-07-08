@@ -13,8 +13,8 @@ export type PokemonDetails = {
 export type PokemonData = {
   previous: null | string;
   results: Array<Pokemon>;
+  next: null | string;
   count: number;
-  next: string;
 };
 
 export type Pokemon = {

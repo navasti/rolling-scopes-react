@@ -1,6 +1,6 @@
-import { INPUT_VALUE_KEY } from 'appConstants';
+import { fetchDetailedPokemons, fetchPokemons } from 'utils';
+import { API_URL, INPUT_VALUE_KEY } from 'appConstants';
 import { SearchBar, Card } from './components';
-import { fetchDetailedPokemons } from 'utils';
 import React, { ChangeEvent } from 'react';
 import { PokemonDetails } from 'types';
 import { Loader } from 'components';
@@ -29,7 +29,8 @@ export class SearchPage extends React.Component<Props, State> {
     if (value != null) {
       this.setState({ inputValue: value });
     }
-    fetchDetailedPokemons()
+    fetchPokemons(API_URL)
+      .then((pokemons) => fetchDetailedPokemons(pokemons))
       .then((pokemons) => this.setState({ pokemons }))
       .finally(() => setTimeout(() => this.setState({ isLoading: false }), 1000));
   }

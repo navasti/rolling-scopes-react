@@ -1,4 +1,3 @@
-import { API_URL } from 'appConstants';
 import { Pokemon, PokemonData, PokemonDetails } from 'types';
 
 export const fetchPokemons = async (url: string) => {
@@ -13,10 +12,9 @@ export const fetchPokemons = async (url: string) => {
   }
 };
 
-export const fetchDetailedPokemons = async () => {
+export const fetchDetailedPokemons = async (pokemons: Array<Pokemon>) => {
   const detailedPokemons: Array<PokemonDetails> = [];
   try {
-    const pokemons = await fetchPokemons(API_URL);
     for (const pokemon of pokemons) {
       const response = await fetch(pokemon.url);
       const data: PokemonDetails = await response.json();

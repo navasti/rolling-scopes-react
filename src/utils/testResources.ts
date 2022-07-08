@@ -1,4 +1,4 @@
-import { PokemonDetails } from 'types';
+import { Pokemon, PokemonData, PokemonDetails } from 'types';
 
 export const isLoading = false;
 
@@ -8,7 +8,14 @@ export const componentName = 'About';
 
 export const location = '/about';
 
-export const pokemons: Array<PokemonDetails> = [
+export const pokemons: PokemonData = {
+  results: [{ name: 'testName', url: 'testURL' }],
+  previous: null,
+  next: null,
+  count: 1,
+};
+
+export const detailedPokemons: Array<PokemonDetails> = [
   {
     abilities: [{ ability: { name: 'ability' }, is_hidden: false, slot: 2 }],
     stats: [{ base_stat: 33, effort: 33, stat: { name: 'test' } }],
