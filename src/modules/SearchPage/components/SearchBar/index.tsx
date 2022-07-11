@@ -8,23 +8,21 @@ type Props = {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export class SearchBar extends React.Component<Props, unknown> {
-  render() {
-    const { inputValue, label, onChange } = this.props;
-    return (
-      <S.SearchBar>
-        <S.Label htmlFor="storage-input">{label}</S.Label>
-        <S.InputWrapper>
-          <SearchIcon />
-          <S.Input
-            placeholder="Type here"
-            onChange={onChange}
-            value={inputValue}
-            id="storage-input"
-            type="text"
-          />
-        </S.InputWrapper>
-      </S.SearchBar>
-    );
-  }
-}
+export const SearchBar = (props: Props) => {
+  const { inputValue, label, onChange } = props;
+  return (
+    <S.SearchBar>
+      <S.Label htmlFor="storage-input">{label}</S.Label>
+      <S.InputWrapper>
+        <SearchIcon />
+        <S.Input
+          placeholder="Type here"
+          onChange={onChange}
+          value={inputValue}
+          id="storage-input"
+          type="text"
+        />
+      </S.InputWrapper>
+    </S.SearchBar>
+  );
+};
