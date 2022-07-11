@@ -10,13 +10,13 @@ export class Card extends React.Component<Props, unknown> {
   render() {
     const { pokemon } = this.props;
     return (
-      <S.Card title="card">
-        <S.ImageWrapper title="image-wrapper">
+      <S.Card>
+        <S.ImageWrapper>
           <S.Image role="img" src={pokemon.sprites.front_default} alt={pokemon.name} />
-          <S.BaseInformation title="base">
-            <S.Title title="base-title">Base:</S.Title>
-            <S.Paragraph>Name: {pokemon.name}</S.Paragraph>
-            <S.Paragraph>
+          <S.BaseInformation>
+            <S.Title>Base:</S.Title>
+            <p>Name: {pokemon.name}</p>
+            <p>
               Types:{' '}
               {pokemon.types.map(({ type }, index) => {
                 const isLast = pokemon.types.length === index + 1;
@@ -27,27 +27,27 @@ export class Card extends React.Component<Props, unknown> {
                   </span>
                 );
               })}
-            </S.Paragraph>
-            <S.Paragraph>Base experience: {pokemon.base_experience}</S.Paragraph>
-            <S.Paragraph>Weight: {pokemon.weight}</S.Paragraph>
-            <S.Paragraph>Height: {pokemon.height}</S.Paragraph>
+            </p>
+            <p>Base experience: {pokemon.base_experience}</p>
+            <p>Weight: {pokemon.weight}</p>
+            <p>Height: {pokemon.height}</p>
           </S.BaseInformation>
         </S.ImageWrapper>
-        <S.Abilities title="abilities">
-          <S.Title title="abilities-title">Pokemon abilities</S.Title>
+        <S.Abilities>
+          <S.Title>Pokemon abilities</S.Title>
           {pokemon.abilities.map((ability) => (
-            <S.Paragraph key={`${pokemon.id}-${ability.ability.name}`}>
+            <p key={`${pokemon.id}-${ability.ability.name}`}>
               {ability.ability.name.toUpperCase()}, hidden: {ability.is_hidden ? 'yes' : 'no'},
               slot: {ability.slot}
-            </S.Paragraph>
+            </p>
           ))}
         </S.Abilities>
-        <S.Stats title="stats">
-          <S.Title title="stats-title">Pokemon statisics</S.Title>
+        <S.Stats>
+          <S.Title>Pokemon statisics</S.Title>
           {pokemon.stats.map((stat) => (
-            <S.Paragraph key={`${pokemon.id}-${stat.stat.name}`}>
+            <p key={`${pokemon.id}-${stat.stat.name}`}>
               {stat.stat.name.toUpperCase()}, power: {stat.base_stat}, effort: {stat.effort}
-            </S.Paragraph>
+            </p>
           ))}
         </S.Stats>
       </S.Card>

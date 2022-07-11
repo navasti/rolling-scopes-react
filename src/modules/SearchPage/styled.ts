@@ -14,11 +14,7 @@ export const CommonMessage = styled.p`
   font-size: 1.4rem;
 `;
 
-type Props = {
-  isLoading: boolean;
-};
-
-export const CardsWrapper = styled.div<Props>`
+export const CardsWrapper = styled.div<{ isLoading: boolean }>`
   align-self: ${({ isLoading }) => (isLoading ? 'center' : 'flex-start')};
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   display: grid;

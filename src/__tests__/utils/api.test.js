@@ -1,4 +1,5 @@
-import { fetchDetailedPokemons, fetchPokemons, detailedPokemons, pokemons } from 'utils';
+import { fetchDetailedPokemons, fetchPokemons } from 'utils';
+import { detailedPokemons, pokemons } from '__mocks__';
 import { API_URL } from 'appConstants';
 
 const pokemonMock = () => {

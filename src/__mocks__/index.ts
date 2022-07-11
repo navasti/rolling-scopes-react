@@ -1,4 +1,4 @@
-import { Pokemon, PokemonData, PokemonDetails } from 'types';
+import { PokemonData, PokemonDetails } from 'types';
 
 export const isLoading = false;
 

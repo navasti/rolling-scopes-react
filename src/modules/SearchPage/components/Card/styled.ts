@@ -13,8 +13,6 @@ export const ImageWrapper = styled.div`
   display: flex;
 `;
 
-export const Paragraph = styled.p``;
-
 export const Image = styled.img`
   border-bottom-right-radius: 10px;
   border-bottom: 1px solid #aaa;

@@ -3,7 +3,8 @@ import { Pokemon, PokemonData, PokemonDetails } from 'types';
 export const fetchPokemons = async (url: string) => {
   let pokemons: Array<Pokemon> = [];
   try {
-    const { results }: PokemonData = await fetch(url).then((res) => res.json());
+    const data = await fetch(url);
+    const { results }: PokemonData = await data.json();
     pokemons = [...results];
   } catch (error) {
     console.error(error);
@@ -13,13 +14,13 @@ export const fetchPokemons = async (url: string) => {
 };
 
 export const fetchDetailedPokemons = async (pokemons: Array<Pokemon>) => {
-  const detailedPokemons: Array<PokemonDetails> = [];
+  let detailedPokemons: Array<PokemonDetails> = [];
   try {
-    for (const pokemon of pokemons) {
+    const responses = pokemons.map(async (pokemon) => {
       const response = await fetch(pokemon.url);
-      const data: PokemonDetails = await response.json();
-      detailedPokemons.push(data);
-    }
+      return (await response.json()) as PokemonDetails;
+    });
+    detailedPokemons = await Promise.all(responses);
   } catch (error) {
     console.error(error);
   } finally {

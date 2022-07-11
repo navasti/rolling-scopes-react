@@ -49,7 +49,7 @@ export class SearchPage extends React.Component<Props, State> {
           {!isLoading && !pokemons.length ? (
             <S.CommonMessage>No pokemons found</S.CommonMessage>
           ) : (
-            <S.CardsWrapper isLoading={isLoading} title="cards">
+            <S.CardsWrapper isLoading={isLoading}>
               {isLoading ? (
                 <Loader />
               ) : (

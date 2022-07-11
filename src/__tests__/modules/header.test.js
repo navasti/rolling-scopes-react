@@ -1,5 +1,5 @@
+import { location, componentName, links } from '__mocks__';
 import { render, screen } from '@testing-library/react';
-import { location, componentName, links } from 'utils';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { LocationBadge, Header } from 'modules';

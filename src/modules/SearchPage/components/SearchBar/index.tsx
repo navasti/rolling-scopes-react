@@ -12,11 +12,17 @@ export class SearchBar extends React.Component<Props, unknown> {
   render() {
     const { inputValue, label, onChange } = this.props;
     return (
-      <S.SearchBar title="search-bar">
-        <S.Label title="local-storage-label">{label}</S.Label>
+      <S.SearchBar>
+        <S.Label htmlFor="storage-input">{label}</S.Label>
         <S.InputWrapper>
           <SearchIcon />
-          <S.Input onChange={onChange} title="local-storage-input" value={inputValue} type="text" />
+          <S.Input
+            placeholder="Type here"
+            onChange={onChange}
+            value={inputValue}
+            id="storage-input"
+            type="text"
+          />
         </S.InputWrapper>
       </S.SearchBar>
     );
