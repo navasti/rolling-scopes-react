@@ -22,7 +22,7 @@ const headerExpectations = () => {
     expect(childNodes.length).toEqual(1);
     expect(childNodes[0].textContent).toEqual(links[idx]);
   });
-  expect(nav.childNodes.length).toEqual(3);
+  expect(nav.childNodes.length).toEqual(links.length);
 };
 
 const routingExpectations = async () => {
