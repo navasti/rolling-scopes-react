@@ -1,4 +1,5 @@
 export { App } from './App';
+export { Forms } from './Form';
 export { About } from './About';
 export { Layout } from './Layout';
 export { Header } from './Header';
