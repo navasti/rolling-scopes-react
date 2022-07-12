@@ -1,7 +1,17 @@
+import { CommonFieldType, GenderFieldType, SelectFieldType } from 'types';
 import React, { createRef, FormEvent, RefObject } from 'react';
-import { FormCard } from './components';
 import { Layout } from 'modules';
 import * as S from './styled';
+import {
+  BirthdayField,
+  ConsentField,
+  GenderField,
+  AvatarField,
+  ShinyField,
+  TypeField,
+  NameField,
+  FormCard,
+} from './components';
 
 type Props = {
   componentName: string;
@@ -9,33 +19,101 @@ type Props = {
 };
 
 type State = {
-  birthdayField: RefObject<HTMLInputElement>;
-  isShinyField: RefObject<HTMLInputElement>;
-  consentField: RefObject<HTMLInputElement>;
-  femaleField: RefObject<HTMLInputElement>;
-  avatarField: RefObject<HTMLInputElement>;
-  typeField: RefObject<HTMLSelectElement>;
-  nameField: RefObject<HTMLInputElement>;
-  maleField: RefObject<HTMLInputElement>;
+  isShinyField: Pick<CommonFieldType, 'inputRef'>;
+  birthdayField: CommonFieldType;
+  consentField: CommonFieldType;
+  genderField: GenderFieldType;
+  avatarField: CommonFieldType;
+  typeField: SelectFieldType;
+  nameField: CommonFieldType;
 };
 
 export class Forms extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      birthdayField: createRef(),
-      consentField: createRef(),
-      isShinyField: createRef(),
-      femaleField: createRef(),
-      avatarField: createRef(),
-      maleField: createRef(),
-      typeField: createRef(),
-      nameField: createRef(),
+      birthdayField: {
+        inputRef: createRef(),
+        errorRef: createRef(),
+      },
+      consentField: {
+        inputRef: createRef(),
+        errorRef: createRef(),
+      },
+      isShinyField: {
+        inputRef: createRef(),
+      },
+      genderField: {
+        femaleInputRef: createRef(),
+        maleInputRef: createRef(),
+        errorRef: createRef(),
+      },
+      avatarField: {
+        inputRef: createRef(),
+        errorRef: createRef(),
+      },
+      typeField: {
+        selectRef: createRef(),
+        errorRef: createRef(),
+      },
+      nameField: {
+        inputRef: createRef(),
+        errorRef: createRef(),
+      },
     };
   }
 
+  clearError = (errorRef: RefObject<HTMLSpanElement>) => {
+    if (errorRef?.current) {
+      errorRef.current.style.display = 'none';
+    }
+  };
+
+  validateGenderField = () => {
+    const { errorRef, femaleInputRef, maleInputRef } = this.state.genderField;
+    if (!femaleInputRef?.current?.checked && !maleInputRef?.current?.checked && errorRef?.current) {
+      errorRef.current.style.display = 'block';
+    }
+  };
+
+  validateConsentField = () => {
+    const { errorRef, inputRef } = this.state.consentField;
+    if (!inputRef?.current?.checked && errorRef?.current) {
+      errorRef.current.style.display = 'block';
+    }
+  };
+
+  validateAvatarField = () => {
+    const { errorRef, inputRef } = this.state.avatarField;
+    if (!inputRef.current?.files?.length && errorRef?.current) {
+      errorRef.current.style.display = 'block';
+    }
+  };
+
+  validateCommonField = ({ errorRef, inputRef }: CommonFieldType) => {
+    if (!inputRef.current?.value && errorRef.current) {
+      errorRef.current.style.display = 'block';
+    }
+  };
+
+  validateTypeField = () => {
+    const { errorRef, selectRef } = this.state.typeField;
+    if (!selectRef.current?.value && errorRef?.current) {
+      errorRef.current.style.display = 'block';
+    }
+  };
+
+  // !todo additional validation on click
+
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    this.validateTypeField();
+    this.validateAvatarField();
+    this.validateGenderField();
+    this.validateConsentField();
+    this.validateCommonField(this.state.nameField);
+    this.validateCommonField(this.state.consentField);
+    this.validateCommonField(this.state.birthdayField);
   };
 
   render() {
@@ -46,69 +124,13 @@ export class Forms extends React.Component<Props, State> {
         <S.CommonView>
           <S.FormHeading>Create custom pokemon!</S.FormHeading>
           <S.Form onSubmit={this.handleSubmit}>
-            <S.CommonLabel htmlFor="name">
-              Name
-              <input id="name" ref={state.nameField} type="text" placeholder="name" />
-            </S.CommonLabel>
-
-            <S.FileField htmlFor="avatar">
-              Avatar
-              <input id="avatar" ref={state.avatarField} type="file" />
-            </S.FileField>
-
-            <S.RadioWrapper>
-              Gender
-              <div>
-                <S.RadioField htmlFor="male">
-                  <input type="radio" ref={state.maleField} id="male" name="gender" value="male" />
-                  Male
-                </S.RadioField>
-                <S.RadioField htmlFor="female">
-                  <input
-                    type="radio"
-                    ref={state.femaleField}
-                    id="female"
-                    name="gender"
-                    value="female"
-                  />
-                  Female
-                </S.RadioField>
-              </div>
-            </S.RadioWrapper>
-
-            <S.CommonLabel htmlFor="type">
-              Main type
-              <select id="type" ref={state.typeField}>
-                <option value=""></option>
-                <option value="fire">fire</option>
-                <option value="grass">grass</option>
-                <option value="poison">poison</option>
-                <option value="flying">flying</option>
-                <option value="ground">ground</option>
-                <option value="psycho">psycho</option>
-                <option value="water">water</option>
-                <option value="ice">ice</option>
-              </select>
-            </S.CommonLabel>
-
-            <S.SwitchWrapper>
-              Shiny
-              <S.SwitchField htmlFor="shiny">
-                <input id="shiny" ref={state.isShinyField} type="checkbox" />
-                <span></span>
-              </S.SwitchField>
-            </S.SwitchWrapper>
-
-            <S.CommonLabel htmlFor="birthdate">
-              Birthdate
-              <input id="birthdate" ref={state.birthdayField} type="date" />
-            </S.CommonLabel>
-
-            <S.CheckboxField htmlFor="consent">
-              <input id="consent" ref={state.consentField} type="checkbox" /> I have read and accept
-              the regulations
-            </S.CheckboxField>
-
+            <NameField refs={state.nameField} onClick={this.clearError} />
+            <AvatarField refs={state.avatarField} onClick={this.clearError} />
+            <GenderField refs={state.genderField} onClick={this.clearError} />
+            <TypeField refs={state.typeField} onClick={this.clearError} />
+            <BirthdayField refs={state.birthdayField} onClick={this.clearError} />
+            <ShinyField inputRef={state.isShinyField.inputRef} />
+            <ConsentField refs={state.consentField} onClick={this.clearError} />
             <S.SubmitButton type="submit">Submit</S.SubmitButton>
           </S.Form>
           <hr />

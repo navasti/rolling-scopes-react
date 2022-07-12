@@ -1,3 +1,5 @@
+import { RefObject } from 'react';
+
 export type PokemonDetails = {
   abilities: Array<Ability>;
   base_experience: number;
@@ -48,4 +50,20 @@ export type Type = {
 export type Sprites = {
   back_default: string;
   front_default: string;
+};
+
+export type CommonFieldType = {
+  inputRef: RefObject<HTMLInputElement>;
+  errorRef: RefObject<HTMLSpanElement>;
+};
+
+export type GenderFieldType = {
+  femaleInputRef: RefObject<HTMLInputElement>;
+  maleInputRef: RefObject<HTMLInputElement>;
+  errorRef: RefObject<HTMLSpanElement>;
+};
+
+export type SelectFieldType = {
+  selectRef: RefObject<HTMLSelectElement>;
+  errorRef: RefObject<HTMLSpanElement>;
 };
