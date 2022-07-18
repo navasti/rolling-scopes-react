@@ -67,3 +67,12 @@ export type SelectFieldType = {
   selectRef: RefObject<HTMLSelectElement>;
   errorRef: RefObject<HTMLSpanElement>;
 };
+
+export type CustomPokemon = {
+  avatar: HTMLImageElement | null;
+  birthday: string;
+  gender: string;
+  shiny: boolean;
+  name: string;
+  type: string;
+};

@@ -15,7 +15,7 @@ export const NameField = (props: Props) => {
   return (
     <>
       <S.CommonLabel htmlFor="name">
-        Name
+        *Name
         <input
           onClick={() => onClick(errorRef)}
           placeholder="name"

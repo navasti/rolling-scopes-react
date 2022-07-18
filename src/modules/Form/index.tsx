@@ -1,7 +1,8 @@
-import { CommonFieldType, GenderFieldType, SelectFieldType } from 'types';
+import { CommonFieldType, CustomPokemon, GenderFieldType, SelectFieldType } from 'types';
 import React, { createRef, FormEvent, RefObject } from 'react';
 import { Layout } from 'modules';
 import * as S from './styled';
+import { uuid } from 'utils';
 import {
   BirthdayField,
   ConsentField,
@@ -20,6 +21,7 @@ type Props = {
 
 type State = {
   isShinyField: Pick<CommonFieldType, 'inputRef'>;
+  pokemons: Array<CustomPokemon & { id: string }>;
   birthdayField: CommonFieldType;
   consentField: CommonFieldType;
   genderField: GenderFieldType;
@@ -28,10 +30,11 @@ type State = {
   nameField: CommonFieldType;
 };
 
-export class Forms extends React.Component<Props, State> {
+export class Form extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      pokemons: [],
       birthdayField: {
         inputRef: createRef(),
         errorRef: createRef(),
@@ -71,49 +74,53 @@ export class Forms extends React.Component<Props, State> {
 
   validateGenderField = () => {
     const { errorRef, femaleInputRef, maleInputRef } = this.state.genderField;
-    if (!femaleInputRef?.current?.checked && !maleInputRef?.current?.checked && errorRef?.current) {
-      errorRef.current.style.display = 'block';
-    }
+    if (femaleInputRef.current?.checked) return 'female';
+    else if (maleInputRef.current?.checked) return 'male';
+    else errorRef?.current && (errorRef.current.style.display = 'block');
   };
 
   validateConsentField = () => {
     const { errorRef, inputRef } = this.state.consentField;
-    if (!inputRef?.current?.checked && errorRef?.current) {
-      errorRef.current.style.display = 'block';
-    }
-  };
-
-  validateAvatarField = () => {
-    const { errorRef, inputRef } = this.state.avatarField;
-    if (!inputRef.current?.files?.length && errorRef?.current) {
-      errorRef.current.style.display = 'block';
-    }
+    if (inputRef?.current?.checked) return inputRef.current.checked;
+    else errorRef?.current && (errorRef.current.style.display = 'block');
   };
 
   validateCommonField = ({ errorRef, inputRef }: CommonFieldType) => {
-    if (!inputRef.current?.value && errorRef.current) {
-      errorRef.current.style.display = 'block';
-    }
+    if (inputRef.current?.value) return inputRef.current.value;
+    else errorRef?.current && (errorRef.current.style.display = 'block');
   };
 
   validateTypeField = () => {
     const { errorRef, selectRef } = this.state.typeField;
-    if (!selectRef.current?.value && errorRef?.current) {
-      errorRef.current.style.display = 'block';
-    }
+    if (selectRef.current?.value) return selectRef.current.value;
+    else errorRef?.current && (errorRef.current.style.display = 'block');
   };
-
-  // !todo additional validation on click
 
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.validateTypeField();
-    this.validateAvatarField();
-    this.validateGenderField();
-    this.validateConsentField();
-    this.validateCommonField(this.state.nameField);
-    this.validateCommonField(this.state.consentField);
-    this.validateCommonField(this.state.birthdayField);
+    const type = this.validateTypeField();
+    const gender = this.validateGenderField();
+    const consent = this.validateConsentField();
+    const name = this.validateCommonField(this.state.nameField);
+    const birthday = this.validateCommonField(this.state.birthdayField);
+    if (type && gender && consent && name && birthday) {
+      const shiny = !!this.state.isShinyField.inputRef.current?.checked;
+      const file = this.state.avatarField.inputRef.current?.files?.[0] || null;
+      const avatar = new Image();
+      if (file) avatar.src = URL.createObjectURL(file);
+      const customPokemon: CustomPokemon & { id: string } = {
+        name,
+        type,
+        shiny,
+        gender,
+        birthday,
+        id: uuid(),
+        avatar: file ? avatar : null,
+      };
+      this.setState({
+        pokemons: [...this.state.pokemons, customPokemon],
+      });
+    }
   };
 
   render() {
@@ -125,7 +132,7 @@ export class Forms extends React.Component<Props, State> {
           <S.FormHeading>Create custom pokemon!</S.FormHeading>
           <S.Form onSubmit={this.handleSubmit}>
             <NameField refs={state.nameField} onClick={this.clearError} />
-            <AvatarField refs={state.avatarField} onClick={this.clearError} />
+            <AvatarField refs={state.avatarField} />
             <GenderField refs={state.genderField} onClick={this.clearError} />
             <TypeField refs={state.typeField} onClick={this.clearError} />
             <BirthdayField refs={state.birthdayField} onClick={this.clearError} />
@@ -134,7 +141,9 @@ export class Forms extends React.Component<Props, State> {
             <S.SubmitButton type="submit">Submit</S.SubmitButton>
           </S.Form>
           <hr />
-          <FormCard />
+          {this.state.pokemons.map((pokemon) => (
+            <FormCard key={pokemon.id} customPokemon={pokemon} />
+          ))}
         </S.CommonView>
       </Layout>
     );

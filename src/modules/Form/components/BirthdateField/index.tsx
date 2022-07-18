@@ -16,7 +16,7 @@ export const BirthdayField = (props: Props) => {
   return (
     <>
       <S.CommonLabel htmlFor="birthdate">
-        Birthdate
+        *Birthdate
         <input
           onClick={() => onClick(errorRef)}
           max={getTodayDate()}

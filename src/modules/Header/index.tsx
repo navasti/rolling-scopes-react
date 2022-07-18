@@ -23,8 +23,8 @@ export const Header = ({ componentName, location }: Props) => {
           </Link>
         </S.LinkWrapper>
         <S.LinkWrapper>
-          <Link role="link" to="/forms">
-            Forms
+          <Link role="link" to="/form">
+            Form
           </Link>
         </S.LinkWrapper>
         <S.LinkWrapper>

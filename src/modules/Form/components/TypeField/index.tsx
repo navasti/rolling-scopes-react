@@ -17,7 +17,7 @@ export const TypeField = (props: Props) => {
   return (
     <>
       <S.CommonLabel htmlFor="type">
-        Main type
+        *Main type
         <select id="type" ref={selectRef} onClick={() => onClick(errorRef)}>
           <option value=""></option>
           {pokemonTypes.map((type) => (

@@ -16,7 +16,7 @@ export const GenderField = (props: Props) => {
   return (
     <>
       <S.RadioWrapper>
-        Gender
+        *Gender
         <div>
           <S.RadioField htmlFor="male">
             <input
