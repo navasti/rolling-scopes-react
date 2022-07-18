@@ -69,7 +69,7 @@ export type SelectFieldType = {
 };
 
 export type CustomPokemon = {
-  avatar: HTMLImageElement | null;
+  avatar: File | null;
   birthday: string;
   gender: string;
   shiny: boolean;

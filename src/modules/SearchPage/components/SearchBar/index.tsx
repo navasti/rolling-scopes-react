@@ -1,5 +1,5 @@
 import * as S from './styled';
-import { SearchIcon } from 'assets/images';
+import { SearchIcon } from 'assets/images/svg';
 import React, { ChangeEvent } from 'react';
 
 type Props = {

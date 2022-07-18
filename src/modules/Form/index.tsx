@@ -106,8 +106,6 @@ export class Form extends React.Component<Props, State> {
     if (type && gender && consent && name && birthday) {
       const shiny = !!this.state.isShinyField.inputRef.current?.checked;
       const file = this.state.avatarField.inputRef.current?.files?.[0] || null;
-      const avatar = new Image();
-      if (file) avatar.src = URL.createObjectURL(file);
       const customPokemon: CustomPokemon & { id: string } = {
         name,
         type,
@@ -115,7 +113,7 @@ export class Form extends React.Component<Props, State> {
         gender,
         birthday,
         id: uuid(),
-        avatar: file ? avatar : null,
+        avatar: file,
       };
       this.setState({
         pokemons: [...this.state.pokemons, customPokemon],
@@ -141,9 +139,11 @@ export class Form extends React.Component<Props, State> {
             <S.SubmitButton type="submit">Submit</S.SubmitButton>
           </S.Form>
           <hr />
-          {this.state.pokemons.map((pokemon) => (
-            <FormCard key={pokemon.id} customPokemon={pokemon} />
-          ))}
+          <S.CardsGrid>
+            {this.state.pokemons.map((pokemon) => (
+              <FormCard key={pokemon.id} customPokemon={pokemon} />
+            ))}
+          </S.CardsGrid>
         </S.CommonView>
       </Layout>
     );

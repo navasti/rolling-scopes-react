@@ -2,7 +2,7 @@ import { PokemonData, PokemonDetails } from 'types';
 
 export const isLoading = false;
 
-export const links = ['Home', 'About', 'Forms', 'Invalid'];
+export const links = ['Home', 'About', 'Form', 'Invalid'];
 
 export const TestingElement = () => <p>testing element</p>;
 

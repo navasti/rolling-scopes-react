@@ -39,3 +39,10 @@ export const SubmitButton = styled.button`
     color: #353535;
   }
 `;
+
+export const CardsGrid = styled.div`
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: grid;
+  width: 100%;
+  gap: 10px;
+`;
