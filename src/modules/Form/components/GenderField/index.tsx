@@ -2,7 +2,7 @@ import * as S from './styled';
 import React, { RefObject } from 'react';
 
 type Props = {
-  onClick: (errorRef: RefObject<HTMLSpanElement>) => void;
+  onChange: (errorRef: RefObject<HTMLSpanElement>) => void;
   refs: {
     femaleInputRef: RefObject<HTMLInputElement>;
     maleInputRef: RefObject<HTMLInputElement>;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const GenderField = (props: Props) => {
-  const { onClick, refs } = props;
+  const { onChange, refs } = props;
   const { errorRef, femaleInputRef, maleInputRef } = refs;
   return (
     <>
@@ -20,7 +20,7 @@ export const GenderField = (props: Props) => {
         <div>
           <S.RadioField htmlFor="male">
             <input
-              onClick={() => onClick(errorRef)}
+              onChange={() => onChange(errorRef)}
               ref={maleInputRef}
               name="gender"
               type="radio"
@@ -31,7 +31,7 @@ export const GenderField = (props: Props) => {
           </S.RadioField>
           <S.RadioField htmlFor="female">
             <input
-              onClick={() => onClick(errorRef)}
+              onChange={() => onChange(errorRef)}
               ref={femaleInputRef}
               value="female"
               name="gender"

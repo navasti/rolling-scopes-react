@@ -3,7 +3,7 @@ import { getTodayDate } from 'utils';
 import * as S from './styled';
 
 type Props = {
-  onClick: (errorRef: RefObject<HTMLSpanElement>) => void;
+  onChange: (errorRef: RefObject<HTMLSpanElement>) => void;
   refs: {
     inputRef: RefObject<HTMLInputElement>;
     errorRef: RefObject<HTMLSpanElement>;
@@ -11,14 +11,14 @@ type Props = {
 };
 
 export const BirthdayField = (props: Props) => {
-  const { onClick, refs } = props;
+  const { onChange, refs } = props;
   const { errorRef, inputRef } = refs;
   return (
     <>
       <S.CommonLabel htmlFor="birthdate">
         *Birthdate
         <input
-          onClick={() => onClick(errorRef)}
+          onChange={() => onChange(errorRef)}
           max={getTodayDate()}
           id="birthdate"
           ref={inputRef}

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const CommonView = styled.div`
   flex-direction: column;
   align-items: center;
+  padding: 0 10px;
   display: flex;
   hr {
     width: 200px;
@@ -23,6 +24,13 @@ export const Form = styled.form`
   display: flex;
 `;
 
+export const SuccessMessage = styled.span`
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+  color: #006600;
+`;
+
 export const SubmitButton = styled.button`
   transition: 0.2s ease;
   border: 2px solid #353535;
@@ -35,6 +43,11 @@ export const SubmitButton = styled.button`
   width: 200px;
   color: #eee;
   &:hover {
+    background-color: #eee;
+    color: #353535;
+  }
+  &:disabled {
+    cursor: not-allowed;
     background-color: #eee;
     color: #353535;
   }

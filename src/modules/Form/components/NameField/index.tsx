@@ -2,7 +2,7 @@ import React, { RefObject } from 'react';
 import * as S from './styled';
 
 type Props = {
-  onClick: (errorRef: RefObject<HTMLSpanElement>) => void;
+  onChange: (errorRef: RefObject<HTMLSpanElement>) => void;
   refs: {
     inputRef: RefObject<HTMLInputElement>;
     errorRef: RefObject<HTMLSpanElement>;
@@ -10,14 +10,15 @@ type Props = {
 };
 
 export const NameField = (props: Props) => {
-  const { onClick, refs } = props;
+  const { onChange, refs } = props;
   const { errorRef, inputRef } = refs;
+
   return (
     <>
       <S.CommonLabel htmlFor="name">
         *Name
         <input
-          onClick={() => onClick(errorRef)}
+          onChange={() => onChange(errorRef)}
           placeholder="name"
           ref={inputRef}
           type="text"
