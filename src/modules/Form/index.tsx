@@ -188,7 +188,7 @@ export class Form extends React.Component<Props, State> {
           </S.Form>
           <hr />
           <S.CardsGrid>
-            {this.state.pokemons.map((pokemon) => (
+            {state.pokemons.map((pokemon) => (
               <FormCard key={pokemon.id} customPokemon={pokemon} />
             ))}
           </S.CardsGrid>

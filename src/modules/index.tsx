@@ -7,3 +7,13 @@ export { NotFound } from './NotFound';
 export { SearchPage } from './SearchPage';
 export { LocationBadge } from './Header/components';
 export { Card, SearchBar } from './SearchPage/components';
+export {
+  BirthdayField,
+  ConsentField,
+  AvatarField,
+  GenderField,
+  ShinyField,
+  NameField,
+  TypeField,
+  FormCard,
+} from './Form/components';

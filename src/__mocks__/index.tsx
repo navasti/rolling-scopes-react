@@ -1,4 +1,5 @@
-import { PokemonData, PokemonDetails } from 'types';
+import { CustomPokemon, PokemonData, PokemonDetails } from 'types';
+import { RefObject } from 'react';
 
 export const isLoading = false;
 
@@ -10,11 +11,28 @@ export const componentName = 'About';
 
 export const location = '/about';
 
+export const TestingErrorElement = () => <p>testing error</p>;
+
 export const pokemons: PokemonData = {
   results: [{ name: 'testName', url: 'testURL' }],
   previous: null,
   next: null,
   count: 1,
+};
+
+export const testOnChange = (errorRef: RefObject<HTMLSpanElement>) => {
+  if (errorRef.current?.style.display === 'block') {
+    errorRef.current.style.display = 'none';
+  }
+};
+
+export const customPokemon: CustomPokemon = {
+  birthday: '01-01-1999',
+  gender: 'male',
+  avatar: null,
+  name: 'pokemonix',
+  type: 'fire',
+  shiny: true,
 };
 
 export const detailedPokemons: Array<PokemonDetails> = [
