@@ -1,4 +1,5 @@
-import { Pokemon, PokemonData, PokemonDetails } from 'types';
+import { Pokemon, PokemonData, PokemonDetails, PokemonType } from 'types';
+import { API } from 'appConstants';
 
 export const fetchPokemons = async (url: string) => {
   let pokemons: Array<Pokemon> = [];
@@ -27,3 +28,26 @@ export const fetchDetailedPokemons = async (pokemons: Array<Pokemon>) => {
     return detailedPokemons;
   }
 };
+
+export const fetchPokemonByParameter = async <T>(url: string, param: string): Promise<T | null> => {
+  let results: T | null = null;
+  try {
+    const response = await fetch(`${url}/${param}`);
+    const data: T = await response.json();
+    results = data;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    return results;
+  }
+};
+
+// export const fetch;
+
+// pokemons, species, ability, type
+
+// pokemon/charizard
+// type || type/normal
+// encounter-method
+// ability/4 || ability/blaze
+// move || move/tackle

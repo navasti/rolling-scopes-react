@@ -15,3 +15,16 @@ export const getTodayDate = (): string => {
 export const uuid = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
+
+export const debounce = <Params extends unknown[]>(
+  func: (...args: Params) => unknown,
+  timeout: number
+): ((...args: Params) => void) => {
+  let timer: NodeJS.Timeout;
+  return (...args: Params) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func(...args);
+    }, timeout);
+  };
+};

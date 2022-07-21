@@ -1,6 +1,6 @@
 import { fetchDetailedPokemons, fetchPokemons } from 'utils';
 import { detailedPokemons, pokemons } from '__mocks__';
-import { API_URL } from 'appConstants';
+import { API } from 'appConstants';
 
 const pokemonMock = () => {
   global.fetch = jest.fn(() =>
@@ -22,7 +22,7 @@ describe('API calls', () => {
   let fetchedPokemons = [];
   it('Fetch pokemons', async () => {
     pokemonMock();
-    const data = await fetchPokemons(API_URL);
+    const data = await fetchPokemons(API.POKEMONS);
     expect(data).toEqual(pokemons.results);
     fetchedPokemons = [...data];
   });
