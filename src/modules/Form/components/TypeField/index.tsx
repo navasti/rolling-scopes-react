@@ -1,33 +1,33 @@
-import React, { RefObject } from 'react';
+import { POKEMON_TYPES } from 'appConstants';
+import React, { forwardRef } from 'react';
+import { FIELDS } from 'appConstants';
 import * as S from './styled';
 
 type Props = {
-  onChange: (errorRef: RefObject<HTMLSpanElement>) => void;
-  refs: {
-    selectRef: RefObject<HTMLSelectElement>;
-    errorRef: RefObject<HTMLSpanElement>;
-  };
+  onChange: (field: string) => void;
+  children: JSX.Element;
 };
 
-const pokemonTypes = ['fire', 'grass', 'poison', 'flying', 'ground', 'psycho', 'water', 'ice'];
-
-export const TypeField = (props: Props) => {
-  const { onChange, refs } = props;
-  const { errorRef, selectRef } = refs;
+export const TypeField = forwardRef<HTMLSelectElement, Props>(({ children, onChange }, ref) => {
   return (
     <>
-      <S.CommonLabel htmlFor="type">
+      <S.CommonLabel htmlFor={FIELDS.TYPE}>
         *Main type
-        <select id="type" ref={selectRef} onChange={() => onChange(errorRef)}>
+        <select
+          onChange={() => onChange(FIELDS.TYPE)}
+          name={FIELDS.TYPE}
+          id={FIELDS.TYPE}
+          ref={ref}
+        >
           <option value=""></option>
-          {pokemonTypes.map((type) => (
+          {POKEMON_TYPES.map((type) => (
             <option key={type} value={type}>
               {type}
             </option>
           ))}
         </select>
       </S.CommonLabel>
-      <S.ErrorMessage ref={errorRef}>Type of the pokemon is required</S.ErrorMessage>
+      {children}
     </>
   );
-};
+});

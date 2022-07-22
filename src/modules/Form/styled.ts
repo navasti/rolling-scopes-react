@@ -59,3 +59,15 @@ export const CardsGrid = styled.div`
   width: 100%;
   gap: 10px;
 `;
+
+export const GenderWrapper = styled.div`
+  flex-direction: column;
+  display: flex;
+`;
+
+export const RadioWrapper = styled.div`
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  margin: 5px 0;
+`;

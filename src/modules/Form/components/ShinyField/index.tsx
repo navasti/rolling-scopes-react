@@ -1,18 +1,15 @@
-import React, { RefObject } from 'react';
+import React, { forwardRef } from 'react';
+import { FIELDS } from 'appConstants';
 import * as S from './styled';
 
-type Props = {
-  inputRef: RefObject<HTMLInputElement>;
-};
-
-export const ShinyField = ({ inputRef }: Props) => {
+export const ShinyField = forwardRef<HTMLInputElement>((_, ref) => {
   return (
     <S.SwitchWrapper>
       Shiny
-      <S.SwitchField htmlFor="shiny">
-        <input id="shiny" ref={inputRef} type="checkbox" />
+      <S.SwitchField htmlFor={FIELDS.SHINY}>
+        <input id={FIELDS.SHINY} name={FIELDS.SHINY} ref={ref} type="checkbox" />
         <span></span>
       </S.SwitchField>
     </S.SwitchWrapper>
   );
-};
+});

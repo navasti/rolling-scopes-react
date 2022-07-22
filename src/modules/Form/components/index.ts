@@ -1,4 +1,5 @@
 export { BirthdayField } from './BirthdateField';
+export { ErrorMessage } from './ErrorMessage';
 export { ConsentField } from './ConsentField';
 export { AvatarField } from './AvatarField';
 export { GenderField } from './GenderField';

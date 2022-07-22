@@ -1,31 +1,29 @@
-import React, { RefObject } from 'react';
+import React, { forwardRef } from 'react';
+import { FIELDS } from 'appConstants';
 import { getTodayDate } from 'utils';
 import * as S from './styled';
 
 type Props = {
-  onChange: (errorRef: RefObject<HTMLSpanElement>) => void;
-  refs: {
-    inputRef: RefObject<HTMLInputElement>;
-    errorRef: RefObject<HTMLSpanElement>;
-  };
+  onChange: (field: string) => void;
+  children: JSX.Element;
 };
 
-export const BirthdayField = (props: Props) => {
-  const { onChange, refs } = props;
-  const { errorRef, inputRef } = refs;
+export const BirthdayField = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
+  const { children, onChange } = props;
   return (
     <>
-      <S.CommonLabel htmlFor="birthdate">
+      <S.CommonLabel htmlFor={FIELDS.BIRTHDAY}>
         *Birthdate
         <input
-          onChange={() => onChange(errorRef)}
+          onChange={() => onChange(FIELDS.BIRTHDAY)}
           max={getTodayDate()}
-          id="birthdate"
-          ref={inputRef}
+          name={FIELDS.BIRTHDAY}
+          id={FIELDS.BIRTHDAY}
           type="date"
+          ref={ref}
         />
       </S.CommonLabel>
-      <S.ErrorMessage ref={errorRef}>Birthday of the pokemon is required</S.ErrorMessage>
+      {children}
     </>
   );
-};
+});

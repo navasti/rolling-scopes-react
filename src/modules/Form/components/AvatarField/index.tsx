@@ -1,22 +1,12 @@
-import React, { RefObject } from 'react';
+import React, { forwardRef } from 'react';
+import { FIELDS } from 'appConstants';
 import * as S from './styled';
 
-type Props = {
-  refs: {
-    inputRef: RefObject<HTMLInputElement>;
-    errorRef: RefObject<HTMLSpanElement>;
-  };
-};
-
-export const AvatarField = (props: Props) => {
-  const { errorRef, inputRef } = props.refs;
+export const AvatarField = forwardRef<HTMLInputElement>((_, ref) => {
   return (
-    <>
-      <S.FileField htmlFor="avatar">
-        Avatar
-        <input id="avatar" ref={inputRef} type="file" />
-      </S.FileField>
-      <S.ErrorMessage ref={errorRef}>Avatar is required</S.ErrorMessage>
-    </>
+    <S.FileField htmlFor={FIELDS.AVATAR}>
+      Avatar
+      <input id={FIELDS.AVATAR} ref={ref} type="file" />
+    </S.FileField>
   );
-};
+});
