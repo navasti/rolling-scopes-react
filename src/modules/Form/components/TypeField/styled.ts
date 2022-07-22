@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-export const ErrorMessage = styled.span`
-  text-align: center;
-  display: none;
-  color: red;
-`;
-
 export const CommonLabel = styled.label`
   justify-content: space-between;
   align-items: center;

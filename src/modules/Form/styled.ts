@@ -71,3 +71,7 @@ export const RadioWrapper = styled.div`
   display: flex;
   margin: 5px 0;
 `;
+
+export const RadioFields = styled.div`
+  min-height: 35px;
+`;

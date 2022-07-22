@@ -6,10 +6,3 @@ export const RadioField = styled.label`
     margin-right: 3px;
   }
 `;
-
-export const ErrorMessage = styled.span`
-  text-align: center;
-  margin-bottom: 5px;
-  display: none;
-  color: red;
-`;

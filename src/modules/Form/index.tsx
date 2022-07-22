@@ -177,7 +177,7 @@ export class Form extends React.Component<Props, State> {
             <S.GenderWrapper>
               <S.RadioWrapper>
                 *Gender
-                <div>
+                <S.RadioFields>
                   <GenderField
                     name={FEMALE}
                     ref={this.genderField.femaleInputRef}
@@ -188,7 +188,7 @@ export class Form extends React.Component<Props, State> {
                     ref={this.genderField.maleInputRef}
                     onChange={this.removeIncorrectField}
                   />
-                </div>
+                </S.RadioFields>
               </S.RadioWrapper>
               <ErrorMessage
                 visible={this.state.errorFields.includes(FIELDS.GENDER)}
@@ -210,6 +210,7 @@ export class Form extends React.Component<Props, State> {
                 visible={this.state.errorFields.includes(FIELDS.CONSENT)}
                 ref={this.consentField.errorRef}
                 message={ERROR_MESSAGES.CONSENT}
+                center
               />
             </ConsentField>
             <S.SubmitButton

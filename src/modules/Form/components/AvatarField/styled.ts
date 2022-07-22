@@ -11,11 +11,3 @@ export const FileField = styled.label`
     border-radius: 0;
   }
 `;
-
-export const ErrorMessage = styled.span`
-  text-align: center;
-  margin-top: 2px;
-  margin-bottom: 5px;
-  display: none;
-  color: red;
-`;
