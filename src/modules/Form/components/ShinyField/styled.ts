@@ -4,7 +4,7 @@ export const SwitchWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   display: flex;
-  margin: 5px 0;
+  margin: 15px 0 5px 0;
 `;
 
 export const SwitchField = styled.label`

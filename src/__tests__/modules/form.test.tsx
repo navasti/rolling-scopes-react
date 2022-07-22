@@ -1,8 +1,21 @@
-import { componentName, customPokemon, location, testOnChange } from '__mocks__';
+import { ERROR_MESSAGES, FEMALE, FIELDS, MALE } from 'appConstants';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { capitalize } from 'utils';
+import {
+  componentName,
+  customPokemon,
+  testOnChange,
+  invisible,
+  selectRef,
+  location,
+  inputRef,
+  errorRef,
+  visible,
+} from '__mocks__';
 import {
   BirthdayField,
+  ErrorMessage,
   ConsentField,
   AvatarField,
   GenderField,
@@ -12,33 +25,144 @@ import {
   FormCard,
   Form,
 } from 'modules';
-import { createRef, RefObject } from 'react';
 
-const errorRef: RefObject<HTMLSpanElement> = createRef();
-const inputRef: RefObject<HTMLInputElement> = createRef();
-const selectRef: RefObject<HTMLSelectElement> = createRef();
-const maleInputRef: RefObject<HTMLInputElement> = createRef();
-const femaleInputRef: RefObject<HTMLInputElement> = createRef();
-
-const inputExpectations = (labelText: string, errorText?: string) => {
+const inputExpectations = (labelText: string, visible?: boolean, errorText?: string) => {
   const input = screen.getByLabelText(labelText);
   expect(input).toBeInTheDocument();
   if (errorText) {
     const error = screen.getByText(errorText);
     expect(error).toBeInTheDocument();
-    expect(error).toHaveStyle('display: none;');
+    expect(error).toHaveStyle(`opacity: ${visible ? '1' : '0'};`);
   }
 };
 
-describe('Form and related componenets', () => {
+describe('NameField', () => {
+  it('With invisible error message', () => {
+    render(
+      <NameField onChange={testOnChange} ref={inputRef}>
+        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.NAME} />
+      </NameField>
+    );
+    inputExpectations(`*${capitalize(FIELDS.NAME)}`, invisible, ERROR_MESSAGES.NAME);
+  });
+  it('With visible error message', () => {
+    render(
+      <NameField onChange={testOnChange} ref={inputRef}>
+        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.NAME} />
+      </NameField>
+    );
+    inputExpectations(`*${capitalize(FIELDS.NAME)}`, visible, ERROR_MESSAGES.NAME);
+  });
+});
+
+describe('BirthdayField', () => {
+  it('With invisible error message', () => {
+    render(
+      <BirthdayField onChange={testOnChange} ref={inputRef}>
+        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.BIRTHDAY} />
+      </BirthdayField>
+    );
+    inputExpectations(`*${capitalize(FIELDS.BIRTHDAY)}`, invisible, ERROR_MESSAGES.BIRTHDAY);
+  });
+  it('With visible error message', () => {
+    render(
+      <BirthdayField onChange={testOnChange} ref={inputRef}>
+        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.BIRTHDAY} />
+      </BirthdayField>
+    );
+    inputExpectations(`*${capitalize(FIELDS.BIRTHDAY)}`, visible, ERROR_MESSAGES.BIRTHDAY);
+  });
+});
+
+describe('ConsentField', () => {
+  it('With invisible error message', () => {
+    render(
+      <ConsentField onChange={testOnChange} ref={inputRef}>
+        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.CONSENT} />
+      </ConsentField>
+    );
+    inputExpectations('I have read and accept the regulations', invisible, ERROR_MESSAGES.CONSENT);
+  });
+  it('With visible error message', () => {
+    render(
+      <ConsentField onChange={testOnChange} ref={inputRef}>
+        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.CONSENT} />
+      </ConsentField>
+    );
+    inputExpectations('I have read and accept the regulations', visible, ERROR_MESSAGES.CONSENT);
+  });
+});
+
+describe('GenderField', () => {
+  it('With invisible error message', () => {
+    render(
+      <div>
+        <GenderField name={MALE} ref={inputRef} onChange={testOnChange} />
+        <GenderField name={FEMALE} ref={inputRef} onChange={testOnChange} />
+        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.GENDER} />
+      </div>
+    );
+    inputExpectations(`${capitalize(FEMALE)}`, invisible, ERROR_MESSAGES.GENDER);
+    inputExpectations(`${capitalize(MALE)}`, invisible, ERROR_MESSAGES.GENDER);
+  });
+  it('With visible error message', () => {
+    render(
+      <div>
+        <GenderField name={MALE} ref={inputRef} onChange={testOnChange} />
+        <GenderField name={FEMALE} ref={inputRef} onChange={testOnChange} />
+        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.GENDER} />
+      </div>
+    );
+    inputExpectations(`${capitalize(FEMALE)}`, visible, ERROR_MESSAGES.GENDER);
+    inputExpectations(`${capitalize(MALE)}`, visible, ERROR_MESSAGES.GENDER);
+  });
+});
+
+describe('TypeField', () => {
+  it('With invisible error message', () => {
+    render(
+      <TypeField ref={selectRef} onChange={testOnChange}>
+        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.TYPE} />
+      </TypeField>
+    );
+    inputExpectations(`*Main ${FIELDS.TYPE}`, invisible, ERROR_MESSAGES.TYPE);
+  });
+  it('With visible error message', () => {
+    render(
+      <TypeField ref={selectRef} onChange={testOnChange}>
+        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.TYPE} />
+      </TypeField>
+    );
+    inputExpectations(`*Main ${FIELDS.TYPE}`, visible, ERROR_MESSAGES.TYPE);
+  });
+});
+
+describe('Form, FormCard, AvatarField and ShinyField', () => {
+  it('AvatarField', () => {
+    render(<AvatarField ref={inputRef} />);
+    inputExpectations('Avatar');
+  });
+  it('ShinyField', () => {
+    render(<ShinyField ref={inputRef} />);
+    expect(screen.getByText(/Shiny/)).toBeInTheDocument();
+  });
+  it('FormCard', () => {
+    render(<FormCard customPokemon={customPokemon} />);
+    expect(screen.getByText(/01-01-1999/)).toBeInTheDocument();
+    expect(screen.getByText(/Pokemonix/)).toBeInTheDocument();
+    expect(screen.getByText(/Male/)).toBeInTheDocument();
+    expect(screen.getByText(/Fire/)).toBeInTheDocument();
+  });
   it('Form', () => {
     render(<Form componentName={componentName} location={location} />, {
       wrapper: BrowserRouter,
     });
     expect(screen.getByText(/I have read and accept the regulations/)).toBeInTheDocument();
     expect(screen.getByText(/Create custom pokemon!/)).toBeInTheDocument();
-    expect(screen.getByText(/Main type/)).toBeInTheDocument();
-    expect(screen.getByText(/Birthday/)).toBeInTheDocument();
+    const birthdayElements = screen.getAllByText(/Birthday/);
+    birthdayElements.forEach((element) => expect(element).toBeInTheDocument());
+    const typeElements = screen.getAllByText(/Main type/);
+    typeElements.forEach((element) => expect(element).toBeInTheDocument());
     const shinyElements = screen.getAllByText(/Shiny/);
     shinyElements.forEach((element) => expect(element).toBeInTheDocument());
     const nameElements = screen.getAllByText(/Name/);
@@ -50,48 +174,5 @@ describe('Form and related componenets', () => {
     const button = screen.getByText(/Submit/);
     expect(button).toHaveStyle('cursor: not-allowed;');
     expect(button).toBeInTheDocument();
-  });
-  it('FormCard', () => {
-    render(<FormCard customPokemon={customPokemon} />);
-    expect(screen.getByText(/01-01-1999/)).toBeInTheDocument();
-    expect(screen.getByText(/pokemonix/)).toBeInTheDocument();
-    expect(screen.getByText(/male/)).toBeInTheDocument();
-    expect(screen.getByText(/fire/)).toBeInTheDocument();
-  });
-  it('BirthdayField', () => {
-    render(<BirthdayField refs={{ inputRef, errorRef }} onChange={testOnChange} />);
-    inputExpectations('*Birthdate', 'Birthday of the pokemon is required');
-  });
-  it('NameField', () => {
-    render(<NameField refs={{ inputRef, errorRef }} onChange={testOnChange} />);
-    inputExpectations('*Name', 'Name must contain at least 2 characters');
-  });
-  it('ConsentField', () => {
-    render(<ConsentField refs={{ inputRef, errorRef }} onChange={testOnChange} />);
-    inputExpectations(
-      'I have read and accept the regulations',
-      'Acceptation of the regulations is required'
-    );
-  });
-  it('AvatarField', () => {
-    render(<AvatarField refs={{ inputRef, errorRef }} />);
-    inputExpectations('Avatar');
-  });
-  it('GenderField', () => {
-    render(
-      <GenderField refs={{ femaleInputRef, maleInputRef, errorRef }} onChange={testOnChange} />
-    );
-    inputExpectations('Male', 'Gender of the pokemon is required');
-    inputExpectations('Female', 'Gender of the pokemon is required');
-  });
-  it('ShinyField', () => {
-    const inputRef: RefObject<HTMLInputElement> = createRef();
-    render(<ShinyField inputRef={inputRef} />);
-    expect(screen.getByText(/Shiny/)).toBeInTheDocument();
-  });
-  it('TypeField', () => {
-    const errorRef: RefObject<HTMLSpanElement> = createRef();
-    render(<TypeField refs={{ selectRef, errorRef }} onChange={testOnChange} />);
-    inputExpectations('*Main type', 'Type of the pokemon is required');
   });
 });

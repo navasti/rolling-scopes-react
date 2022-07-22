@@ -13,9 +13,9 @@ export const GenderField = forwardRef<HTMLInputElement, Props>(({ name, onChange
     <S.RadioField htmlFor={name}>
       <input
         onChange={() => onChange(FIELDS.GENDER)}
-        name={FIELDS.GENDER}
         value={name}
         type="radio"
+        name={name}
         ref={ref}
         id={name}
       />

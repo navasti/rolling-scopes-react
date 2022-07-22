@@ -13,7 +13,7 @@ export const BirthdayField = forwardRef<HTMLInputElement, Props>((props: Props, 
   return (
     <>
       <S.CommonLabel htmlFor={FIELDS.BIRTHDAY}>
-        *Birthdate
+        *Birthday
         <input
           onChange={() => onChange(FIELDS.BIRTHDAY)}
           max={getTodayDate()}

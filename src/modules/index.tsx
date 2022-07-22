@@ -10,6 +10,7 @@ export { Card, SearchBar } from './SearchPage/components';
 export {
   BirthdayField,
   ConsentField,
+  ErrorMessage,
   AvatarField,
   GenderField,
   ShinyField,

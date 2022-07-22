@@ -1,16 +1,19 @@
 import { CustomPokemon, PokemonData, PokemonDetails } from 'types';
-import { RefObject } from 'react';
+import { createRef, RefObject } from 'react';
 
+export const visible = true;
+export const invisible = false;
 export const isLoading = false;
 
+export const errorRef: RefObject<HTMLSpanElement> = createRef();
+export const inputRef: RefObject<HTMLInputElement> = createRef();
+export const selectRef: RefObject<HTMLSelectElement> = createRef();
+
 export const links = ['Home', 'About', 'Form', 'Invalid'];
-
-export const TestingElement = () => <p>testing element</p>;
-
 export const componentName = 'About';
-
 export const location = '/about';
 
+export const TestingElement = () => <p>testing element</p>;
 export const TestingErrorElement = () => <p>testing error</p>;
 
 export const pokemons: PokemonData = {
@@ -20,17 +23,15 @@ export const pokemons: PokemonData = {
   count: 1,
 };
 
-export const testOnChange = (errorRef: RefObject<HTMLSpanElement>) => {
-  if (errorRef.current?.style.display === 'block') {
-    errorRef.current.style.display = 'none';
-  }
+export const testOnChange = (field: string) => {
+  console.log(field);
 };
 
 export const customPokemon: CustomPokemon = {
   birthday: '01-01-1999',
+  name: 'pokemonix',
   gender: 'male',
   avatar: null,
-  name: 'pokemonix',
   type: 'fire',
   shiny: true,
 };

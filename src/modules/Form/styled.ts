@@ -38,7 +38,7 @@ export const SubmitButton = styled.button`
   border-radius: 10px;
   align-self: center;
   padding: 5px 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   cursor: pointer;
   width: 200px;
   color: #eee;
