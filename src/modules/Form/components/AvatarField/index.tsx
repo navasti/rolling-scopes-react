@@ -1,12 +1,12 @@
-import React, { forwardRef } from 'react';
 import { FIELDS } from 'appConstants';
+import { forwardRef } from 'react';
 import * as S from './styled';
 
 export const AvatarField = forwardRef<HTMLInputElement>((_, ref) => {
   return (
-    <S.FileField htmlFor={FIELDS.AVATAR}>
+    <S.FileField htmlFor={FIELDS.avatar}>
       Avatar
-      <input id={FIELDS.AVATAR} ref={ref} type="file" />
+      <input id={FIELDS.avatar} ref={ref} type="file" />
     </S.FileField>
   );
 });

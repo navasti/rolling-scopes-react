@@ -1,10 +1,10 @@
-import React, { forwardRef } from 'react';
-import { FIELDS } from 'appConstants';
+import { CHECK_FIELDS, FIELDS } from 'appConstants';
+import { forwardRef } from 'react';
 import { capitalize } from 'utils';
 import * as S from './styled';
 
 type Props = {
-  onChange: (field: string) => void;
+  onChange: (field: CHECK_FIELDS) => void;
   name: string;
 };
 
@@ -12,8 +12,8 @@ export const GenderField = forwardRef<HTMLInputElement, Props>(({ name, onChange
   return (
     <S.RadioField htmlFor={name}>
       <input
-        onChange={() => onChange(FIELDS.GENDER)}
-        name={FIELDS.GENDER}
+        onChange={() => onChange(FIELDS.gender)}
+        name={FIELDS.gender}
         value={name}
         type="radio"
         ref={ref}

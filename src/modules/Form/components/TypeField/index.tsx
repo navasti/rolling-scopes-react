@@ -1,22 +1,24 @@
-import { POKEMON_TYPES } from 'appConstants';
-import React, { forwardRef } from 'react';
+import { POKEMON_TYPES, TEXT_FIELDS } from 'appConstants';
+import { ErrorMessage } from '../ErrorMessage';
 import { FIELDS } from 'appConstants';
+import { ErrorsObject } from 'types';
+import { forwardRef } from 'react';
 import * as S from './styled';
 
 type Props = {
-  onChange: (field: string) => void;
-  children: JSX.Element;
+  onChange: (field: TEXT_FIELDS) => void;
+  errors: ErrorsObject;
 };
 
-export const TypeField = forwardRef<HTMLSelectElement, Props>(({ children, onChange }, ref) => {
+export const TypeField = forwardRef<HTMLSelectElement, Props>(({ errors, onChange }, ref) => {
   return (
     <>
-      <S.CommonLabel htmlFor={FIELDS.TYPE}>
+      <S.CommonLabel htmlFor={FIELDS.type}>
         *Main type
         <select
-          onChange={() => onChange(FIELDS.TYPE)}
-          name={FIELDS.TYPE}
-          id={FIELDS.TYPE}
+          onChange={() => onChange(FIELDS.type)}
+          name={FIELDS.type}
+          id={FIELDS.type}
           ref={ref}
         >
           <option value=""></option>
@@ -27,7 +29,7 @@ export const TypeField = forwardRef<HTMLSelectElement, Props>(({ children, onCha
           ))}
         </select>
       </S.CommonLabel>
-      {children}
+      <ErrorMessage visible={!!errors.type} message={errors.type} />
     </>
   );
 });

@@ -2,7 +2,6 @@ import questionmark from 'assets/images/questionmark.png';
 import { CustomPokemon } from 'types';
 import { capitalize } from 'utils';
 import * as S from './styled';
-import React from 'react';
 
 type Props = {
   customPokemon: CustomPokemon;

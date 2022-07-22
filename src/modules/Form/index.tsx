@@ -1,9 +1,16 @@
-import { FIELDS, FIELDS_VALIDATION_BY_NAME, ERROR_MESSAGES, FEMALE, MALE } from 'appConstants';
-import { CommonFieldType, CustomPokemon, GenderFieldType, SelectFieldType } from 'types';
 import React, { createRef, FormEvent, RefObject } from 'react';
+import { CustomPokemon, ErrorsObject } from 'types';
 import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
+import {
+  FIELDS_VALIDATION_BY_NAME,
+  ERROR_MESSAGES,
+  CHECK_FIELDS,
+  TEXT_FIELDS,
+  FEMALE,
+  MALE,
+} from 'appConstants';
 import {
   BirthdayField,
   ErrorMessage,
@@ -23,69 +30,54 @@ type Props = {
 
 type State = {
   pokemons: Array<CustomPokemon & { id: string }>;
-  errorFields: Array<string>;
   initialEnter: boolean;
+  errors: ErrorsObject;
 };
 
 export class Form extends React.Component<Props, State> {
-  isShinyField: Pick<CommonFieldType, 'inputRef'>;
+  femaleInputRef: RefObject<HTMLInputElement>;
   successMessage: RefObject<HTMLSpanElement>;
-  birthdayField: CommonFieldType;
-  consentField: CommonFieldType;
-  genderField: GenderFieldType;
-  avatarField: CommonFieldType;
-  typeField: SelectFieldType;
-  nameField: CommonFieldType;
+  birthdayField: RefObject<HTMLInputElement>;
+  isShinyField: RefObject<HTMLInputElement>;
+  consentField: RefObject<HTMLInputElement>;
+  maleInputRef: RefObject<HTMLInputElement>;
+  avatarField: RefObject<HTMLInputElement>;
+  typeField: RefObject<HTMLSelectElement>;
+  nameField: RefObject<HTMLInputElement>;
+
   constructor(props: Props) {
     super(props);
     this.state = {
       pokemons: [],
-      errorFields: [],
       initialEnter: true,
+      errors: {
+        birthday: null,
+        consent: null,
+        gender: null,
+        name: null,
+        type: null,
+      },
     };
     this.successMessage = createRef();
-    this.birthdayField = {
-      inputRef: createRef(),
-      errorRef: createRef(),
-    };
-    this.consentField = {
-      inputRef: createRef(),
-      errorRef: createRef(),
-    };
-    this.isShinyField = {
-      inputRef: createRef(),
-    };
-    this.genderField = {
-      femaleInputRef: createRef(),
-      maleInputRef: createRef(),
-      errorRef: createRef(),
-    };
-    this.avatarField = {
-      inputRef: createRef(),
-      errorRef: createRef(),
-    };
-    this.typeField = {
-      selectRef: createRef(),
-      errorRef: createRef(),
-    };
-    this.nameField = {
-      inputRef: createRef(),
-      errorRef: createRef(),
-    };
+    this.femaleInputRef = createRef();
+    this.birthdayField = createRef();
+    this.consentField = createRef();
+    this.isShinyField = createRef();
+    this.maleInputRef = createRef();
+    this.avatarField = createRef();
+    this.typeField = createRef();
+    this.nameField = createRef();
   }
 
-  removeIncorrectField = (field: string) => {
+  removeError = (field: TEXT_FIELDS | CHECK_FIELDS) => {
     if (this.state.initialEnter) this.setState({ initialEnter: false });
-    const fields = [...this.state.errorFields];
-    const index = fields.indexOf(field);
-    if (index !== -1) {
-      fields.splice(index, 1);
-      this.setState({ errorFields: [...fields] });
-    }
+    const errors = { ...this.state.errors };
+    errors[field] = null;
+    this.setState({ errors });
   };
 
   validate = (fields: Array<React.RefObject<HTMLInputElement | HTMLSelectElement>>) => {
-    const errors: Array<string> = [];
+    const errors = { ...this.state.errors };
     const textFields = FIELDS_VALIDATION_BY_NAME.TEXT.map((textField) =>
       fields.find((field) => field.current?.name === textField)
     );
@@ -94,26 +86,28 @@ export class Form extends React.Component<Props, State> {
     );
     checkFields.forEach((checkField) => {
       const valid = checkField.some((field) => (field.current as HTMLInputElement)?.checked);
-      const name = checkField[0]?.current?.name;
-      if (!valid && name) errors.push(name);
+      const name = checkField[0]?.current?.name
+        ? (checkField[0].current.name as CHECK_FIELDS)
+        : null;
+      if (!valid && name) errors[name] = ERROR_MESSAGES[name];
     });
     textFields.forEach((textField) => {
-      const name = textField?.current?.name;
+      const name = textField?.current?.name ? (textField.current.name as TEXT_FIELDS) : null;
       const value = textField?.current?.value;
       const valid = value && value.trim().length >= 2;
-      if (!valid && name) errors.push(name);
+      if (!valid && name) errors[name] = ERROR_MESSAGES[name];
     });
     return errors;
   };
 
   prepareCustomPokemon = () => {
-    const shiny = !!this.isShinyField.inputRef.current?.checked;
-    const female = this.genderField.femaleInputRef?.current?.checked;
-    const file = this.avatarField.inputRef.current?.files?.[0] || null;
+    const shiny = !!this.isShinyField.current?.checked;
+    const female = this.femaleInputRef?.current?.checked;
+    const file = this.avatarField.current?.files?.[0] || null;
     const customPokemon: CustomPokemon & { id: string } = {
-      birthday: this.birthdayField.inputRef?.current?.value || '',
-      type: this.typeField.selectRef?.current?.value || '',
-      name: this.nameField.inputRef?.current?.value || '',
+      birthday: this.birthdayField?.current?.value || '',
+      type: this.typeField?.current?.value || '',
+      name: this.nameField?.current?.value || '',
       gender: female ? FEMALE : MALE,
       avatar: file,
       id: uuid(),
@@ -125,18 +119,18 @@ export class Form extends React.Component<Props, State> {
   handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const fields = [
-      this.nameField.inputRef,
-      this.typeField.selectRef,
-      this.avatarField.inputRef,
-      this.isShinyField.inputRef,
-      this.consentField.inputRef,
-      this.birthdayField.inputRef,
-      this.genderField.maleInputRef,
-      this.genderField.femaleInputRef,
+      this.nameField,
+      this.typeField,
+      this.avatarField,
+      this.isShinyField,
+      this.consentField,
+      this.birthdayField,
+      this.maleInputRef,
+      this.femaleInputRef,
     ];
     const errors = this.validate(fields);
-    if (errors.length) {
-      this.setState({ errorFields: errors });
+    if (Object.values(errors).some((error) => error != null)) {
+      this.setState({ errors });
     } else {
       const customPokemon = this.prepareCustomPokemon();
       this.setState({
@@ -160,61 +154,50 @@ export class Form extends React.Component<Props, State> {
         <S.CommonView>
           <S.FormHeading>Create custom pokemon!</S.FormHeading>
           <S.Form onSubmit={this.handleSubmit}>
-            <NameField onChange={this.removeIncorrectField} ref={this.nameField.inputRef}>
-              <ErrorMessage
-                visible={this.state.errorFields.includes(FIELDS.NAME)}
-                ref={this.nameField.errorRef}
-                message={ERROR_MESSAGES.NAME}
-              />
-            </NameField>
-            <TypeField onChange={this.removeIncorrectField} ref={this.typeField.selectRef}>
-              <ErrorMessage
-                visible={this.state.errorFields.includes(FIELDS.TYPE)}
-                ref={this.typeField.errorRef}
-                message={ERROR_MESSAGES.TYPE}
-              />
-            </TypeField>
+            <NameField
+              onChange={this.removeError}
+              errors={this.state.errors}
+              ref={this.nameField}
+            />
+            <TypeField
+              onChange={this.removeError}
+              errors={this.state.errors}
+              ref={this.typeField}
+            />
             <S.GenderWrapper>
               <S.RadioWrapper>
                 *Gender
                 <S.RadioFields>
                   <GenderField
                     name={FEMALE}
-                    ref={this.genderField.femaleInputRef}
-                    onChange={this.removeIncorrectField}
+                    ref={this.femaleInputRef}
+                    onChange={this.removeError}
                   />
-                  <GenderField
-                    name={MALE}
-                    ref={this.genderField.maleInputRef}
-                    onChange={this.removeIncorrectField}
-                  />
+                  <GenderField name={MALE} ref={this.maleInputRef} onChange={this.removeError} />
                 </S.RadioFields>
               </S.RadioWrapper>
               <ErrorMessage
-                visible={this.state.errorFields.includes(FIELDS.GENDER)}
-                ref={this.genderField.errorRef}
-                message={ERROR_MESSAGES.GENDER}
+                visible={!!this.state.errors.gender}
+                message={this.state.errors.gender}
               />
             </S.GenderWrapper>
-            <BirthdayField ref={this.birthdayField.inputRef} onChange={this.removeIncorrectField}>
-              <ErrorMessage
-                visible={this.state.errorFields.includes(FIELDS.BIRTHDAY)}
-                ref={this.birthdayField.errorRef}
-                message={ERROR_MESSAGES.BIRTHDAY}
-              />
-            </BirthdayField>
-            <AvatarField ref={this.avatarField.inputRef} />
-            <ShinyField ref={this.isShinyField.inputRef} />
-            <ConsentField ref={this.consentField.inputRef} onChange={this.removeIncorrectField}>
-              <ErrorMessage
-                visible={this.state.errorFields.includes(FIELDS.CONSENT)}
-                ref={this.consentField.errorRef}
-                message={ERROR_MESSAGES.CONSENT}
-                center
-              />
-            </ConsentField>
+            <BirthdayField
+              ref={this.birthdayField}
+              errors={this.state.errors}
+              onChange={this.removeError}
+            />
+            <AvatarField ref={this.avatarField} />
+            <ShinyField ref={this.isShinyField} />
+            <ConsentField
+              ref={this.consentField}
+              errors={this.state.errors}
+              onChange={this.removeError}
+            />
             <S.SubmitButton
-              disabled={this.state.initialEnter || this.state.errorFields.length > 0}
+              disabled={
+                this.state.initialEnter ||
+                Object.values(this.state.errors).some((error) => error != null)
+              }
               type="submit"
             >
               Submit

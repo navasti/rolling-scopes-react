@@ -3,36 +3,42 @@ export const INPUT_VALUE_KEY = 'input-value';
 
 export const MALE = 'male';
 export const FEMALE = 'female';
-export const POKEMON_TYPES = [
-  'fire',
-  'grass',
-  'poison',
-  'flying',
-  'ground',
-  'psycho',
-  'water',
-  'ice',
-];
 
-export const FIELDS = {
-  BIRTHDAY: 'birthday',
-  CONSENT: 'consent',
-  GENDER: 'gender',
-  AVATAR: 'avatar',
-  SHINY: 'shiny',
-  NAME: 'name',
-  TYPE: 'type',
-};
+export enum TYPES {
+  fire = 'fire',
+  grass = 'grass',
+  poison = 'poison',
+  flying = 'flying',
+  ground = 'ground',
+  psycho = 'psycho',
+  water = 'water',
+  ice = 'ice',
+}
 
-export const ERROR_MESSAGES = {
-  NAME: 'Name must be at least 2 characters long.',
-  CONSENT: 'Regulations consent is required.',
-  BIRTHDAY: 'Birthday is required.',
-  TYPE: 'Main type is required.',
-  GENDER: 'Gender is required.',
-};
+export const POKEMON_TYPES = Object.values(TYPES);
+
+export enum FIELDS {
+  birthday = 'birthday',
+  consent = 'consent',
+  gender = 'gender',
+  avatar = 'avatar',
+  shiny = 'shiny',
+  name = 'name',
+  type = 'type',
+}
+
+export enum ERROR_MESSAGES {
+  name = 'Name must be at least 2 characters long.',
+  consent = 'Regulations consent is required.',
+  birthday = 'Birthday is required.',
+  type = 'Main type is required.',
+  gender = 'Gender is required.',
+}
+
+export type TEXT_FIELDS = FIELDS.name | FIELDS.birthday | FIELDS.type;
+export type CHECK_FIELDS = FIELDS.consent | FIELDS.gender;
 
 export const FIELDS_VALIDATION_BY_NAME = {
-  TEXT: [FIELDS.NAME, FIELDS.BIRTHDAY, FIELDS.TYPE],
-  CHECK: [FIELDS.CONSENT, FIELDS.GENDER],
+  TEXT: [FIELDS.name, FIELDS.birthday, FIELDS.type],
+  CHECK: [FIELDS.consent, FIELDS.gender],
 };

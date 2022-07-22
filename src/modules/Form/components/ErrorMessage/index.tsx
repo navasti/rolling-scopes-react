@@ -1,17 +1,15 @@
-import React, { forwardRef } from 'react';
 import * as S from './styled';
 
 type Props = {
-  message: string;
+  message: string | null;
   visible: boolean;
   center?: boolean;
 };
 
-export const ErrorMessage = forwardRef<HTMLSpanElement, Props>((props, ref) => {
-  const { message, center, visible } = props;
+export const ErrorMessage = ({ message, center, visible }: Props) => {
   return (
-    <S.ErrorMessage visible={visible} ref={ref} center={center}>
+    <S.ErrorMessage visible={visible} center={center}>
       {message}
     </S.ErrorMessage>
   );
-});
+};

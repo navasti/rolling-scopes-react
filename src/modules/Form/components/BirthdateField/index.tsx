@@ -1,29 +1,31 @@
-import React, { forwardRef } from 'react';
-import { FIELDS } from 'appConstants';
+import { FIELDS, TEXT_FIELDS } from 'appConstants';
+import { ErrorMessage } from '../ErrorMessage';
 import { getTodayDate } from 'utils';
+import { ErrorsObject } from 'types';
+import { forwardRef } from 'react';
 import * as S from './styled';
 
 type Props = {
-  onChange: (field: string) => void;
-  children: JSX.Element;
+  onChange: (field: TEXT_FIELDS) => void;
+  errors: ErrorsObject;
 };
 
 export const BirthdayField = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
-  const { children, onChange } = props;
+  const { errors, onChange } = props;
   return (
     <>
-      <S.CommonLabel htmlFor={FIELDS.BIRTHDAY}>
+      <S.CommonLabel htmlFor={FIELDS.birthday}>
         *Birthday
         <input
-          onChange={() => onChange(FIELDS.BIRTHDAY)}
+          onChange={() => onChange(FIELDS.birthday)}
           max={getTodayDate()}
-          name={FIELDS.BIRTHDAY}
-          id={FIELDS.BIRTHDAY}
+          name={FIELDS.birthday}
+          id={FIELDS.birthday}
           type="date"
           ref={ref}
         />
       </S.CommonLabel>
-      {children}
+      <ErrorMessage visible={!!errors.birthday} message={errors.birthday} />
     </>
   );
 });

@@ -76,3 +76,11 @@ export type CustomPokemon = {
   name: string;
   type: string;
 };
+
+export type ErrorsObject = {
+  birthday: null | string;
+  consent: null | string;
+  gender: null | string;
+  name: null | string;
+  type: null | string;
+};

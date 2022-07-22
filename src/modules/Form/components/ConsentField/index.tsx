@@ -1,26 +1,29 @@
-import React, { forwardRef } from 'react';
-import { FIELDS } from 'appConstants';
+import { CHECK_FIELDS, FIELDS } from 'appConstants';
+import { ErrorMessage } from '../ErrorMessage';
+import { ErrorsObject } from 'types';
+import { forwardRef } from 'react';
 import * as S from './styled';
 
 type Props = {
-  onChange: (field: string) => void;
-  children: JSX.Element;
+  onChange: (field: CHECK_FIELDS) => void;
+  errors: ErrorsObject;
 };
 
-export const ConsentField = forwardRef<HTMLInputElement, Props>(({ children, onChange }, ref) => {
+export const ConsentField = forwardRef<HTMLInputElement, Props>((props, ref) => {
+  const { errors, onChange } = props;
   return (
     <>
-      <S.CheckboxField htmlFor={FIELDS.CONSENT}>
+      <S.CheckboxField htmlFor={FIELDS.consent}>
         <input
-          onChange={() => onChange(FIELDS.CONSENT)}
-          name={FIELDS.CONSENT}
-          id={FIELDS.CONSENT}
+          onChange={() => onChange(FIELDS.consent)}
+          name={FIELDS.consent}
+          id={FIELDS.consent}
           type="checkbox"
           ref={ref}
         />
         I have read and accept the regulations
       </S.CheckboxField>
-      {children}
+      <ErrorMessage visible={!!errors.consent} message={errors.consent} />
     </>
   );
 });
