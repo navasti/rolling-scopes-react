@@ -19,6 +19,20 @@ export type PokemonData = {
   count: number;
 };
 
+export type TypesData = {
+  previous: null | string;
+  results: Array<PokemonType>;
+  next: null | string;
+  count: number;
+};
+
+export type MovesData = {
+  results: Array<PokemonMove>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+
 export type DamageRelations = {
   double_damage_from: Array<PokemonType>;
   double_damage_to: Array<PokemonType>;
@@ -32,6 +46,7 @@ export type PokemonTypeDetails = {
   pokemon: Array<{ pokemon: Pokemon; slot: number }>;
   damage_relations: DamageRelations;
   moves: Array<PokemonMove>;
+  name: string;
   id: number;
 };
 

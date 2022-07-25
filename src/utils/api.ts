@@ -1,38 +1,7 @@
-import { Pokemon, PokemonData, PokemonDetails, PokemonType } from 'types';
-import { API } from 'appConstants';
-
-export const fetchPokemons = async (url: string) => {
-  let pokemons: Array<Pokemon> = [];
-  try {
-    const data = await fetch(url);
-    const { results }: PokemonData = await data.json();
-    pokemons = [...results];
-  } catch (error) {
-    console.error(error);
-  } finally {
-    return pokemons;
-  }
-};
-
-export const fetchDetailedPokemons = async (pokemons: Array<Pokemon>) => {
-  let detailedPokemons: Array<PokemonDetails> = [];
-  try {
-    const responses = pokemons.map(async (pokemon) => {
-      const response = await fetch(pokemon.url);
-      return (await response.json()) as PokemonDetails;
-    });
-    detailedPokemons = await Promise.all(responses);
-  } catch (error) {
-    console.error(error);
-  } finally {
-    return detailedPokemons;
-  }
-};
-
-export const fetchPokemonByParameter = async <T>(url: string, param: string): Promise<T | null> => {
+export const fetchPokemonByParameter = async <T>(url: string): Promise<T | null> => {
   let results: T | null = null;
   try {
-    const response = await fetch(`${url}/${param}`);
+    const response = await fetch(url);
     const data: T = await response.json();
     results = data;
   } catch (error) {
@@ -42,12 +11,30 @@ export const fetchPokemonByParameter = async <T>(url: string, param: string): Pr
   }
 };
 
-// export const fetch;
+export const fetchBase = async <T1 extends { results: Array<T2> }, T2>(url: string) => {
+  let base: Array<T2> = [];
+  try {
+    const data = await fetch(url);
+    const { results }: T1 = await data.json();
+    base = [...results];
+  } catch (error) {
+    console.error(error);
+  } finally {
+    return base;
+  }
+};
 
-// pokemons, species, ability, type
-
-// pokemon/charizard
-// type || type/normal
-// encounter-method
-// ability/4 || ability/blaze
-// move || move/tackle
+export const fetchDetails = async <T1 extends { url: string }, T2>(arr: Array<T1>) => {
+  let detailed: Array<T2> = [];
+  try {
+    const responses = arr.map(async (item) => {
+      const response = await fetch(item.url);
+      return (await response.json()) as T2;
+    });
+    detailed = await Promise.all(responses);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    return detailed;
+  }
+};

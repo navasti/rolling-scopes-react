@@ -13,11 +13,3 @@ export const CommonMessage = styled.p`
   margin-top: 20px;
   font-size: 1.4rem;
 `;
-
-export const CardsWrapper = styled.div<{ isLoading: boolean }>`
-  align-self: ${({ isLoading }) => (isLoading ? 'center' : 'flex-start')};
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  display: grid;
-  width: 100%;
-  gap: 10px;
-`;
