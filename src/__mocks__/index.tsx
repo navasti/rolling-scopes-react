@@ -1,18 +1,54 @@
-import { PokemonData, PokemonDetails } from 'types';
+import { CustomPokemon, ErrorsObject, PokemonData, PokemonDetails } from 'types';
+import { CHECK_FIELDS, ERROR_MESSAGES, TEXT_FIELDS } from 'appConstants';
+import { createRef, RefObject } from 'react';
 
+export const visible = true;
+export const invisible = false;
 export const isLoading = false;
 
-export const links = ['Home', 'About', 'Invalid'];
+export const errorRef: RefObject<HTMLSpanElement> = createRef();
+export const inputRef: RefObject<HTMLInputElement> = createRef();
+export const selectRef: RefObject<HTMLSelectElement> = createRef();
 
+export const links = ['Home', 'About', 'Form', 'Invalid'];
 export const componentName = 'About';
-
 export const location = '/about';
+
+export const TestingElement = () => <p>testing element</p>;
+export const TestingErrorElement = () => <p>testing error</p>;
 
 export const pokemons: PokemonData = {
   results: [{ name: 'testName', url: 'testURL' }],
   previous: null,
   next: null,
   count: 1,
+};
+
+export const testOnChange = (field: TEXT_FIELDS | CHECK_FIELDS) => console.log(field);
+
+export const testEmptyErrors: ErrorsObject = {
+  birthday: null,
+  consent: null,
+  gender: null,
+  name: null,
+  type: null,
+};
+
+export const testErrors: ErrorsObject = {
+  birthday: ERROR_MESSAGES.birthday,
+  consent: ERROR_MESSAGES.consent,
+  gender: ERROR_MESSAGES.gender,
+  name: ERROR_MESSAGES.name,
+  type: ERROR_MESSAGES.type,
+};
+
+export const customPokemon: CustomPokemon = {
+  birthday: '01-01-1999',
+  name: 'pokemonix',
+  gender: 'male',
+  avatar: null,
+  type: 'fire',
+  shiny: true,
 };
 
 export const detailedPokemons: Array<PokemonDetails> = [

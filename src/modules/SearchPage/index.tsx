@@ -19,11 +19,14 @@ type State = {
 };
 
 export class SearchPage extends React.Component<Props, State> {
-  state: State = {
-    isLoading: true,
-    inputValue: '',
-    pokemons: [],
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      inputValue: '',
+      pokemons: [],
+    };
+  }
   componentDidMount() {
     const value = window.localStorage.getItem(INPUT_VALUE_KEY);
     if (value != null) {

@@ -3,12 +3,13 @@ import { detailedPokemons, localStorageMock } from '__mocks__';
 import { Card, SearchBar, SearchPage } from 'modules';
 import { BrowserRouter } from 'react-router-dom';
 import { INPUT_VALUE_KEY } from 'appConstants';
+import { PokemonDetails } from 'types';
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-const cardExpectations = (pokemon) => {
+const cardExpectations = (pokemon: PokemonDetails) => {
   const { sprites, abilities, stats, name } = pokemon;
   // Image
   const imgEl = screen.getAllByRole('img')[0];
@@ -39,7 +40,7 @@ describe('Search page and related components', () => {
     render(<SearchPage componentName="SearchPage" location="/" />, {
       wrapper: BrowserRouter,
     });
-    const input = screen.getByPlaceholderText('Type here');
+    const input = screen.getByPlaceholderText('Type here') as HTMLInputElement;
     expect(input.value).toEqual('');
     fireEvent.change(input, { target: { value: 'changed value' } });
     expect(input.value).toEqual('changed value');
@@ -80,7 +81,7 @@ describe('SearchPage components', () => {
         onChange={(e) => (inputValue = e.target.value)}
       />
     );
-    const input = screen.getByLabelText(/test/);
+    const input = screen.getByLabelText(/test/) as HTMLInputElement;
     expect(input).toBeInTheDocument();
     expect(input.value).toEqual('initial');
     fireEvent.change(input, { target: { value: 'test' } });

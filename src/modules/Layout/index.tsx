@@ -8,14 +8,12 @@ type Props = {
   location: string;
 };
 
-export class Layout extends React.Component<Props, unknown> {
-  render() {
-    const { children, componentName, location } = this.props;
-    return (
-      <S.LayoutWrapper>
-        <Header location={location} componentName={componentName} />
-        <main role="main">{children}</main>
-      </S.LayoutWrapper>
-    );
-  }
-}
+export const Layout = (props: Props) => {
+  const { children, componentName, location } = props;
+  return (
+    <S.LayoutWrapper>
+      <Header location={location} componentName={componentName} />
+      <main role="main">{children}</main>
+    </S.LayoutWrapper>
+  );
+};
