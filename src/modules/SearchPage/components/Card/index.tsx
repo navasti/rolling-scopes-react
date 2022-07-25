@@ -1,6 +1,5 @@
 import { PokemonDetails } from 'types';
 import * as S from './styled';
-import React from 'react';
 
 type Props = {
   pokemon: PokemonDetails;

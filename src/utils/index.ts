@@ -12,6 +12,4 @@ export const uuid = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2);
 };
 
-export const capitalize = (text: string) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-};
+export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);

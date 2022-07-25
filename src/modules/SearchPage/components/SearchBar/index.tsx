@@ -1,6 +1,6 @@
 import * as S from './styled';
+import { ChangeEvent } from 'react';
 import { SearchIcon } from 'assets/images/svg';
-import React, { ChangeEvent } from 'react';
 
 type Props = {
   label: string;

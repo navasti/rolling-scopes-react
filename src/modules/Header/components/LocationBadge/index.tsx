@@ -1,5 +1,4 @@
 import * as S from './styled';
-import React from 'react';
 
 type Props = {
   componentName: string;
