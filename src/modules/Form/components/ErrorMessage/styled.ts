@@ -6,7 +6,7 @@ type Props = {
 };
 
 export const ErrorMessage = styled.span<Props>`
-  text-align: ${(props) => (props?.center ? 'center' : 'left')};
+  text-align: ${(props) => (props.center ? 'center' : 'left')};
   opacity: ${(props) => (props.visible ? '1' : '0')};
   transition: opacity 0.2s ease-in-out;
   margin-bottom: 10px;
