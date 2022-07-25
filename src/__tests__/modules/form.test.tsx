@@ -3,14 +3,14 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { capitalize } from 'utils';
 import {
+  testEmptyErrors,
   componentName,
   customPokemon,
   testOnChange,
+  testErrors,
   invisible,
-  selectRef,
   location,
   inputRef,
-  errorRef,
   visible,
 } from '__mocks__';
 import {
@@ -29,7 +29,7 @@ import {
 const inputExpectations = (labelText: string, visible?: boolean, errorText?: string) => {
   const input = screen.getByLabelText(labelText);
   expect(input).toBeInTheDocument();
-  if (errorText) {
+  if (!visible && errorText) {
     const error = screen.getByText(errorText);
     expect(error).toBeInTheDocument();
     expect(error).toHaveStyle(`opacity: ${visible ? '1' : '0'};`);
@@ -38,58 +38,34 @@ const inputExpectations = (labelText: string, visible?: boolean, errorText?: str
 
 describe('NameField', () => {
   it('With invisible error message', () => {
-    render(
-      <NameField onChange={testOnChange} ref={inputRef}>
-        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.NAME} />
-      </NameField>
-    );
-    inputExpectations(`*${capitalize(FIELDS.NAME)}`, invisible, ERROR_MESSAGES.NAME);
+    render(<NameField errors={testEmptyErrors} onChange={testOnChange} />);
+    inputExpectations(`*${capitalize(FIELDS.name)}`, invisible);
   });
   it('With visible error message', () => {
-    render(
-      <NameField onChange={testOnChange} ref={inputRef}>
-        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.NAME} />
-      </NameField>
-    );
-    inputExpectations(`*${capitalize(FIELDS.NAME)}`, visible, ERROR_MESSAGES.NAME);
+    render(<NameField errors={testErrors} onChange={testOnChange} />);
+    inputExpectations(`*${capitalize(FIELDS.name)}`, visible, ERROR_MESSAGES.name);
   });
 });
 
 describe('BirthdayField', () => {
   it('With invisible error message', () => {
-    render(
-      <BirthdayField onChange={testOnChange} ref={inputRef}>
-        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.BIRTHDAY} />
-      </BirthdayField>
-    );
-    inputExpectations(`*${capitalize(FIELDS.BIRTHDAY)}`, invisible, ERROR_MESSAGES.BIRTHDAY);
+    render(<BirthdayField errors={testEmptyErrors} onChange={testOnChange} />);
+    inputExpectations(`*${capitalize(FIELDS.birthday)}`, invisible);
   });
   it('With visible error message', () => {
-    render(
-      <BirthdayField onChange={testOnChange} ref={inputRef}>
-        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.BIRTHDAY} />
-      </BirthdayField>
-    );
-    inputExpectations(`*${capitalize(FIELDS.BIRTHDAY)}`, visible, ERROR_MESSAGES.BIRTHDAY);
+    render(<BirthdayField errors={testErrors} onChange={testOnChange} />);
+    inputExpectations(`*${capitalize(FIELDS.birthday)}`, visible, ERROR_MESSAGES.birthday);
   });
 });
 
 describe('ConsentField', () => {
   it('With invisible error message', () => {
-    render(
-      <ConsentField onChange={testOnChange} ref={inputRef}>
-        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.CONSENT} />
-      </ConsentField>
-    );
-    inputExpectations('I have read and accept the regulations', invisible, ERROR_MESSAGES.CONSENT);
+    render(<ConsentField errors={testEmptyErrors} onChange={testOnChange} />);
+    inputExpectations('I have read and accept the regulations', invisible);
   });
   it('With visible error message', () => {
-    render(
-      <ConsentField onChange={testOnChange} ref={inputRef}>
-        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.CONSENT} />
-      </ConsentField>
-    );
-    inputExpectations('I have read and accept the regulations', visible, ERROR_MESSAGES.CONSENT);
+    render(<ConsentField errors={testErrors} onChange={testOnChange} />);
+    inputExpectations('I have read and accept the regulations', visible, ERROR_MESSAGES.consent);
   });
 });
 
@@ -97,43 +73,35 @@ describe('GenderField', () => {
   it('With invisible error message', () => {
     render(
       <div>
-        <GenderField name={MALE} ref={inputRef} onChange={testOnChange} />
-        <GenderField name={FEMALE} ref={inputRef} onChange={testOnChange} />
-        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.GENDER} />
+        <GenderField name={MALE} onChange={testOnChange} />;
+        <GenderField name={FEMALE} onChange={testOnChange} />
+        <ErrorMessage message={testEmptyErrors.gender} visible={invisible} />
       </div>
     );
-    inputExpectations(`${capitalize(FEMALE)}`, invisible, ERROR_MESSAGES.GENDER);
-    inputExpectations(`${capitalize(MALE)}`, invisible, ERROR_MESSAGES.GENDER);
+    inputExpectations(`${capitalize(MALE)}`, invisible);
+    inputExpectations(`${capitalize(MALE)}`, invisible);
   });
   it('With visible error message', () => {
     render(
       <div>
-        <GenderField name={MALE} ref={inputRef} onChange={testOnChange} />
-        <GenderField name={FEMALE} ref={inputRef} onChange={testOnChange} />
-        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.GENDER} />
+        <GenderField name={MALE} onChange={testOnChange} />;
+        <GenderField name={FEMALE} onChange={testOnChange} />
+        <ErrorMessage message={testErrors.gender} visible={visible} />
       </div>
     );
-    inputExpectations(`${capitalize(FEMALE)}`, visible, ERROR_MESSAGES.GENDER);
-    inputExpectations(`${capitalize(MALE)}`, visible, ERROR_MESSAGES.GENDER);
+    inputExpectations(`${capitalize(MALE)}`, visible, ERROR_MESSAGES.gender);
+    inputExpectations(`${capitalize(MALE)}`, visible, ERROR_MESSAGES.gender);
   });
 });
 
 describe('TypeField', () => {
   it('With invisible error message', () => {
-    render(
-      <TypeField ref={selectRef} onChange={testOnChange}>
-        <ErrorMessage visible={invisible} ref={errorRef} message={ERROR_MESSAGES.TYPE} />
-      </TypeField>
-    );
-    inputExpectations(`*Main ${FIELDS.TYPE}`, invisible, ERROR_MESSAGES.TYPE);
+    render(<TypeField errors={testEmptyErrors} onChange={testOnChange} />);
+    inputExpectations(`*Main ${FIELDS.type}`, invisible);
   });
   it('With visible error message', () => {
-    render(
-      <TypeField ref={selectRef} onChange={testOnChange}>
-        <ErrorMessage visible={visible} ref={errorRef} message={ERROR_MESSAGES.TYPE} />
-      </TypeField>
-    );
-    inputExpectations(`*Main ${FIELDS.TYPE}`, visible, ERROR_MESSAGES.TYPE);
+    render(<TypeField errors={testErrors} onChange={testOnChange} />);
+    inputExpectations(`*Main ${FIELDS.type}`, visible, ERROR_MESSAGES.type);
   });
 });
 
