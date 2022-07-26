@@ -30,7 +30,7 @@ export const Card = ({ pokemon }: Props) => {
           <p>Height: {pokemon.height}</p>
         </S.BaseInformation>
       </S.ImageWrapper>
-      <S.Abilities>
+      {/* <S.Abilities>
         <S.Title>Pokemon abilities</S.Title>
         {pokemon.abilities.map((ability) => (
           <p key={`${pokemon.id}-${ability.ability.name}`}>
@@ -46,7 +46,7 @@ export const Card = ({ pokemon }: Props) => {
             {stat.stat.name.toUpperCase()}, power: {stat.base_stat}, effort: {stat.effort}
           </p>
         ))}
-      </S.Stats>
+      </S.Stats> */}
     </S.Card>
   );
 };

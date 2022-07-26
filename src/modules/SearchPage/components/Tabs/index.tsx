@@ -10,12 +10,12 @@ type Props = {
 
 export const Tabs = ({ activeTab, lengths, isLoading, options, onClick }: Props) => {
   return (
-    <div>
+    <S.TabsWrapper>
       {options.map((option) => (
-        <S.Option active={option === activeTab} key={option} onClick={() => onClick(option)}>
+        <S.Tab active={option === activeTab} key={option} onClick={() => onClick(option)}>
           {option} {!isLoading && `(${lengths[option]})`}
-        </S.Option>
+        </S.Tab>
       ))}
-    </div>
+    </S.TabsWrapper>
   );
 };
