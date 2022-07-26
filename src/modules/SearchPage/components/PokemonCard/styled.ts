@@ -17,12 +17,13 @@ export const Card = styled.div`
 `;
 
 export const ImageWrapper = styled.div`
+  align-items: center;
   display: flex;
 `;
 
 export const Image = styled.img`
   border-right: 1px solid #aaa;
-  align-self: center;
+  width: 70px;
 `;
 
 export const Title = styled.span`

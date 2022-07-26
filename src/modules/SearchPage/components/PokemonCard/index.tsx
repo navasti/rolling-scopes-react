@@ -32,9 +32,6 @@ export const PokemonCard = ({ pokemon, handlePokemonSelect, handleModalOpened }:
                 );
               })}
             </p>
-            <p>Base experience: {pokemon.base_experience}</p>
-            <p>Weight: {pokemon.weight}</p>
-            <p>Height: {pokemon.height}</p>
           </S.BaseInformation>
         </S.ImageWrapper>
       </S.Card>

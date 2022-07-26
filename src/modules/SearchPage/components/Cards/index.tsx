@@ -51,7 +51,7 @@ export class Cards extends React.Component<Props, State> {
           <Loader />
         ) : (
           <S.CardsWrapper
-            min={this.props.activeTab === AvailableTabs.pokemons ? '250px' : '130px'}
+            min={this.props.activeTab === AvailableTabs.pokemons ? '190px' : '130px'}
             isLoading={this.props.isLoading}
           >
             {this.props.activeTab === AvailableTabs.pokemons ? (

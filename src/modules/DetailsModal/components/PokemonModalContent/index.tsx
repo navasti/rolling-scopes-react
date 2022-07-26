@@ -5,6 +5,15 @@ import * as S from './styled';
 export const PokemonModalContent = ({ selectedPokemon }: { selectedPokemon: PokemonDetails }) => {
   return (
     <div>
+      <S.ParagraphContentProperty>
+        <b>Weight:</b> {selectedPokemon.weight}
+      </S.ParagraphContentProperty>
+      <S.ParagraphContentProperty>
+        <b>Height:</b> {selectedPokemon.height}
+      </S.ParagraphContentProperty>
+      <S.ParagraphContentProperty>
+        <b>Base experience:</b> {selectedPokemon.base_experience}
+      </S.ParagraphContentProperty>
       <S.DivContentProperty>
         <S.PokemonContentTitle>Pokemon abilities</S.PokemonContentTitle>
         {selectedPokemon.abilities.map((ability) => (

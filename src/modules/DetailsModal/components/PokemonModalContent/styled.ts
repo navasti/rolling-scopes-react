@@ -10,3 +10,8 @@ export const PokemonContentTitle = styled.span`
   margin-bottom: 2px;
   font-weight: 600;
 `;
+
+export const ParagraphContentProperty = styled.p`
+  font-size: 0.875rem;
+  margin-top: 5px;
+`;
