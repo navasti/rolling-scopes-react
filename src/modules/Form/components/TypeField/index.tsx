@@ -1,5 +1,5 @@
 import { POKEMON_TYPES, TEXT_FIELDS } from 'appConstants';
-import { ErrorMessage } from '../ErrorMessage';
+import { ErrorMessage } from 'modules/Form/components';
 import { FIELDS } from 'appConstants';
 import { ErrorsObject } from 'types';
 import { forwardRef } from 'react';

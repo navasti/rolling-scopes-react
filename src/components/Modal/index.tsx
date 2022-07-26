@@ -1,60 +1,54 @@
 import { TimesIcon } from 'assets/images/svg';
+import React, { ForwardedRef, RefObject } from 'react';
 import * as S from './styled';
-import React from 'react';
 
 type Props = {
+  handleModalOpened: (isModalOpened: boolean) => void;
   children: [JSX.Element, JSX.Element];
-};
-
-type State = {
   opened: boolean;
 };
 
-export class Modal extends React.Component<Props, State> {
-  constructor(props: Props) {
+export const Modal = React.forwardRef<HTMLDivElement, Props>((props, ref) => (
+  <ModalClass innerRef={ref} {...props} />
+));
+class ModalClass extends React.Component<
+  Props & { innerRef: ForwardedRef<HTMLDivElement> },
+  unknown
+> {
+  constructor(props: Props & { innerRef: ForwardedRef<HTMLDivElement> }) {
     super(props);
-    this.state = {
-      opened: false,
-    };
   }
-  closeModal = () => {
-    this.setState({ opened: false });
+  componentDidMount() {
+    document.addEventListener('click', (event) => this.handleClickOutside(event));
+  }
+  componentWillUnmount() {
+    document.removeEventListener('click', (event) => this.handleClickOutside(event));
+  }
+  handleClickOutside = (event: MouseEvent) => {
+    const current = (this.props.innerRef as RefObject<HTMLDivElement>).current;
+    const target = event.target as HTMLElement;
+    if (this.props.opened && current && !current.contains(target)) {
+      this.props.handleModalOpened(false);
+    }
   };
-  // handleTypeChange = async ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-  //   const data = await fetchPokemonByParameter<PokemonTypeDetails>(API.TYPE, target.value);
-  //   console.log(data);
-  // };
-  // handleMoveChange = async ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-  //   const data = await fetchPokemonByParameter<PokemonTypeDetails>(API.MOVE, target.value);
-  //   console.log(data);
-  // };
-  // handleNameChange = async ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-  //   const data = await fetchPokemonByParameter<PokemonTypeDetails>(API.NAME, target.value);
-  //   console.log(data);
-  // };
-
   render() {
-    const { opened } = this.state;
-    const { children } = this.props;
+    const { children, opened, innerRef, handleModalOpened } = this.props;
     return (
-      opened && (
-        <S.ModalWrapper>
-          <S.ModalWindow>
-            <S.Header>
-              <p>{children[0]}</p>
-              <S.CloseButton onClick={this.closeModal}>
-                <TimesIcon />
-              </S.CloseButton>
-            </S.Header>
-            <S.Content>
-              {children[1]}
-              {/* <input type="text" placeholder="type" onChange={(e) => this.handleTypeChange(e)} />
-              <input type="text" placeholder="move" onChange={(e) => this.handleMoveChange(e)} />
-              <input type="text" placeholder="name" onChange={(e) => this.handleNameChange(e)} /> */}
-            </S.Content>
-          </S.ModalWindow>
-        </S.ModalWrapper>
-      )
+      <>
+        {opened && (
+          <S.ModalWrapper>
+            <S.ModalWindow ref={innerRef}>
+              <S.Header>
+                <p>{children[0]}</p>
+                <S.CloseButton onClick={() => handleModalOpened(false)}>
+                  <TimesIcon />
+                </S.CloseButton>
+              </S.Header>
+              <S.Content>{children[1]}</S.Content>
+            </S.ModalWindow>
+          </S.ModalWrapper>
+        )}
+      </>
     );
   }
 }

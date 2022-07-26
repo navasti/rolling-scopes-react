@@ -4,14 +4,6 @@ import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
 import {
-  FIELDS_VALIDATION_BY_NAME,
-  ERROR_MESSAGES,
-  CHECK_FIELDS,
-  TEXT_FIELDS,
-  FEMALE,
-  MALE,
-} from 'appConstants';
-import {
   BirthdayField,
   ErrorMessage,
   ConsentField,
@@ -21,7 +13,15 @@ import {
   TypeField,
   NameField,
   FormCard,
-} from './components';
+} from 'modules/Form/components';
+import {
+  FIELDS_VALIDATION_BY_NAME,
+  ERROR_MESSAGES,
+  CHECK_FIELDS,
+  TEXT_FIELDS,
+  FEMALE,
+  MALE,
+} from 'appConstants';
 
 type Props = {
   componentName: string;

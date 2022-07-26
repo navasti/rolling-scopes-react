@@ -1,14 +1,9 @@
 import { SearchPage, About, NotFound, Form } from 'modules';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { Modal } from 'components';
 
 export const App = () => {
   return (
     <>
-      <Modal>
-        <span>Pokemon details</span>
-        <span>kontent 2312328374897</span>
-      </Modal>
       <Routes>
         <Route path="/" element={<SearchPage componentName="SearchPage" location="/" />} />
         <Route path="/about" element={<About componentName="About" location="/about" />} />

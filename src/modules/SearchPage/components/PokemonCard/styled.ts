@@ -5,8 +5,15 @@ export const Card = styled.div`
   flex-direction: column;
   border-radius: 10px;
   font-size: 0.775rem;
-  padding: 5px;
+  cursor: pointer;
   display: flex;
+  padding: 5px;
+  &:hover {
+    border-color: #000;
+    img {
+      border-color: #000;
+    }
+  }
 `;
 
 export const ImageWrapper = styled.div`
@@ -27,12 +34,4 @@ export const Title = styled.span`
 
 export const BaseInformation = styled.div`
   margin-left: 10px;
-`;
-
-export const Stats = styled.div`
-  margin-top: 5px;
-`;
-
-export const Abilities = styled.div`
-  margin-top: 5px;
 `;

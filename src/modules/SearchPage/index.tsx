@@ -1,8 +1,7 @@
 import { AvailableTabs, API, INPUT_VALUE_KEY, Lengths, tabs } from 'appConstants';
 import { fetchPokemonByParameter, fetchDetails, fetchBase } from 'utils';
+import { SearchBar, Tabs, Cards } from 'modules/SearchPage/components';
 import React, { ChangeEvent, KeyboardEvent } from 'react';
-import { SearchBar, Tabs, Cards } from './components';
-import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {
@@ -13,8 +12,8 @@ import {
   PokemonMove,
   PokemonType,
   MovesData,
-  Pokemon,
   TypesData,
+  Pokemon,
 } from 'types';
 
 type Props = {
@@ -116,40 +115,34 @@ export class SearchPage extends React.Component<Props, State> {
   };
 
   render() {
-    const { inputValue, isLoading, pokemons, types, moves, activeTab, lengths } = this.state;
-    const { componentName, location } = this.props;
     return (
-      <Layout componentName={componentName} location={location}>
-        <S.SearchPageView>
-          <SearchBar
-            label="Local Storage Input"
-            onKeyDown={this.onKeyDown}
-            onChange={this.onChange}
-            inputValue={inputValue}
-            isLoading={isLoading}
-          />
-          <Tabs
-            onClick={this.onClick}
-            isLoading={isLoading}
-            activeTab={activeTab}
-            lengths={lengths}
-            options={tabs}
-          />
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <>
-              {activeTab === AvailableTabs.pokemons ? (
-                <Cards pokemons={pokemons} isLoading={isLoading} />
-              ) : activeTab === AvailableTabs.moves ? (
-                <Cards moves={moves} isLoading={isLoading} />
-              ) : (
-                activeTab === AvailableTabs.types && <Cards types={types} isLoading={isLoading} />
-              )}
-            </>
-          )}
-        </S.SearchPageView>
-      </Layout>
+      <>
+        <Layout componentName={this.props.componentName} location={this.props.location}>
+          <S.SearchPageView>
+            <SearchBar
+              label="Local Storage Input"
+              onKeyDown={this.onKeyDown}
+              onChange={this.onChange}
+              inputValue={this.state.inputValue}
+              isLoading={this.state.isLoading}
+            />
+            <Tabs
+              onClick={this.onClick}
+              isLoading={this.state.isLoading}
+              activeTab={this.state.activeTab}
+              lengths={this.state.lengths}
+              options={tabs}
+            />
+            <Cards
+              isLoading={this.state.isLoading}
+              activeTab={this.state.activeTab}
+              pokemons={this.state.pokemons}
+              types={this.state.types}
+              moves={this.state.moves}
+            />
+          </S.SearchPageView>
+        </Layout>
+      </>
     );
   }
 }

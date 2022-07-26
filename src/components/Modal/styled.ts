@@ -17,8 +17,8 @@ export const ModalWindow = styled.div`
   background-color: #eee;
   border: 2px solid #222;
   border-radius: 10px;
-  /* min-height: 400px; */
-  max-height: 800px;
+  overflow-y: auto;
+  max-height: 80%;
   padding: 20px;
   width: 480px;
 `;
@@ -47,7 +47,7 @@ export const CloseButton = styled.button`
 `;
 
 export const Content = styled.div`
-  margin: 25px 0;
+  margin: 15px 0;
 `;
 
 export const Footer = styled.footer``;

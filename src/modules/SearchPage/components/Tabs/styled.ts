@@ -8,7 +8,7 @@ export const TabsWrapper = styled.div`
   background-color: #3c1361;
   justify-content: center;
   border-radius: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   align-items: center;
   display: flex;
 `;

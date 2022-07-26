@@ -1,5 +1,5 @@
+import { ErrorMessage } from 'modules/Form/components';
 import { FIELDS, TEXT_FIELDS } from 'appConstants';
-import { ErrorMessage } from '../ErrorMessage';
 import { getTodayDate } from 'utils';
 import { ErrorsObject } from 'types';
 import { forwardRef } from 'react';

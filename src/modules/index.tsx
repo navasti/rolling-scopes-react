@@ -5,14 +5,16 @@ export { Layout } from './Layout';
 export { Header } from './Header';
 export { NotFound } from './NotFound';
 export { SearchPage } from './SearchPage';
+export { DetailsModal } from './DetailsModal';
 export { LocationBadge } from './Header/components';
-export { Card, SearchBar } from './SearchPage/components';
+export { Cards, MoveCard, PokemonCard, SearchBar, Tabs, TypeCard } from './SearchPage/components';
+export { MoveModalContent, PokemonModalContent, TypeModalContent } from './DetailsModal/components';
 export {
   BirthdayField,
   ConsentField,
   ErrorMessage,
-  AvatarField,
   GenderField,
+  AvatarField,
   ShinyField,
   NameField,
   TypeField,

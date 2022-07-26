@@ -1,5 +1,5 @@
+import { ErrorMessage } from 'modules/Form/components';
 import { CHECK_FIELDS, FIELDS } from 'appConstants';
-import { ErrorMessage } from '../ErrorMessage';
 import { ErrorsObject } from 'types';
 import { forwardRef } from 'react';
 import * as S from './styled';

@@ -1,11 +1,12 @@
 import { AvailableTabs, Lengths, tabs } from 'appConstants';
 import * as S from './styled';
+
 type Props = {
-  lengths: Lengths;
-  isLoading: boolean;
-  options: typeof tabs;
-  activeTab: AvailableTabs;
   onClick: (tab: AvailableTabs) => void;
+  activeTab: AvailableTabs;
+  options: typeof tabs;
+  isLoading: boolean;
+  lengths: Lengths;
 };
 
 export const Tabs = ({ activeTab, lengths, isLoading, options, onClick }: Props) => {
