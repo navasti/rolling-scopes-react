@@ -64,11 +64,13 @@ export class SearchPage extends React.Component<Props, State> {
   }
 
   onClick = (tab: AvailableTabs) => this.setState({ activeTab: tab });
+
   onChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     this.setState({ inputValue: value });
     window.localStorage.setItem(INPUT_VALUE_KEY, value);
   };
+
   onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
       this.setState({ isLoading: true });

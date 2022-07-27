@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
-export const CardsWrapper = styled.div<{ isLoading: boolean; min: string }>`
-  align-self: ${({ isLoading }) => (isLoading ? 'center' : 'flex-start')};
+export const CardsWrapper = styled.div<{ isLoading: boolean; min: string; center?: boolean }>`
   grid-template-columns: repeat(auto-fill, minmax(${({ min }) => min}, 1fr));
+  align-self: ${({ isLoading }) => (isLoading ? 'center' : 'flex-start')};
+  justify-items: ${({ center }) => (center ? 'center' : 'stretch')};
   display: grid;
   width: 100%;
   gap: 10px;
