@@ -1,14 +1,17 @@
 import { ErrorMessages } from 'appConstants';
 import { createRef, RefObject } from 'react';
 import {
+  PokemonMoveDetails,
+  PokemonTypeDetails,
   PokemonDetails,
   CustomPokemon,
   ErrorsObject,
   CheckFields,
   PokemonData,
   TextFields,
-  PokemonMoveDetails,
-  PokemonTypeDetails,
+  PokemonType,
+  Pokemon,
+  PokemonMove,
 } from 'types';
 
 export const visible = true;
@@ -25,6 +28,21 @@ export const location = '/about';
 
 export const TestingElement = () => <p>testing element</p>;
 export const TestingErrorElement = () => <p>testing error</p>;
+
+export const pokemonTypes: PokemonType = {
+  name: 'typex',
+  url: 'url',
+};
+
+export const pokemons: Pokemon = {
+  name: 'pokemonix',
+  url: 'url',
+};
+
+export const pokemonMoves: PokemonMove = {
+  name: 'movix',
+  url: 'url',
+};
 
 export const typeModalContentProperties = [
   'Double damage from',
@@ -55,7 +73,7 @@ export const pokemonModalContentProperties = [
   'Types',
 ] as const;
 
-export const pokemons: PokemonData = {
+export const pokemonData: PokemonData = {
   results: [{ name: 'testName', url: 'testURL' }],
   previous: null,
   next: null,

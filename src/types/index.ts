@@ -47,6 +47,9 @@ export type MovesData = {
   count: number;
 };
 
+export type MockBaseDataType = Pokemon | PokemonMove | PokemonType;
+export type MockDetailedDataType = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+
 export type DamageRelations = {
   double_damage_from: Array<PokemonType>;
   double_damage_to: Array<PokemonType>;

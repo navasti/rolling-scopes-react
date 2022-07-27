@@ -4,7 +4,7 @@ export const isServerError = (status: number) => String(status).startsWith(Error
 
 export const hasError = (status: number) => !String(status).startsWith(ErrorStatuses.success);
 
-export const handleCatch = (error: unknown) => {
+const handleCatch = (error: unknown) => {
   error instanceof Error && window.alert(error.message);
 };
 
