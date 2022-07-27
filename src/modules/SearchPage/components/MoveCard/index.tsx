@@ -14,7 +14,7 @@ export const MoveCard = ({ move, handleModalOpened, handleMoveSelect }: Props) =
   };
   return (
     <S.Card onClick={onClick}>
-      <div>{move.name}</div>
+      <p>{move.name}</p>
     </S.Card>
   );
 };

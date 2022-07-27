@@ -7,6 +7,8 @@ import {
   CheckFields,
   PokemonData,
   TextFields,
+  PokemonMoveDetails,
+  PokemonTypeDetails,
 } from 'types';
 
 export const visible = true;
@@ -23,6 +25,35 @@ export const location = '/about';
 
 export const TestingElement = () => <p>testing element</p>;
 export const TestingErrorElement = () => <p>testing error</p>;
+
+export const typeModalContentProperties = [
+  'Double damage from',
+  'Double damage to',
+  'Half damage from',
+  'Half damage to',
+  'No damage from',
+  'No damage to',
+  'Pokemons',
+  'Moves',
+] as const;
+
+export const moveModalContentProperties = [
+  'Learned by',
+  'Priority',
+  'Accuracy',
+  'Power',
+  'Type',
+  'PP',
+] as const;
+
+export const pokemonModalContentProperties = [
+  'Pokemon statistics',
+  'Pokemon abilities',
+  'Base experience',
+  'Height',
+  'Weight',
+  'Types',
+] as const;
 
 export const pokemons: PokemonData = {
   results: [{ name: 'testName', url: 'testURL' }],
@@ -58,15 +89,45 @@ export const customPokemon: CustomPokemon = {
   shiny: true,
 };
 
+export const detailedTypes: Array<PokemonTypeDetails> = [
+  {
+    damage_relations: {
+      double_damage_from: [],
+      double_damage_to: [{ name: 'toTest', url: 'urlTest' }],
+      half_damage_from: [{ name: 'fromTest', url: 'urlTest' }],
+      half_damage_to: [],
+      no_damage_from: [],
+      no_damage_to: [],
+    },
+    pokemon: [{ pokemon: { name: 'pokemonTest', url: 'urlTest' }, slot: 1 }],
+    moves: [{ name: 'moveTest', url: 'urlTest' }],
+    name: 'typeTest',
+    id: 10,
+  },
+];
+
+export const detailedMoves: Array<PokemonMoveDetails> = [
+  {
+    learned_by_pokemon: [{ name: 'pokomonTest', url: 'urlTest' }],
+    type: { name: 'typeTest', url: 'urlTest' },
+    name: 'moveTest',
+    accuracy: 60,
+    priority: 0,
+    power: 50,
+    id: 20,
+    pp: 15,
+  },
+];
+
 export const detailedPokemons: Array<PokemonDetails> = [
   {
     abilities: [{ ability: { name: 'ability' }, is_hidden: false, slot: 2 }],
     stats: [{ base_stat: 33, effort: 33, stat: { name: 'test' } }],
     sprites: { back_default: 'url', front_default: 'url' },
-    types: [{ slot: 2, type: { name: 'test' } }],
+    types: [{ slot: 2, type: { name: 'typeTest' } }],
     name: 'Testing pokemon',
-    base_experience: 10,
-    height: 10,
+    base_experience: 12,
+    height: 15,
     weight: 10,
     id: 34,
   },
@@ -74,7 +135,7 @@ export const detailedPokemons: Array<PokemonDetails> = [
     abilities: [{ ability: { name: 'ability2' }, is_hidden: true, slot: 1 }],
     stats: [{ base_stat: 22, effort: 22, stat: { name: 'test' } }],
     sprites: { back_default: 'url2', front_default: 'url2' },
-    types: [{ slot: 2, type: { name: 'test2' } }],
+    types: [{ slot: 2, type: { name: 'typeTest2' } }],
     name: 'Testing pokemon2',
     base_experience: 16,
     height: 11,

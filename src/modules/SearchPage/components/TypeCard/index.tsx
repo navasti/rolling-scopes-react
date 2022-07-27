@@ -15,7 +15,7 @@ export const TypeCard = ({ type, handleModalOpened, handleTypeSelect }: Props) =
   return (
     <>
       <S.Card onClick={onClick}>
-        <div>{type.name}</div>
+        <p>{type.name}</p>
       </S.Card>
     </>
   );
