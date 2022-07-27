@@ -1,18 +1,14 @@
-enum ErrorStatuses {
-  success = '2',
-  client = '4',
-  server = '5',
-}
+import { ErrorStatuses } from 'appConstants';
 
-const isServerError = (status: number) => String(status).startsWith(ErrorStatuses.server);
+export const isServerError = (status: number) => String(status).startsWith(ErrorStatuses.server);
 
-const hasError = (status: number) => !String(status).startsWith(ErrorStatuses.success);
+export const hasError = (status: number) => !String(status).startsWith(ErrorStatuses.success);
 
-const handleCatch = (error: unknown) => {
+export const handleCatch = (error: unknown) => {
   error instanceof Error && window.alert(error.message);
 };
 
-const handleResponse = async <T>(response: Response) => {
+export const handleResponse = async <T>(response: Response) => {
   if (hasError(response.status)) {
     if (isServerError(response.status)) {
       window.alert('There was a server error');
@@ -20,7 +16,7 @@ const handleResponse = async <T>(response: Response) => {
   } else return (await response.json()) as T;
 };
 
-const handleMappedResponse = async <T>(arr: Array<Promise<Response>>) => {
+export const handleMappedResponse = async <T>(arr: Array<Promise<Response>>) => {
   const responses = await Promise.all(arr);
   const promises: Array<Promise<T>> = [];
   let errors = 0;

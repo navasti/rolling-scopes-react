@@ -29,10 +29,14 @@ export const SearchBar = (props: Props) => {
           />
         </S.InputWrapper>
       </S.SearchBar>
-      <b>Type and press enter to search for specific pokemon, type or move.</b>
-      <b style={{ marginBottom: '30px' }}>
-        Clear input and press enter to search for all pokemons, types and moves.
-      </b>
+      <S.InputInstructions>
+        <S.InputInstruction>
+          Type and press enter to search for specific pokemon, type or move.
+        </S.InputInstruction>
+        <S.InputInstruction>
+          Clear input and press enter to search for all pokemons, types and moves.
+        </S.InputInstruction>
+      </S.InputInstructions>
     </>
   );
 };

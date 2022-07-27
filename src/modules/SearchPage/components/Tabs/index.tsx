@@ -1,4 +1,5 @@
-import { AvailableTabs, Lengths, tabs } from 'appConstants';
+import { AvailableTabs, tabs } from 'appConstants';
+import { Lengths } from 'types';
 import * as S from './styled';
 
 type Props = {

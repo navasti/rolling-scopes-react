@@ -1,6 +1,13 @@
-import { CustomPokemon, ErrorsObject, PokemonData, PokemonDetails } from 'types';
-import { CHECK_FIELDS, ERROR_MESSAGES, TEXT_FIELDS } from 'appConstants';
+import { ErrorMessages } from 'appConstants';
 import { createRef, RefObject } from 'react';
+import {
+  PokemonDetails,
+  CustomPokemon,
+  ErrorsObject,
+  CheckFields,
+  PokemonData,
+  TextFields,
+} from 'types';
 
 export const visible = true;
 export const invisible = false;
@@ -24,7 +31,7 @@ export const pokemons: PokemonData = {
   count: 1,
 };
 
-export const testOnChange = (field: TEXT_FIELDS | CHECK_FIELDS) => console.log(field);
+export const testOnChange = (field: TextFields | CheckFields) => console.log(field);
 
 export const testEmptyErrors: ErrorsObject = {
   birthday: null,
@@ -35,11 +42,11 @@ export const testEmptyErrors: ErrorsObject = {
 };
 
 export const testErrors: ErrorsObject = {
-  birthday: ERROR_MESSAGES.birthday,
-  consent: ERROR_MESSAGES.consent,
-  gender: ERROR_MESSAGES.gender,
-  name: ERROR_MESSAGES.name,
-  type: ERROR_MESSAGES.type,
+  birthday: ErrorMessages.birthday,
+  consent: ErrorMessages.consent,
+  gender: ErrorMessages.gender,
+  name: ErrorMessages.name,
+  type: ErrorMessages.type,
 };
 
 export const customPokemon: CustomPokemon = {

@@ -1,4 +1,4 @@
-import { AvailableTabs, API, INPUT_VALUE_KEY, Lengths, tabs } from 'appConstants';
+import { AvailableTabs, API, INPUT_VALUE_KEY, tabs } from 'appConstants';
 import { fetchPokemonByParameter, fetchDetails, fetchBase } from 'utils';
 import { SearchBar, Tabs, Cards } from 'modules/SearchPage/components';
 import React, { ChangeEvent, KeyboardEvent } from 'react';
@@ -14,6 +14,7 @@ import {
   MovesData,
   TypesData,
   Pokemon,
+  Lengths,
 } from 'types';
 
 type Props = {

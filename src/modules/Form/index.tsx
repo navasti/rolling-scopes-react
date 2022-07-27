@@ -1,5 +1,5 @@
 import React, { createRef, FormEvent, RefObject } from 'react';
-import { CustomPokemon, ErrorsObject } from 'types';
+import { CheckFields, CustomPokemon, ErrorsObject, TextFields } from 'types';
 import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
@@ -14,14 +14,7 @@ import {
   NameField,
   FormCard,
 } from 'modules/Form/components';
-import {
-  FIELDS_VALIDATION_BY_NAME,
-  ERROR_MESSAGES,
-  CHECK_FIELDS,
-  TEXT_FIELDS,
-  FEMALE,
-  MALE,
-} from 'appConstants';
+import { FIELDS_VALIDATION_BY_NAME, FEMALE, MALE, ErrorMessages } from 'appConstants';
 
 type Props = {
   componentName: string;
@@ -69,7 +62,7 @@ export class Form extends React.Component<Props, State> {
     this.nameField = createRef();
   }
 
-  removeError = (field: TEXT_FIELDS | CHECK_FIELDS) => {
+  removeError = (field: TextFields | CheckFields) => {
     if (this.state.initialEnter) this.setState({ initialEnter: false });
     const errors = { ...this.state.errors };
     errors[field] = null;
@@ -87,15 +80,15 @@ export class Form extends React.Component<Props, State> {
     checkFields.forEach((checkField) => {
       const valid = checkField.some((field) => (field.current as HTMLInputElement)?.checked);
       const name = checkField[0]?.current?.name
-        ? (checkField[0].current.name as CHECK_FIELDS)
+        ? (checkField[0].current.name as CheckFields)
         : null;
-      if (!valid && name) errors[name] = ERROR_MESSAGES[name];
+      if (!valid && name) errors[name] = ErrorMessages[name];
     });
     textFields.forEach((textField) => {
-      const name = textField?.current?.name ? (textField.current.name as TEXT_FIELDS) : null;
+      const name = textField?.current?.name ? (textField.current.name as TextFields) : null;
       const value = textField?.current?.value;
       const valid = value && value.trim().length >= 2;
-      if (!valid && name) errors[name] = ERROR_MESSAGES[name];
+      if (!valid && name) errors[name] = ErrorMessages[name];
     });
     return errors;
   };

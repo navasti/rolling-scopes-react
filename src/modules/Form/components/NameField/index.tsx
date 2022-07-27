@@ -1,24 +1,24 @@
 import { ErrorMessage } from 'modules/Form/components';
-import { FIELDS, TEXT_FIELDS } from 'appConstants';
-import { ErrorsObject } from 'types';
+import { ErrorsObject, TextFields } from 'types';
+import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
 import * as S from './styled';
 
 type Props = {
-  onChange: (field: TEXT_FIELDS) => void;
+  onChange: (field: TextFields) => void;
   errors: ErrorsObject;
 };
 
 export const NameField = forwardRef<HTMLInputElement, Props>(({ errors, onChange }, ref) => {
   return (
     <>
-      <S.CommonLabel htmlFor={FIELDS.name}>
+      <S.CommonLabel htmlFor={Fields.name}>
         *Name
         <input
-          onChange={() => onChange(FIELDS.name)}
-          placeholder={FIELDS.name}
-          name={FIELDS.name}
-          id={FIELDS.name}
+          onChange={() => onChange(Fields.name)}
+          placeholder={Fields.name}
+          name={Fields.name}
+          id={Fields.name}
           type="text"
           ref={ref}
         />

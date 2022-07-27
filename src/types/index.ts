@@ -1,4 +1,18 @@
+import { Fields, Limits, tabs } from 'appConstants';
 import { RefObject } from 'react';
+
+export type TextFields = Fields.name | Fields.birthday | Fields.type;
+export type CheckFields = Fields.consent | Fields.gender;
+export type Lengths = PrepareLengths<typeof tabs>;
+export type PrepareLengths<Arr extends typeof tabs> = {
+  [P in Arr[number] as P]: number;
+};
+
+export type LimitParams = {
+  pokemonLimit: Limits.pokemon;
+  typeLimit: Limits.type;
+  moveLimit: Limits.move;
+};
 
 export type PokemonDetails = {
   abilities: Array<Ability>;

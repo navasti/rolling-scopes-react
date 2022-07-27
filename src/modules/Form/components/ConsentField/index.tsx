@@ -1,11 +1,11 @@
 import { ErrorMessage } from 'modules/Form/components';
-import { CHECK_FIELDS, FIELDS } from 'appConstants';
-import { ErrorsObject } from 'types';
+import { CheckFields, ErrorsObject } from 'types';
+import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
 import * as S from './styled';
 
 type Props = {
-  onChange: (field: CHECK_FIELDS) => void;
+  onChange: (field: CheckFields) => void;
   errors: ErrorsObject;
 };
 
@@ -13,11 +13,11 @@ export const ConsentField = forwardRef<HTMLInputElement, Props>((props, ref) => 
   const { errors, onChange } = props;
   return (
     <>
-      <S.CheckboxField htmlFor={FIELDS.consent}>
+      <S.CheckboxField htmlFor={Fields.consent}>
         <input
-          onChange={() => onChange(FIELDS.consent)}
-          name={FIELDS.consent}
-          id={FIELDS.consent}
+          onChange={() => onChange(Fields.consent)}
+          name={Fields.consent}
+          id={Fields.consent}
           type="checkbox"
           ref={ref}
         />
