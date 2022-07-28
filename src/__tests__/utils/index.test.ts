@@ -1,4 +1,6 @@
-import { capitalize, uuid, getTodayDate } from 'utils';
+import { capitalize, uuid, getTodayDate, appendComma } from 'utils';
+
+const testingArray = ['test1', 'test2'];
 
 describe('General utils', () => {
   it('Capitalize first letter', () => {
@@ -21,5 +23,9 @@ describe('General utils', () => {
     expect(date).toContain(`${now.getDate()}`);
     expect(date).toContain(`${now.getFullYear()}`);
     expect(date).toContain(`${now.getMonth() + 1}`);
+  });
+  it('Append comma', () => {
+    expect(appendComma(testingArray.length, 0, testingArray[0])).toEqual(`${testingArray[0]}, `);
+    expect(appendComma(testingArray.length, 1, testingArray[1])).toEqual(`${testingArray[1]}`);
   });
 });

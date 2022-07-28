@@ -1,6 +1,6 @@
 import { MoveModalContent, PokemonModalContent, TypeModalContent } from 'modules';
 import { render, screen } from '@testing-library/react';
-import { capitalize } from 'utils';
+import { appendComma, capitalize } from 'utils';
 import {
   pokemonModalContentProperties,
   typeModalContentProperties,
@@ -9,13 +9,14 @@ import {
   detailedMoves,
   detailedTypes,
 } from '__mocks__';
+import { NONE } from 'appConstants';
 
 export const moveModalContentExpectations = () => {
   const { accuracy, learned_by_pokemon, power, priority, pp, type } = detailedMoves[0];
   moveModalContentProperties.forEach((item) =>
     expect(screen.getByText(`${item}:`)).toBeInTheDocument()
   );
-  expect(screen.getByText(`${learned_by_pokemon[0].name}.`)).toBeInTheDocument();
+  expect(screen.getByText(learned_by_pokemon[0].name)).toBeInTheDocument();
   expect(screen.getByText(String(accuracy))).toBeInTheDocument();
   expect(screen.getByText(String(priority))).toBeInTheDocument();
   expect(screen.getByText(String(power))).toBeInTheDocument();
@@ -34,7 +35,7 @@ export const pokemonModalContentExpectations = () => {
   pokemonModalContentProperties.forEach((item) =>
     expect(screen.getByText(`${item}:`)).toBeInTheDocument()
   );
-  expect(screen.getByText(`${types[0].type.name}.`)).toBeInTheDocument();
+  expect(screen.getByText(types[0].type.name)).toBeInTheDocument();
   expect(screen.getByText(String(base_experience))).toBeInTheDocument();
   expect(screen.getByText(renderedAbility)).toBeInTheDocument();
   expect(screen.getByText(String(height))).toBeInTheDocument();
@@ -49,19 +50,14 @@ export const typeModalContentExpectations = () => {
     const relation = damage_relations[key];
     const formatted =
       relation.length > 0 &&
-      relation
-        .map(({ name }, index) => {
-          return `${name}${relation.length === index + 1 ? '.' : ', '}`;
-        })
-        .join('');
+      relation.map(({ name }, index) => appendComma(relation.length, index, name)).join('');
     if (formatted) {
       expect(screen.getByText(formatted)).toBeInTheDocument();
     }
   }
-  expect(screen.getByText(`${moves[0].name}.`)).toBeInTheDocument();
-  expect(screen.getByText(`${moves[0].name}.`)).toBeInTheDocument();
-  expect(screen.getByText(`${pokemon[0].pokemon.name}.`)).toBeInTheDocument();
-  screen.getAllByText('none.').forEach((element) => expect(element).toBeInTheDocument());
+  expect(screen.getByText(moves[0].name)).toBeInTheDocument();
+  expect(screen.getByText(pokemon[0].pokemon.name)).toBeInTheDocument();
+  screen.getAllByText(NONE).forEach((element) => expect(element).toBeInTheDocument());
   typeModalContentProperties.forEach((item) =>
     expect(screen.getByText(`${item}:`)).toBeInTheDocument()
   );

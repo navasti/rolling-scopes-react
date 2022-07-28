@@ -47,6 +47,7 @@ export enum Types {
   ice = 'ice',
 }
 
+export const NONE = 'none';
 export const MALE = 'male';
 export const FEMALE = 'female';
 export const INPUT_VALUE_KEY = 'input-value';

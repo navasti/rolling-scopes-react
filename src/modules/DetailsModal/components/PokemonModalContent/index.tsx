@@ -1,45 +1,44 @@
+import { capitalize, appendComma } from 'utils';
 import { PokemonDetails } from 'types';
-import { capitalize } from 'utils';
 import * as S from './styled';
 
-export const PokemonModalContent = ({ selectedPokemon }: { selectedPokemon: PokemonDetails }) => {
+type Props = {
+  selectedPokemon: PokemonDetails;
+};
+
+export const PokemonModalContent = ({ selectedPokemon }: Props) => {
+  const { abilities, types, base_experience, height, stats, weight } = selectedPokemon;
+  const baseContent = [
+    { id: 1, label: 'Weight', value: weight },
+    { id: 2, label: 'Height', value: height },
+    { id: 3, label: 'Base experience', value: base_experience },
+  ];
   return (
     <div>
-      <S.ParagraphContentProperty>
-        <b>Weight:</b> {selectedPokemon.weight}
-      </S.ParagraphContentProperty>
+      {baseContent.map(({ id, label, value }) => (
+        <S.ParagraphContentProperty key={id}>
+          <b>{label}:</b> {value}
+        </S.ParagraphContentProperty>
+      ))}
 
       <S.ParagraphContentProperty>
-        <b>Height:</b> {selectedPokemon.height}
-      </S.ParagraphContentProperty>
-
-      <S.ParagraphContentProperty>
-        <b>Types:</b>{' '}
-        {selectedPokemon.types.map(({ type }, index) => {
-          const isLast = selectedPokemon.types.length === index + 1;
-          return `${type.name}${isLast ? '.' : ', '}`;
-        })}
-      </S.ParagraphContentProperty>
-
-      <S.ParagraphContentProperty>
-        <b>Base experience:</b> {selectedPokemon.base_experience}
+        <b>Types:</b> {types.map(({ type }, index) => appendComma(types.length, index, type.name))}
       </S.ParagraphContentProperty>
 
       <S.DivContentProperty>
         <S.PokemonContentTitle>Pokemon abilities:</S.PokemonContentTitle>
-        {selectedPokemon.abilities.map((ability) => (
-          <p key={ability.ability.name}>
-            {capitalize(ability.ability.name)} - hidden: {ability.is_hidden ? 'yes' : 'no'}, slot:{' '}
-            {ability.slot}
+        {abilities.map(({ ability, is_hidden, slot }) => (
+          <p key={ability.name}>
+            {capitalize(ability.name)} - hidden: {is_hidden ? 'yes' : 'no'}, slot: {slot}
           </p>
         ))}
       </S.DivContentProperty>
 
       <S.DivContentProperty>
         <S.PokemonContentTitle>Pokemon statistics:</S.PokemonContentTitle>
-        {selectedPokemon.stats.map((stat) => (
-          <p key={stat.stat.name}>
-            {capitalize(stat.stat.name)} - power: {stat.base_stat}, effort: {stat.effort}
+        {stats.map(({ base_stat, effort, stat }) => (
+          <p key={stat.name}>
+            {capitalize(stat.name)} - power: {base_stat}, effort: {effort}
           </p>
         ))}
       </S.DivContentProperty>

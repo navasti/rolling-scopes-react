@@ -1,84 +1,43 @@
 import { PokemonTypeDetails } from 'types';
+import { NONE } from 'appConstants';
+import { appendComma } from 'utils';
 import * as S from './styled';
 
-export const TypeModalContent = ({ selectedType }: { selectedType: PokemonTypeDetails }) => {
-  const {
-    double_damage_from,
-    double_damage_to,
-    half_damage_from,
-    half_damage_to,
-    no_damage_from,
-    no_damage_to,
-  } = selectedType.damage_relations;
+type Props = {
+  selectedType: PokemonTypeDetails;
+};
+
+export const TypeModalContent = ({ selectedType }: Props) => {
+  const { damage_relations, moves, pokemon } = selectedType;
+  const damageContent = [
+    { id: 1, label: 'Double damage from', array: damage_relations.double_damage_from },
+    { id: 2, label: 'Double damage to', array: damage_relations.double_damage_to },
+    { id: 3, label: 'Half damage from', array: damage_relations.half_damage_from },
+    { id: 4, label: 'Half damage to', array: damage_relations.half_damage_to },
+    { id: 5, label: 'No damage from', array: damage_relations.no_damage_from },
+    { id: 6, label: 'No damage to', array: damage_relations.no_damage_to },
+  ];
   return (
     <div>
-      <S.ParagraphContentProperty>
-        <b>Double damage from:</b>{' '}
-        {double_damage_from.length > 0
-          ? double_damage_from.map(({ name }, index) => {
-              const isLast = selectedType.damage_relations.double_damage_from.length === index + 1;
-              return `${name}${isLast ? '.' : ', '}`;
-            })
-          : 'none.'}
-      </S.ParagraphContentProperty>
-      <S.ParagraphContentProperty>
-        <b>Double damage to:</b>{' '}
-        {double_damage_to.length > 0
-          ? double_damage_to.map(({ name }, index) => {
-              const isLast = selectedType.damage_relations.double_damage_to.length === index + 1;
-              return `${name}${isLast ? '.' : ', '}`;
-            })
-          : 'none.'}
-      </S.ParagraphContentProperty>
-      <S.ParagraphContentProperty>
-        <b>Half damage from:</b>{' '}
-        {half_damage_from.length > 0
-          ? half_damage_from.map(({ name }, index) => {
-              const isLast = selectedType.damage_relations.half_damage_from.length === index + 1;
-              return `${name}${isLast ? '.' : ', '}`;
-            })
-          : 'none.'}
-      </S.ParagraphContentProperty>
-      <S.ParagraphContentProperty>
-        <b>Half damage to:</b>{' '}
-        {half_damage_to.length > 0
-          ? half_damage_to.map(({ name }, index) => {
-              const isLast = selectedType.damage_relations.half_damage_to.length === index + 1;
-              return `${name}${isLast ? '.' : ', '}`;
-            })
-          : 'none.'}
-      </S.ParagraphContentProperty>
-      <S.ParagraphContentProperty>
-        <b>No damage from:</b>{' '}
-        {no_damage_from.length > 0
-          ? no_damage_from.map(({ name }, index) => {
-              const isLast = selectedType.damage_relations.no_damage_from.length === index + 1;
-              return `${name}${isLast ? '.' : ', '}`;
-            })
-          : 'none.'}
-      </S.ParagraphContentProperty>
-      <S.ParagraphContentProperty>
-        <b>No damage to:</b>{' '}
-        {no_damage_to.length > 0
-          ? no_damage_to.map(({ name }, index) => {
-              const isLast = selectedType.damage_relations.no_damage_to.length === index + 1;
-              return `${name}${isLast ? '.' : ', '}`;
-            })
-          : 'none.'}
-      </S.ParagraphContentProperty>
+      {damageContent.map(({ array, label, id }) => (
+        <S.ParagraphContentProperty key={id}>
+          <b>{label}:</b>{' '}
+          {array.length > 0
+            ? array.map(({ name }, index) => appendComma(array.length, index, name))
+            : NONE}
+        </S.ParagraphContentProperty>
+      ))}
       <S.ParagraphContentProperty>
         <b>Moves:</b>{' '}
-        {selectedType.moves.map(({ name }, index) => {
-          const isLast = selectedType.moves.length === index + 1;
-          return `${name}${isLast ? '.' : ', '}`;
-        })}
+        {moves.length > 0
+          ? moves.map(({ name }, index) => appendComma(moves.length, index, name))
+          : NONE}
       </S.ParagraphContentProperty>
       <S.ParagraphContentProperty>
         <b>Pokemons:</b>{' '}
-        {selectedType.pokemon.map((item, index) => {
-          const isLast = selectedType.pokemon.length === index + 1;
-          return `${item.pokemon.name}${isLast ? '.' : ', '}`;
-        })}
+        {pokemon.length > 0
+          ? pokemon.map((item, index) => appendComma(pokemon.length, index, item.pokemon.name))
+          : NONE}
       </S.ParagraphContentProperty>
     </div>
   );

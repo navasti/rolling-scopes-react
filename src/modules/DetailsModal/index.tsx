@@ -1,6 +1,6 @@
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
-import { forwardRef } from 'react';
 import { Modal } from 'components';
+import { forwardRef } from 'react';
 import * as S from './styled';
 import {
   PokemonModalContent,
@@ -17,23 +17,22 @@ type Props = {
 };
 
 export const DetailsModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { isModalOpened, selectedMove, selectedPokemon, selectedType, handleModalOpened } = props;
   return (
     <>
-      {selectedPokemon ? (
-        <Modal handleModalOpened={handleModalOpened} opened={isModalOpened} ref={ref}>
-          <S.ModalTitle>{selectedPokemon.name}</S.ModalTitle>
-          <PokemonModalContent selectedPokemon={selectedPokemon} />
+      {props.selectedPokemon ? (
+        <Modal handleModalOpened={props.handleModalOpened} opened={props.isModalOpened} ref={ref}>
+          <S.ModalTitle>{props.selectedPokemon.name}</S.ModalTitle>
+          <PokemonModalContent selectedPokemon={props.selectedPokemon} />
         </Modal>
-      ) : selectedMove ? (
-        <Modal handleModalOpened={handleModalOpened} opened={isModalOpened} ref={ref}>
-          <S.ModalTitle>{selectedMove.name}</S.ModalTitle>
-          <MoveModalContent selectedMove={selectedMove} />
+      ) : props.selectedMove ? (
+        <Modal handleModalOpened={props.handleModalOpened} opened={props.isModalOpened} ref={ref}>
+          <S.ModalTitle>{props.selectedMove.name}</S.ModalTitle>
+          <MoveModalContent selectedMove={props.selectedMove} />
         </Modal>
-      ) : selectedType ? (
-        <Modal handleModalOpened={handleModalOpened} opened={isModalOpened} ref={ref}>
-          <S.ModalTitle>{selectedType.name}</S.ModalTitle>
-          <TypeModalContent selectedType={selectedType} />
+      ) : props.selectedType ? (
+        <Modal handleModalOpened={props.handleModalOpened} opened={props.isModalOpened} ref={ref}>
+          <S.ModalTitle>{props.selectedType.name}</S.ModalTitle>
+          <TypeModalContent selectedType={props.selectedType} />
         </Modal>
       ) : null}
     </>

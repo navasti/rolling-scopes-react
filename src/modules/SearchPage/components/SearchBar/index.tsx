@@ -10,8 +10,7 @@ type Props = {
   onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export const SearchBar = (props: Props) => {
-  const { inputValue, label, isLoading, onChange, onKeyDown } = props;
+export const SearchBar = ({ inputValue, label, isLoading, onChange, onKeyDown }: Props) => {
   return (
     <>
       <S.SearchBar>

@@ -1,5 +1,5 @@
-import { TimesIcon } from 'assets/images/svg';
 import React, { ForwardedRef, RefObject } from 'react';
+import { TimesIcon } from 'assets/images/svg';
 import * as S from './styled';
 
 type Props = {
