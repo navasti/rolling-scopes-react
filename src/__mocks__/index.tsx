@@ -25,9 +25,15 @@ export const selectRef: RefObject<HTMLSelectElement> = createRef();
 export const links = ['Home', 'About', 'Form', 'Invalid'];
 export const componentName = 'About';
 export const location = '/about';
+export const testingContent = 'Content';
+export const testingTitle = 'Title';
 
 export const TestingElement = () => <p>testing element</p>;
 export const TestingErrorElement = () => <p>testing error</p>;
+
+export const TestingTitleElement = () => <span>{testingTitle}</span>;
+export const TestingContentElement = () => <div>{testingContent}</div>;
+export const modalRef: RefObject<HTMLDivElement> = createRef();
 
 export const pokemonTypes: PokemonType = {
   name: 'typex',

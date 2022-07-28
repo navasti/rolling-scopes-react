@@ -11,6 +11,7 @@ type Props = {
 export const Modal = React.forwardRef<HTMLDivElement, Props>((props, ref) => (
   <ModalClass innerRef={ref} {...props} />
 ));
+
 class ModalClass extends React.Component<
   Props & { innerRef: ForwardedRef<HTMLDivElement> },
   unknown
