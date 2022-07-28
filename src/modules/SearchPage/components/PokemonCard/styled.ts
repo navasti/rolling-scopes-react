@@ -4,35 +4,35 @@ export const Card = styled.div`
   border: 2px solid #aaa;
   flex-direction: column;
   border-radius: 10px;
-  font-size: 0.875rem;
-  padding: 5px;
+  font-size: 0.775rem;
+  cursor: pointer;
   display: flex;
+  padding: 5px;
+  &:hover {
+    border-color: #000;
+    img {
+      border-color: #000;
+    }
+  }
 `;
 
 export const ImageWrapper = styled.div`
+  align-items: center;
   display: flex;
 `;
 
 export const Image = styled.img`
-  border-bottom-right-radius: 10px;
-  border-bottom: 1px solid #aaa;
   border-right: 1px solid #aaa;
-  align-self: center;
+  width: 70px;
 `;
 
 export const Title = styled.span`
-  font-weight: bold;
-  font-size: 1rem;
+  display: inline-block;
+  font-size: 0.875rem;
+  margin-bottom: 2px;
+  font-weight: 600;
 `;
 
 export const BaseInformation = styled.div`
   margin-left: 10px;
-`;
-
-export const Stats = styled.div`
-  margin-top: 5px;
-`;
-
-export const Abilities = styled.div`
-  margin-top: 5px;
 `;

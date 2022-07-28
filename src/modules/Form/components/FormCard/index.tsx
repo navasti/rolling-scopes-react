@@ -9,27 +9,24 @@ type Props = {
 
 export const FormCard = ({ customPokemon }: Props) => {
   const { avatar, birthday, gender, name, shiny, type } = customPokemon;
+  const baseContent = [
+    { id: 1, label: 'Name', value: capitalize(name) },
+    { id: 2, label: 'Gender', value: capitalize(gender) },
+    { id: 3, label: 'Main type', value: capitalize(type) },
+    { id: 4, label: 'Birthday', value: capitalize(birthday) },
+    { id: 5, label: 'Shiny', value: shiny ? 'Yes' : 'No' },
+  ];
   return (
     <S.Card>
       <S.ImageWrapper>
         <img src={avatar ? URL.createObjectURL(avatar) : questionmark} />
       </S.ImageWrapper>
       <S.Details>
-        <p>
-          Name: <span>{capitalize(name)}</span>
-        </p>
-        <p>
-          Gender: <span>{capitalize(gender)}</span>
-        </p>
-        <p>
-          Main type: <span>{capitalize(type)}</span>
-        </p>
-        <p>
-          Birthday: <span>{capitalize(birthday)}</span>
-        </p>
-        <p>
-          Shiny: <span>{shiny ? 'Yes' : 'No'}</span>
-        </p>
+        {baseContent.map(({ id, label, value }) => (
+          <p key={id}>
+            {label}: <span>{value}</span>
+          </p>
+        ))}
       </S.Details>
     </S.Card>
   );

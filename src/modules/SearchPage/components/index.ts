@@ -1,2 +1,6 @@
+export { PokemonCard } from './PokemonCard';
 export { SearchBar } from './SearchBar';
-export { Card } from './Card';
+export { MoveCard } from './MoveCard';
+export { TypeCard } from './TypeCard';
+export { Cards } from './Cards';
+export { Tabs } from './Tabs';
