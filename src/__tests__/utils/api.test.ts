@@ -1,9 +1,15 @@
-import { fetchPokemonByParameter, isServerError, fetchDetails, fetchBase, hasError } from 'utils';
 import {
-  MockDetailedDataType,
+  fetchPokemonByParameter,
+  handleMappedResponse,
+  handleResponse,
+  isServerError,
+  fetchDetails,
+  fetchBase,
+  hasError,
+} from 'utils';
+import {
   PokemonMoveDetails,
   PokemonTypeDetails,
-  MockBaseDataType,
   PokemonDetails,
   PokemonMove,
   PokemonData,
@@ -13,56 +19,70 @@ import {
   Pokemon,
 } from 'types';
 import {
+  handleMappedResponseMock,
+  fetchByParameterMock,
+  handleResponseMock,
   detailedPokemons,
+  fetchDetailsMock,
+  fetchBaseMock,
   detailedMoves,
   detailedTypes,
-  pokemonMoves,
-  pokemonTypes,
-  pokemons,
+  pokemonMove,
+  pokemonType,
+  pokemon,
 } from '__mocks__';
 
-const fetchBaseMock = <T extends MockBaseDataType>(mockData: T) => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve({ results: [mockData] }),
-    })
-  ) as jest.Mock;
-};
-
-const fetchByParameterMock = <T extends MockDetailedDataType>(mockData: T) => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve(mockData),
-    })
-  ) as jest.Mock;
-};
-
-const fetchDetailsMock = <T>(mockData: Array<T>) => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      status: 200,
-      json: () => Promise.resolve(mockData[0]),
-    })
-  ) as jest.Mock;
-};
-
 describe('API utils', () => {
+  it('handleResponse success', async () => {
+    let error = false;
+    window.alert = jest.fn(() => (error = true));
+    handleResponseMock<Pokemon>(200, pokemon);
+    const response = await fetch('url');
+    const data = await handleResponse<Pokemon>(response);
+    expect(data).toEqual(pokemon);
+    expect(error).toBeFalsy();
+  });
+  it('handleResponse error', async () => {
+    let error = false;
+    window.alert = jest.fn(() => (error = true));
+    handleResponseMock<Pokemon>(500, pokemon);
+    const response = await fetch('url');
+    const data = await handleResponse<Pokemon>(response);
+    expect(data).toBeUndefined();
+    expect(error).toBeTruthy();
+  });
+  it('handleMappedResponse success', async () => {
+    let errorShown = 0;
+    window.alert = jest.fn(() => (errorShown += 1));
+    handleMappedResponseMock<PokemonDetails>(200, detailedPokemons[0]);
+    const responses = [fetch('url')];
+    const data = await handleMappedResponse<PokemonDetails>(responses);
+    expect(data).toEqual([detailedPokemons[0]]);
+    expect(errorShown).toEqual(0);
+  });
+  it('handleMappedResponse errors', async () => {
+    let errorShown = 0;
+    window.alert = jest.fn(() => (errorShown += 1));
+    handleMappedResponseMock<PokemonDetails>(500, detailedPokemons[0]);
+    const responses = ['url', 'url2'].map((url) => fetch(url));
+    const data = await handleMappedResponse<PokemonDetails>(responses);
+    expect(data).toEqual([]);
+    expect(errorShown).toEqual(1);
+  });
   it('fetchBase pokemons', async () => {
-    fetchBaseMock<Pokemon>(pokemons);
+    fetchBaseMock<Pokemon>(pokemon);
     const data = await fetchBase<PokemonData, Pokemon>('url');
-    expect(data).toEqual([pokemons]);
+    expect(data).toEqual([pokemon]);
   });
   it('fetchBase moves', async () => {
-    fetchBaseMock<PokemonMove>(pokemonMoves);
+    fetchBaseMock<PokemonMove>(pokemonMove);
     const data = await fetchBase<MovesData, PokemonMove>('url');
-    expect(data).toEqual([pokemonMoves]);
+    expect(data).toEqual([pokemonMove]);
   });
   it('fetchBase types', async () => {
-    fetchBaseMock<PokemonType>(pokemonTypes);
+    fetchBaseMock<PokemonType>(pokemonType);
     const data = await fetchBase<TypesData, PokemonType>('url');
-    expect(data).toEqual([pokemonTypes]);
+    expect(data).toEqual([pokemonType]);
   });
   it('fetchPokemonByParameter pokemon', async () => {
     fetchByParameterMock<PokemonDetails>(detailedPokemons[0]);
@@ -81,17 +101,17 @@ describe('API utils', () => {
   });
   it('fetchDetails pokemons', async () => {
     fetchDetailsMock<PokemonDetails>([detailedPokemons[0]]);
-    const data = await fetchDetails<Pokemon, PokemonDetails>([pokemons]);
+    const data = await fetchDetails<Pokemon, PokemonDetails>([pokemon]);
     expect(data).toEqual([detailedPokemons[0]]);
   });
   it('fetchDetails moves', async () => {
     fetchDetailsMock<PokemonMoveDetails>([detailedMoves[0]]);
-    const data = await fetchDetails<PokemonMove, PokemonMoveDetails>([pokemonMoves]);
+    const data = await fetchDetails<PokemonMove, PokemonMoveDetails>([pokemonMove]);
     expect(data).toEqual([detailedMoves[0]]);
   });
   it('fetchDetails types', async () => {
     fetchDetailsMock<PokemonTypeDetails>([detailedTypes[0]]);
-    const data = await fetchDetails<PokemonType, PokemonTypeDetails>([pokemonMoves]);
+    const data = await fetchDetails<PokemonType, PokemonTypeDetails>([pokemonMove]);
     expect(data).toEqual([detailedTypes[0]]);
   });
   it('isServerError', () => {

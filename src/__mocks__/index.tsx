@@ -1,17 +1,20 @@
 import { ErrorMessages } from 'appConstants';
 import { createRef, RefObject } from 'react';
+import { hasError } from 'utils';
 import {
+  MockDetailedDataType,
   PokemonMoveDetails,
   PokemonTypeDetails,
+  MockBaseDataType,
   PokemonDetails,
   CustomPokemon,
   ErrorsObject,
   CheckFields,
   PokemonData,
-  TextFields,
-  PokemonType,
-  Pokemon,
   PokemonMove,
+  PokemonType,
+  TextFields,
+  Pokemon,
 } from 'types';
 
 export const visible = true;
@@ -35,17 +38,62 @@ export const TestingTitleElement = () => <span>{testingTitle}</span>;
 export const TestingContentElement = () => <div>{testingContent}</div>;
 export const modalRef: RefObject<HTMLDivElement> = createRef();
 
-export const pokemonTypes: PokemonType = {
+export const fetchBaseMock = <T extends MockBaseDataType>(mockData: T) => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve({ results: [mockData] }),
+    })
+  ) as jest.Mock;
+};
+
+export const fetchByParameterMock = <T extends MockDetailedDataType>(mockData: T) => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(mockData),
+    })
+  ) as jest.Mock;
+};
+
+export const fetchDetailsMock = <T,>(mockData: Array<T>) => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status: 200,
+      json: () => Promise.resolve(mockData[0]),
+    })
+  ) as jest.Mock;
+};
+
+export const handleResponseMock = <T,>(status: number, mockData: T) => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status,
+      json: () => Promise.resolve(hasError(status) ? undefined : mockData),
+    })
+  ) as jest.Mock;
+};
+
+export const handleMappedResponseMock = <T,>(status: number, mockData: T) => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      status,
+      json: () => Promise.resolve(hasError(status) ? undefined : mockData),
+    })
+  ) as jest.Mock;
+};
+
+export const pokemonType: PokemonType = {
   name: 'typex',
   url: 'url',
 };
 
-export const pokemons: Pokemon = {
+export const pokemon: Pokemon = {
   name: 'pokemonix',
   url: 'url',
 };
 
-export const pokemonMoves: PokemonMove = {
+export const pokemonMove: PokemonMove = {
   name: 'movix',
   url: 'url',
 };
