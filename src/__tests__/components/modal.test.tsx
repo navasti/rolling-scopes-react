@@ -12,11 +12,7 @@ describe('Modal', () => {
   it('Render opened modal', () => {
     let opened = true;
     const { container } = render(
-      <Modal
-        handleModalOpened={(isOpened: boolean) => (opened = isOpened)}
-        opened={opened}
-        ref={modalRef}
-      >
+      <Modal handleCloseModal={() => (opened = false)} opened={opened} ref={modalRef}>
         <TestingTitleElement />
         <TestingContentElement />
       </Modal>
@@ -29,7 +25,7 @@ describe('Modal', () => {
   });
   it('Render closed modal', () => {
     const { container } = render(
-      <Modal handleModalOpened={() => {}} opened={false}>
+      <Modal handleCloseModal={() => {}} opened={false}>
         <TestingTitleElement />
         <TestingContentElement />
       </Modal>
