@@ -9,30 +9,31 @@ import {
 } from 'modules/DetailsModal/components';
 
 type Props = {
-  handleModalOpened: (isModalOpened: boolean) => void;
   selectedType?: PokemonTypeDetails;
   selectedMove?: PokemonMoveDetails;
   selectedPokemon?: PokemonDetails;
+  handleCloseModal: () => void;
   isModalOpened: boolean;
 };
 
 export const DetailsModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const { handleCloseModal, isModalOpened, selectedMove, selectedPokemon, selectedType } = props;
   return (
     <>
-      {props.selectedPokemon ? (
-        <Modal handleModalOpened={props.handleModalOpened} opened={props.isModalOpened} ref={ref}>
-          <S.ModalTitle>{props.selectedPokemon.name}</S.ModalTitle>
-          <PokemonModalContent selectedPokemon={props.selectedPokemon} />
+      {selectedPokemon ? (
+        <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
+          <S.ModalTitle>{selectedPokemon.name}</S.ModalTitle>
+          <PokemonModalContent selectedPokemon={selectedPokemon} />
         </Modal>
-      ) : props.selectedMove ? (
-        <Modal handleModalOpened={props.handleModalOpened} opened={props.isModalOpened} ref={ref}>
-          <S.ModalTitle>{props.selectedMove.name}</S.ModalTitle>
-          <MoveModalContent selectedMove={props.selectedMove} />
+      ) : selectedMove ? (
+        <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
+          <S.ModalTitle>{selectedMove.name}</S.ModalTitle>
+          <MoveModalContent selectedMove={selectedMove} />
         </Modal>
-      ) : props.selectedType ? (
-        <Modal handleModalOpened={props.handleModalOpened} opened={props.isModalOpened} ref={ref}>
-          <S.ModalTitle>{props.selectedType.name}</S.ModalTitle>
-          <TypeModalContent selectedType={props.selectedType} />
+      ) : selectedType ? (
+        <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
+          <S.ModalTitle>{selectedType.name}</S.ModalTitle>
+          <TypeModalContent selectedType={selectedType} />
         </Modal>
       ) : null}
     </>

@@ -3,14 +3,14 @@ import * as S from './styled';
 
 type Props = {
   handleTypeSelect: (selectedMove: PokemonTypeDetails) => void;
-  handleModalOpened: (opened: boolean) => void;
+  handleOpenModal: () => void;
   type: PokemonTypeDetails;
 };
 
-export const TypeCard = ({ type, handleModalOpened, handleTypeSelect }: Props) => {
+export const TypeCard = ({ type, handleOpenModal, handleTypeSelect }: Props) => {
   const onClick = () => {
     handleTypeSelect(type);
-    setTimeout(() => handleModalOpened(true), 0);
+    setTimeout(() => handleOpenModal(), 0);
   };
   return (
     <>

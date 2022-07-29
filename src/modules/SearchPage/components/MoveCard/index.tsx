@@ -3,14 +3,14 @@ import * as S from './styled';
 
 type Props = {
   handleMoveSelect: (selectedMove: PokemonMoveDetails) => void;
-  handleModalOpened: (opened: boolean) => void;
+  handleOpenModal: () => void;
   move: PokemonMoveDetails;
 };
 
-export const MoveCard = ({ move, handleModalOpened, handleMoveSelect }: Props) => {
+export const MoveCard = ({ move, handleOpenModal, handleMoveSelect }: Props) => {
   const onClick = () => {
     handleMoveSelect(move);
-    setTimeout(() => handleModalOpened(true), 0);
+    setTimeout(() => handleOpenModal(), 0);
   };
   return (
     <S.Card onClick={onClick}>
