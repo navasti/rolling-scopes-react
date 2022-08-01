@@ -1,12 +1,15 @@
+import { FieldReturnType } from 'types';
 import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
 import * as S from './styled';
 
-export const AvatarField = forwardRef<HTMLInputElement>((_, ref) => {
+type Props = FieldReturnType<Fields.avatar>;
+
+export const AvatarField = forwardRef<HTMLInputElement, Props>(({ name, onChange }, ref) => {
   return (
-    <S.FileField htmlFor={Fields.avatar}>
+    <S.FileField>
       Avatar
-      <input id={Fields.avatar} ref={ref} type="file" />
+      <input name={name} type="file" ref={ref} onChange={onChange} />
     </S.FileField>
   );
 });

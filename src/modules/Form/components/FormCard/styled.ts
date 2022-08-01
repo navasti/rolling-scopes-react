@@ -4,9 +4,10 @@ export const Card = styled.div`
   border: 2px solid #aaa;
   border-radius: 10px;
   font-size: 0.875rem;
-  padding: 5px;
-  display: flex;
+  margin-bottom: 5px;
   align-items: center;
+  display: flex;
+  padding: 5px;
 `;
 
 export const ImageWrapper = styled.div`

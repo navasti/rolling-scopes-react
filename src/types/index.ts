@@ -1,4 +1,5 @@
-import { Fields, Limits, tabs } from 'appConstants';
+import { FEMALE, Fields, Limits, MALE, tabs } from 'appConstants';
+import { UseFormRegisterReturn } from 'react-hook-form';
 import { RefObject } from 'react';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
@@ -7,6 +8,27 @@ export type Lengths = PrepareLengths<typeof tabs>;
 export type PrepareLengths<Arr extends typeof tabs> = {
   [P in Arr[number] as P]: number;
 };
+
+export enum MessageType {
+  error = 'error',
+  success = 'success',
+}
+
+export type FormFields = {
+  gender: typeof MALE | typeof FEMALE;
+  avatar: FileList;
+  consent: boolean;
+  birthday: string;
+  shiny: boolean;
+  name: string;
+  type: string;
+};
+
+export type FieldReturnType<T extends Fields> = {
+  name: string;
+  error?: string;
+  value?: string;
+} & UseFormRegisterReturn<T>;
 
 export type LimitParams = {
   pokemonLimit: Limits.pokemon;
@@ -172,9 +194,9 @@ export type SelectFieldType = {
 };
 
 export type CustomPokemon = {
+  gender: typeof MALE | typeof FEMALE;
   avatar: File | null;
   birthday: string;
-  gender: string;
   shiny: boolean;
   name: string;
   type: string;

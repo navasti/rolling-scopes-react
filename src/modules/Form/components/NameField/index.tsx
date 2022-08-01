@@ -1,29 +1,27 @@
-import { ErrorMessage } from 'modules/Form/components';
-import { ErrorsObject, TextFields } from 'types';
+import { FieldReturnType, MessageType } from 'types';
 import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
+import { Message } from 'modules';
 import * as S from './styled';
 
-type Props = {
-  onChange: (field: TextFields) => void;
-  errors: ErrorsObject;
-};
+type Props = FieldReturnType<Fields.name>;
 
-export const NameField = forwardRef<HTMLInputElement, Props>(({ errors, onChange }, ref) => {
+export const NameField = forwardRef<HTMLInputElement, Props>((props, ref) => {
+  const { name, error, onChange } = props;
   return (
     <>
-      <S.CommonLabel htmlFor={Fields.name}>
+      <S.CommonLabel htmlFor={name}>
         *Name
         <input
-          onChange={() => onChange(Fields.name)}
           placeholder={Fields.name}
-          name={Fields.name}
-          id={Fields.name}
+          onChange={onChange}
+          name={name}
           type="text"
+          id={name}
           ref={ref}
         />
       </S.CommonLabel>
-      <ErrorMessage visible={!!errors.name} message={errors.name} />
+      <Message visible={!!error} message={error || ''} type={MessageType.error} />
     </>
   );
 });

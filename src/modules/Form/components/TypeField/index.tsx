@@ -1,26 +1,19 @@
-import { ErrorMessage } from 'modules/Form/components';
-import { ErrorsObject, TextFields } from 'types';
+import { FieldReturnType, MessageType } from 'types';
 import { POKEMON_TYPES } from 'appConstants';
 import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
+import { Message } from 'modules';
 import * as S from './styled';
 
-type Props = {
-  onChange: (field: TextFields) => void;
-  errors: ErrorsObject;
-};
+type Props = FieldReturnType<Fields.type>;
 
-export const TypeField = forwardRef<HTMLSelectElement, Props>(({ errors, onChange }, ref) => {
+export const TypeField = forwardRef<HTMLSelectElement, Props>((props, ref) => {
+  const { error, name, onChange } = props;
   return (
     <>
-      <S.CommonLabel htmlFor={Fields.type}>
+      <S.CommonLabel htmlFor={name}>
         *Main type
-        <select
-          onChange={() => onChange(Fields.type)}
-          name={Fields.type}
-          id={Fields.type}
-          ref={ref}
-        >
+        <select onChange={onChange} name={name} ref={ref} id={name}>
           <option value=""></option>
           {POKEMON_TYPES.map((type) => (
             <option key={type} value={type}>
@@ -29,7 +22,7 @@ export const TypeField = forwardRef<HTMLSelectElement, Props>(({ errors, onChang
           ))}
         </select>
       </S.CommonLabel>
-      <ErrorMessage visible={!!errors.type} message={errors.type} />
+      <Message visible={!!error} message={error || ''} type={MessageType.error} />
     </>
   );
 });

@@ -1,31 +1,21 @@
-import { ErrorMessage } from 'modules/Form/components';
-import { ErrorsObject, TextFields } from 'types';
+import { FieldReturnType, MessageType } from 'types';
 import { Fields } from 'appConstants';
 import { getTodayDate } from 'utils';
 import { forwardRef } from 'react';
+import { Message } from 'modules';
 import * as S from './styled';
 
-type Props = {
-  onChange: (field: TextFields) => void;
-  errors: ErrorsObject;
-};
+type Props = FieldReturnType<Fields.birthday>;
 
 export const BirthdayField = forwardRef<HTMLInputElement, Props>((props: Props, ref) => {
-  const { errors, onChange } = props;
+  const { name, error, onChange } = props;
   return (
     <>
-      <S.CommonLabel htmlFor={Fields.birthday}>
+      <S.CommonLabel>
         *Birthday
-        <input
-          onChange={() => onChange(Fields.birthday)}
-          max={getTodayDate()}
-          name={Fields.birthday}
-          id={Fields.birthday}
-          type="date"
-          ref={ref}
-        />
+        <input onChange={onChange} max={getTodayDate()} name={name} type="date" ref={ref} />
       </S.CommonLabel>
-      <ErrorMessage visible={!!errors.birthday} message={errors.birthday} />
+      <Message visible={!!error} message={error || ''} type={MessageType.error} />
     </>
   );
 });

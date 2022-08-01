@@ -12,11 +12,11 @@ export { MoveModalContent, PokemonModalContent, TypeModalContent } from './Detai
 export {
   BirthdayField,
   ConsentField,
-  ErrorMessage,
   GenderField,
   AvatarField,
   ShinyField,
   NameField,
   TypeField,
   FormCard,
+  Message,
 } from './Form/components';

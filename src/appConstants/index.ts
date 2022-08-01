@@ -22,10 +22,12 @@ export enum Fields {
   birthday = 'birthday',
   consent = 'consent',
   gender = 'gender',
+  female = 'female',
   avatar = 'avatar',
   shiny = 'shiny',
   name = 'name',
   type = 'type',
+  male = 'male',
 }
 
 export enum ErrorMessages {
@@ -51,6 +53,7 @@ export const NONE = 'none';
 export const MALE = 'male';
 export const FEMALE = 'female';
 export const INPUT_VALUE_KEY = 'input-value';
+export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
 export const tabs = Object.values(AvailableTabs);
 
 export const API = (({ typeLimit, moveLimit, pokemonLimit }: LimitParams) => {
