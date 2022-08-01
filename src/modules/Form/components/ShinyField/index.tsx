@@ -5,8 +5,7 @@ import * as S from './styled';
 
 type Props = FieldReturnType<Fields.shiny>;
 
-export const ShinyField = forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { name, onChange } = props;
+export const ShinyField = forwardRef<HTMLInputElement, Props>(({ name, onChange }, ref) => {
   return (
     <S.SwitchWrapper>
       Shiny

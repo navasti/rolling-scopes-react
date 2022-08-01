@@ -1,4 +1,5 @@
 import { LimitParams } from 'types';
+import * as yup from 'yup';
 
 export enum Limits {
   pokemon = 20,
@@ -22,12 +23,10 @@ export enum Fields {
   birthday = 'birthday',
   consent = 'consent',
   gender = 'gender',
-  female = 'female',
   avatar = 'avatar',
   shiny = 'shiny',
   name = 'name',
   type = 'type',
-  male = 'male',
 }
 
 export enum ErrorMessages {
@@ -71,6 +70,14 @@ export const API = (({ typeLimit, moveLimit, pokemonLimit }: LimitParams) => {
 })({ moveLimit: Limits.move, pokemonLimit: Limits.pokemon, typeLimit: Limits.type });
 
 export const POKEMON_TYPES = Object.values(Types);
+
+export const FORM_VALIDATION_SCHEMA = yup.object().shape({
+  type: yup.string().required(ErrorMessages.type),
+  name: yup.string().min(2).required(ErrorMessages.name),
+  gender: yup.string().nullable().required(ErrorMessages.gender),
+  birthday: yup.string().min(10).required(ErrorMessages.birthday),
+  consent: yup.bool().oneOf([true], ErrorMessages.consent),
+});
 
 export const FIELDS_VALIDATION_BY_NAME = {
   TEXT: [Fields.name, Fields.birthday, Fields.type],

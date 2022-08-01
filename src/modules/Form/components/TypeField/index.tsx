@@ -7,8 +7,7 @@ import * as S from './styled';
 
 type Props = FieldReturnType<Fields.type>;
 
-export const TypeField = forwardRef<HTMLSelectElement, Props>((props, ref) => {
-  const { error, name, onChange } = props;
+export const TypeField = forwardRef<HTMLSelectElement, Props>(({ error, name, onChange }, ref) => {
   return (
     <>
       <S.CommonLabel htmlFor={name}>

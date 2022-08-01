@@ -1,12 +1,10 @@
-import { FEMALE, MALE, ErrorMessages, Fields, SUCCESS_MESSAGE } from 'appConstants';
+import { FEMALE, MALE, Fields, SUCCESS_MESSAGE, FORM_VALIDATION_SCHEMA } from 'appConstants';
 import { CustomPokemon, FormFields, MessageType } from 'types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
-import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
-import * as yup from 'yup';
 import {
   BirthdayField,
   ConsentField,
@@ -17,6 +15,7 @@ import {
   NameField,
   FormCard,
   Message,
+  Layout,
 } from 'modules';
 
 type Props = {
@@ -24,24 +23,21 @@ type Props = {
   location: string;
 };
 
-const FORM_VALIDATION_SCHEMA = yup.object().shape({
-  type: yup.string().required(ErrorMessages.type),
-  name: yup.string().min(2).required(ErrorMessages.name),
-  gender: yup.string().nullable().required(ErrorMessages.gender),
-  birthday: yup.string().min(10).required(),
-  consent: yup.bool().oneOf([true], ErrorMessages.consent),
-});
-
 export const Form = ({ componentName, location }: Props) => {
   const [pokemons, setPokemons] = useState<Array<CustomPokemon & { id: string }>>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [initialEnter, setInitialEnter] = useState(true);
 
   const {
-    register,
-    handleSubmit,
     formState: { errors },
+    handleSubmit,
+    register,
+    reset,
+    watch,
+    clearErrors,
   } = useForm<FormFields>({
     resolver: yupResolver(FORM_VALIDATION_SCHEMA),
+    reValidateMode: 'onSubmit',
   });
 
   const onSubmit: SubmitHandler<FormFields> = (fieldValues) => {
@@ -57,22 +53,47 @@ export const Form = ({ componentName, location }: Props) => {
     };
     setPokemons([...pokemons, customPokemon]);
     setShowSuccessMessage(true);
+    reset();
     setTimeout(() => setShowSuccessMessage(false), 5000);
   };
+
+  watch(() => initialEnter && setInitialEnter(false));
+
+  const clearErrorOnChange = (field: Fields) => !!errors[field]?.message && clearErrors(field);
 
   return (
     <Layout location={location} componentName={componentName}>
       <S.CommonView>
         <S.FormHeading>Create custom pokemon!</S.FormHeading>
         <S.Form onSubmit={handleSubmit(onSubmit)}>
-          <NameField error={errors.name?.message} {...register(Fields.name)} />
-          <TypeField error={errors.type?.message} {...register(Fields.type)} />
+          <NameField
+            error={errors.name?.message}
+            {...register(Fields.name, {
+              onChange: () => clearErrorOnChange(Fields.name),
+            })}
+          />
+          <TypeField
+            error={errors.type?.message}
+            {...register(Fields.type, {
+              onChange: () => clearErrorOnChange(Fields.type),
+            })}
+          />
           <S.GenderWrapper>
             <S.RadioWrapper>
               *Gender
               <S.RadioFields>
-                <GenderField {...register(Fields.gender)} value={FEMALE} />
-                <GenderField {...register(Fields.gender)} value={MALE} />
+                <GenderField
+                  {...register(Fields.gender, {
+                    onChange: () => clearErrorOnChange(Fields.gender),
+                  })}
+                  value={FEMALE}
+                />
+                <GenderField
+                  {...register(Fields.gender, {
+                    onChange: () => clearErrorOnChange(Fields.gender),
+                  })}
+                  value={MALE}
+                />
               </S.RadioFields>
             </S.RadioWrapper>
             <Message
@@ -81,12 +102,20 @@ export const Form = ({ componentName, location }: Props) => {
               type={MessageType.error}
             />
           </S.GenderWrapper>
-          <BirthdayField error={errors.birthday?.message} {...register(Fields.birthday)} />
+          <BirthdayField
+            error={errors.birthday?.message}
+            {...register(Fields.birthday, { onChange: () => clearErrorOnChange(Fields.birthday) })}
+          />
           <AvatarField {...register(Fields.avatar)} />
           <ShinyField {...register(Fields.shiny)} />
-          <ConsentField error={errors.consent?.message} {...register(Fields.consent)} />
+          <ConsentField
+            error={errors.consent?.message}
+            {...register(Fields.consent, { onChange: () => clearErrorOnChange(Fields.consent) })}
+          />
           <S.SubmitButton
-            disabled={Object.values(errors).some((error) => error.message !== undefined)}
+            disabled={
+              initialEnter || Object.values(errors).some((error) => error.message !== undefined)
+            }
             type="submit"
           >
             Submit

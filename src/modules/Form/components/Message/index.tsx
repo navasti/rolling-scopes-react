@@ -1,4 +1,5 @@
 import { MessageType } from 'types';
+import { capitalize } from 'utils';
 import * as S from './styled';
 
 type Props = {
@@ -11,7 +12,7 @@ type Props = {
 export const Message = ({ message, center, visible, type }: Props) => {
   return (
     <S.Message visible={visible} center={center} type={type}>
-      {message}
+      {message && capitalize(message)}
     </S.Message>
   );
 };
