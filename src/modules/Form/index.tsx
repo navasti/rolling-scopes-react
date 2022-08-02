@@ -1,10 +1,18 @@
-import { FEMALE, MALE, Fields, SUCCESS_MESSAGE, FORM_VALIDATION_SCHEMA } from 'appConstants';
 import { CustomPokemon, FormFields, MessageType } from 'types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import * as S from './styled';
 import { uuid } from 'utils';
+import {
+  FORM_VALIDATION_SCHEMA,
+  MESSAGE_HIDE_TIME,
+  SUCCESS_MESSAGE,
+  defaultValues,
+  Fields,
+  FEMALE,
+  MALE,
+} from 'appConstants';
 import {
   BirthdayField,
   ConsentField,
@@ -38,6 +46,7 @@ export const Form = ({ componentName, location }: Props) => {
   } = useForm<FormFields>({
     resolver: yupResolver(FORM_VALIDATION_SCHEMA),
     reValidateMode: 'onSubmit',
+    defaultValues,
   });
 
   const onSubmit: SubmitHandler<FormFields> = (fieldValues) => {
@@ -53,8 +62,8 @@ export const Form = ({ componentName, location }: Props) => {
     };
     setPokemons([...pokemons, customPokemon]);
     setShowSuccessMessage(true);
-    reset();
-    setTimeout(() => setShowSuccessMessage(false), 5000);
+    reset(defaultValues, { keepValues: false });
+    setTimeout(() => setShowSuccessMessage(false), MESSAGE_HIDE_TIME);
   };
 
   watch(() => initialEnter && setInitialEnter(false));

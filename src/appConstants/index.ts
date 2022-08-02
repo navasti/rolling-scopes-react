@@ -1,4 +1,4 @@
-import { LimitParams } from 'types';
+import { FormFields, LimitParams } from 'types';
 import * as yup from 'yup';
 
 export enum Limits {
@@ -51,6 +51,7 @@ export enum Types {
 export const NONE = 'none';
 export const MALE = 'male';
 export const FEMALE = 'female';
+export const MESSAGE_HIDE_TIME = 5000;
 export const INPUT_VALUE_KEY = 'input-value';
 export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
 export const tabs = Object.values(AvailableTabs);
@@ -73,13 +74,23 @@ export const POKEMON_TYPES = Object.values(Types);
 
 export const FORM_VALIDATION_SCHEMA = yup.object().shape({
   type: yup.string().required(ErrorMessages.type),
-  name: yup.string().min(2).required(ErrorMessages.name),
+  name: yup.string().min(2, ErrorMessages.name).required(ErrorMessages.name),
   gender: yup.string().nullable().required(ErrorMessages.gender),
-  birthday: yup.string().min(10).required(ErrorMessages.birthday),
+  birthday: yup.string().required(ErrorMessages.birthday),
   consent: yup.bool().oneOf([true], ErrorMessages.consent),
 });
 
 export const FIELDS_VALIDATION_BY_NAME = {
   TEXT: [Fields.name, Fields.birthday, Fields.type],
   CHECK: [Fields.consent, Fields.gender],
+};
+
+export const defaultValues: FormFields = {
+  avatar: new DataTransfer().files,
+  consent: false,
+  gender: MALE,
+  shiny: false,
+  birthday: '',
+  name: '',
+  type: '',
 };
