@@ -16,7 +16,7 @@ export enum MessageType {
 
 export type FormFields = {
   gender: typeof MALE | typeof FEMALE;
-  avatar: FileList;
+  avatar: FileList | null;
   consent: boolean;
   birthday: string;
   shiny: boolean;

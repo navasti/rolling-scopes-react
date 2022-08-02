@@ -86,7 +86,7 @@ export const FIELDS_VALIDATION_BY_NAME = {
 };
 
 export const defaultValues: FormFields = {
-  avatar: new DataTransfer().files,
+  avatar: null,
   consent: false,
   gender: MALE,
   shiny: false,

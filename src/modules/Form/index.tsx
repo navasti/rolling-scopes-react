@@ -52,7 +52,7 @@ export const Form = ({ componentName, location }: Props) => {
   const onSubmit: SubmitHandler<FormFields> = (fieldValues) => {
     const { shiny, avatar, gender, name, type, birthday } = fieldValues;
     const customPokemon: CustomPokemon & { id: string } = {
-      avatar: avatar.length > 0 ? avatar[0] : null,
+      avatar: avatar && avatar.length > 0 ? avatar[0] : null,
       id: uuid(),
       birthday,
       gender,
