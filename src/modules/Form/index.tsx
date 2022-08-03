@@ -39,10 +39,10 @@ export const Form = ({ componentName, location }: Props) => {
   const {
     formState: { errors },
     handleSubmit,
+    clearErrors,
     register,
     reset,
     watch,
-    clearErrors,
   } = useForm<FormFields>({
     resolver: yupResolver(FORM_VALIDATION_SCHEMA),
     reValidateMode: 'onSubmit',
@@ -52,7 +52,7 @@ export const Form = ({ componentName, location }: Props) => {
   const onSubmit: SubmitHandler<FormFields> = (fieldValues) => {
     const { shiny, avatar, gender, name, type, birthday } = fieldValues;
     const customPokemon: CustomPokemon & { id: string } = {
-      avatar: avatar && avatar.length > 0 ? avatar[0] : null,
+      avatar: !!avatar?.length ? avatar[0] : null,
       id: uuid(),
       birthday,
       gender,
@@ -68,7 +68,9 @@ export const Form = ({ componentName, location }: Props) => {
 
   watch(() => initialEnter && setInitialEnter(false));
 
-  const clearErrorOnChange = (field: Fields) => !!errors[field]?.message && clearErrors(field);
+  const onChange = (field: Fields) => ({
+    onChange: () => !!errors[field]?.message && clearErrors(field),
+  });
 
   return (
     <Layout location={location} componentName={componentName}>
@@ -77,32 +79,18 @@ export const Form = ({ componentName, location }: Props) => {
         <S.Form onSubmit={handleSubmit(onSubmit)}>
           <NameField
             error={errors.name?.message}
-            {...register(Fields.name, {
-              onChange: () => clearErrorOnChange(Fields.name),
-            })}
+            {...register(Fields.name, onChange(Fields.name))}
           />
           <TypeField
             error={errors.type?.message}
-            {...register(Fields.type, {
-              onChange: () => clearErrorOnChange(Fields.type),
-            })}
+            {...register(Fields.type, onChange(Fields.type))}
           />
           <S.GenderWrapper>
             <S.RadioWrapper>
               *Gender
               <S.RadioFields>
-                <GenderField
-                  {...register(Fields.gender, {
-                    onChange: () => clearErrorOnChange(Fields.gender),
-                  })}
-                  value={FEMALE}
-                />
-                <GenderField
-                  {...register(Fields.gender, {
-                    onChange: () => clearErrorOnChange(Fields.gender),
-                  })}
-                  value={MALE}
-                />
+                <GenderField {...register(Fields.gender, onChange(Fields.gender))} value={FEMALE} />
+                <GenderField {...register(Fields.gender, onChange(Fields.gender))} value={MALE} />
               </S.RadioFields>
             </S.RadioWrapper>
             <Message
@@ -112,14 +100,14 @@ export const Form = ({ componentName, location }: Props) => {
             />
           </S.GenderWrapper>
           <BirthdayField
+            {...register(Fields.birthday, onChange(Fields.birthday))}
             error={errors.birthday?.message}
-            {...register(Fields.birthday, { onChange: () => clearErrorOnChange(Fields.birthday) })}
           />
           <AvatarField {...register(Fields.avatar)} />
           <ShinyField {...register(Fields.shiny)} />
           <ConsentField
             error={errors.consent?.message}
-            {...register(Fields.consent, { onChange: () => clearErrorOnChange(Fields.consent) })}
+            {...register(Fields.consent, onChange(Fields.consent))}
           />
           <S.SubmitButton
             disabled={
