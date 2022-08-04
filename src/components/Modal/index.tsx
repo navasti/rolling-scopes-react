@@ -12,14 +12,14 @@ export const Modal = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { children, opened, handleCloseModal } = props;
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = ({ target }: MouseEvent) => {
       const current = (ref as RefObject<HTMLDivElement>).current;
-      const target = event.target as HTMLElement;
-      opened && current && !current.contains(target) && handleCloseModal();
+      opened && current && !current.contains(target as HTMLElement) && handleCloseModal();
     };
-    document.addEventListener('click', (event) => handleClickOutside(event));
-    return () => document.removeEventListener('click', (event) => handleClickOutside(event));
-  }, [opened, ref, handleCloseModal]);
+    const callback = (event: MouseEvent) => handleClickOutside(event);
+    document.addEventListener('click', callback);
+    return () => document.removeEventListener('click', callback);
+  }, [handleCloseModal, opened, ref]);
 
   return (
     <>

@@ -1,12 +1,8 @@
+import { PokemonModalContent, MoveModalContent, TypeModalContent } from './components';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { Modal } from 'components';
 import { forwardRef } from 'react';
 import * as S from './styled';
-import {
-  PokemonModalContent,
-  MoveModalContent,
-  TypeModalContent,
-} from 'modules/DetailsModal/components';
 
 type Props = {
   selectedType?: PokemonTypeDetails;

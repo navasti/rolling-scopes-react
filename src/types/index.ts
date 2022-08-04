@@ -14,6 +14,8 @@ export enum MessageType {
   success = 'success',
 }
 
+export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+
 export type FormFields = {
   gender: typeof MALE | typeof FEMALE;
   avatar: FileList | null;
@@ -68,9 +70,6 @@ export type MovesData = {
   next: null | string;
   count: number;
 };
-
-export type MockBaseDataType = Pokemon | PokemonMove | PokemonType;
-export type MockDetailedDataType = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
 export type DamageRelations = {
   double_damage_from: Array<PokemonType>;
@@ -152,6 +151,7 @@ export type Area = {
 export type Ability = {
   ability: {
     name: string;
+    url: string;
   };
   is_hidden: boolean;
   slot: number;
@@ -162,6 +162,7 @@ export type Stat = {
   effort: number;
   stat: {
     name: string;
+    url: string;
   };
 };
 
@@ -169,6 +170,7 @@ export type Type = {
   slot: number;
   type: {
     name: string;
+    url: string;
   };
 };
 

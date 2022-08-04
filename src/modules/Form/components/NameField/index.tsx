@@ -1,7 +1,7 @@
 import { FieldReturnType, MessageType } from 'types';
+import { Message } from 'modules/Form/components';
 import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
-import { Message } from 'modules';
 import * as S from './styled';
 
 type Props = FieldReturnType<Fields.name>;

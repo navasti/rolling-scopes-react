@@ -2,6 +2,7 @@ import { CustomPokemon, FormFields, MessageType } from 'types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
+import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
 import {
@@ -23,8 +24,7 @@ import {
   NameField,
   FormCard,
   Message,
-  Layout,
-} from 'modules';
+} from './components';
 
 type Props = {
   componentName: string;

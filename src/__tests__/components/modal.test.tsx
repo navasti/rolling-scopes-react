@@ -1,35 +1,45 @@
+import { ModalContent, ModalTitle, modalRef, handleCloseModal } from '__mocks__';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Modal } from 'components';
-import {
-  TestingContentElement,
-  TestingTitleElement,
-  testingContent,
-  testingTitle,
-  modalRef,
-} from '__mocks__';
+
+const prepareModalElement = (opened: boolean) => (
+  <Modal handleCloseModal={handleCloseModal} opened={opened} ref={modalRef}>
+    <ModalTitle />
+    <ModalContent />
+  </Modal>
+);
 
 describe('Modal', () => {
-  it('Render opened modal', () => {
-    let opened = true;
-    const { container } = render(
-      <Modal handleCloseModal={() => (opened = false)} opened={opened} ref={modalRef}>
-        <TestingTitleElement />
-        <TestingContentElement />
-      </Modal>
-    );
-    const closeButton = container.querySelector('button') as HTMLButtonElement;
-    expect(screen.getByText(testingContent)).toBeInTheDocument();
-    expect(screen.getByText(testingTitle)).toBeInTheDocument();
-    fireEvent.click(closeButton);
-    expect(opened).toBeFalsy();
+  afterEach(() => handleCloseModal.mockReset());
+  it('modal should be rendered when open prop equals true', () => {
+    render(prepareModalElement(true));
+    expect(screen.getByTestId('modal-title')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-content')).toBeInTheDocument();
   });
-  it('Render closed modal', () => {
-    const { container } = render(
-      <Modal handleCloseModal={() => {}} opened={false}>
-        <TestingTitleElement />
-        <TestingContentElement />
-      </Modal>
-    );
-    expect(container.children.length).toEqual(0);
+  it('modal should not be rendered when open prop equals false', () => {
+    const { container } = render(prepareModalElement(false));
+    expect(screen.queryByTestId('modal-content')).toBeNull();
+    expect(screen.queryByTestId('modal-title')).toBeNull();
+    expect(container.children).toHaveLength(0);
+  });
+  it('close button should be rendered and clicking should fire handleCloseModal method', () => {
+    const { container } = render(prepareModalElement(true));
+    expect(container.querySelector('button')).toBeInTheDocument();
+    expect(handleCloseModal).not.toHaveBeenCalled();
+    fireEvent.click(container.querySelector('button') as HTMLButtonElement);
+    expect(handleCloseModal).toHaveBeenCalledWith();
+    expect(handleCloseModal).toHaveBeenCalledTimes(1);
+  });
+  it('clicking outside the modal should fire handleCloseModal method', () => {
+    const { container } = render(prepareModalElement(true));
+    expect(handleCloseModal).not.toHaveBeenCalled();
+    fireEvent.click(container.children[0]);
+    expect(handleCloseModal).toHaveBeenCalledWith();
+    expect(handleCloseModal).toHaveBeenCalledTimes(1);
+    screen.debug();
+  });
+  it('modal should match the snapshot', () => {
+    const { container } = render(prepareModalElement(true));
+    expect(container).toMatchSnapshot();
   });
 });

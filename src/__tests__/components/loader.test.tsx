@@ -1,10 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { Loader } from 'components';
 
-describe('Loader component', () => {
-  it('Rendering', () => {
-    render(<Loader />);
-    expect(screen.getByTitle('loader')).toBeInTheDocument();
-    expect(screen.getByTitle('loader')).toBeVisible();
+describe('Loader', () => {
+  it('loader component should be visible and match snapshot', () => {
+    const { container } = render(<Loader />);
+    expect(container).toMatchSnapshot();
+    expect(container).toBeVisible();
   });
 });

@@ -1,7 +1,7 @@
 import { AvailableTabs, API, INPUT_VALUE_KEY, tabs } from 'appConstants';
 import { fetchPokemonByParameter, fetchDetails, fetchBase } from 'utils';
-import { SearchBar, Tabs, Cards } from 'modules/SearchPage/components';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { SearchBar, Tabs, Cards } from './components';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {

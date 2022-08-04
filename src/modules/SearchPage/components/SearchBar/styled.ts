@@ -39,7 +39,7 @@ export const InputInstructions = styled.div`
 `;
 
 export const InputInstruction = styled.span`
-  display: inline-block;
+  display: block;
   font-size: 0.875rem;
   font-weight: 600;
 `;

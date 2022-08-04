@@ -1,3 +1,5 @@
+import { handleMappedResponseMock, handleResponseMock } from '__mocks__/api';
+import { pokemonMove, pokemonType, pokemon } from '__mocks__';
 import {
   fetchPokemonByParameter,
   handleMappedResponse,
@@ -18,25 +20,12 @@ import {
   TypesData,
   Pokemon,
 } from 'types';
-import {
-  handleMappedResponseMock,
-  fetchByParameterMock,
-  handleResponseMock,
-  detailedPokemons,
-  fetchDetailsMock,
-  fetchBaseMock,
-  detailedMoves,
-  detailedTypes,
-  pokemonMove,
-  pokemonType,
-  pokemon,
-} from '__mocks__';
 
 describe('API utils', () => {
   it('handleResponse success', async () => {
     let error = false;
     window.alert = jest.fn(() => (error = true));
-    handleResponseMock<Pokemon>(200, pokemon);
+    handleResponseMock(200, pokemon);
     const response = await fetch('url');
     const data = await handleResponse<Pokemon>(response);
     expect(data).toEqual(pokemon);
@@ -45,7 +34,7 @@ describe('API utils', () => {
   it('handleResponse error', async () => {
     let error = false;
     window.alert = jest.fn(() => (error = true));
-    handleResponseMock<Pokemon>(500, pokemon);
+    handleResponseMock(500, pokemon);
     const response = await fetch('url');
     const data = await handleResponse<Pokemon>(response);
     expect(data).toBeUndefined();
@@ -54,7 +43,7 @@ describe('API utils', () => {
   it('handleMappedResponse success', async () => {
     let errorShown = 0;
     window.alert = jest.fn(() => (errorShown += 1));
-    handleMappedResponseMock<PokemonDetails>(200, detailedPokemons[0]);
+    handleMappedResponseMock(200, detailedPokemons[0]);
     const responses = [fetch('url')];
     const data = await handleMappedResponse<PokemonDetails>(responses);
     expect(data).toEqual([detailedPokemons[0]]);
@@ -63,7 +52,7 @@ describe('API utils', () => {
   it('handleMappedResponse errors', async () => {
     let errorShown = 0;
     window.alert = jest.fn(() => (errorShown += 1));
-    handleMappedResponseMock<PokemonDetails>(500, detailedPokemons[0]);
+    handleMappedResponseMock(500, detailedPokemons[0]);
     const responses = ['url', 'url2'].map((url) => fetch(url));
     const data = await handleMappedResponse<PokemonDetails>(responses);
     expect(data).toEqual([]);

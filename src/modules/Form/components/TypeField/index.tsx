@@ -1,8 +1,7 @@
 import { FieldReturnType, MessageType } from 'types';
-import { POKEMON_TYPES } from 'appConstants';
-import { Fields } from 'appConstants';
+import { POKEMON_TYPES, Fields } from 'appConstants';
+import { Message } from 'modules/Form/components';
 import { forwardRef } from 'react';
-import { Message } from 'modules';
 import * as S from './styled';
 
 type Props = FieldReturnType<Fields.type>;
