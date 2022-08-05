@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navigation navigation component should render links and match snapshot 1`] = `
+<div>
+  <nav
+    class="sc-hKMtZM jcSmlG"
+  >
+    <div
+      class="sc-eCYdqJ ioBEYj"
+    >
+      <a
+        href="/"
+      >
+        Home
+      </a>
+      <a
+        href="/about"
+      >
+        About
+      </a>
+      <a
+        href="/form"
+      >
+        Form
+      </a>
+      <a
+        href="/invalid"
+      >
+        Invalid
+      </a>
+    </div>
+  </nav>
+</div>
+`;

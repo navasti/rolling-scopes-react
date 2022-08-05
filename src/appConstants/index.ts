@@ -54,7 +54,10 @@ export const FEMALE = 'female';
 export const MESSAGE_HIDE_TIME = 5000;
 export const INPUT_VALUE_KEY = 'input-value';
 export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
-export const tabs = Object.values(AvailableTabs);
+export const LINKS = ['home', 'about', 'form', 'invalid'] as const;
+
+export const TABS = Object.values(AvailableTabs);
+export const POKEMON_TYPES = Object.values(Types);
 
 export const API = (({ typeLimit, moveLimit, pokemonLimit }: LimitParams) => {
   const BASE = 'https://pokeapi.co/api/v2';
@@ -70,8 +73,6 @@ export const API = (({ typeLimit, moveLimit, pokemonLimit }: LimitParams) => {
   };
 })({ moveLimit: Limits.move, pokemonLimit: Limits.pokemon, typeLimit: Limits.type });
 
-export const POKEMON_TYPES = Object.values(Types);
-
 export const FORM_VALIDATION_SCHEMA = yup.object().shape({
   type: yup.string().required(ErrorMessages.type),
   name: yup.string().min(2, ErrorMessages.name).required(ErrorMessages.name),
@@ -85,9 +86,9 @@ export const FIELDS_VALIDATION_BY_NAME = {
   CHECK: [Fields.consent, Fields.gender],
 };
 
-export const defaultValues: FormFields = {
-  avatar: null,
+export const DEFAULT_VALUES: FormFields = {
   consent: false,
+  avatar: null,
   gender: MALE,
   shiny: false,
   birthday: '',

@@ -1,11 +1,11 @@
-import { FEMALE, Fields, Limits, MALE, tabs } from 'appConstants';
+import { FEMALE, Fields, Limits, MALE, TABS } from 'appConstants';
 import { UseFormRegisterReturn } from 'react-hook-form';
 import { RefObject } from 'react';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;
-export type Lengths = PrepareLengths<typeof tabs>;
-export type PrepareLengths<Arr extends typeof tabs> = {
+export type Lengths = PrepareLengths<typeof TABS>;
+export type PrepareLengths<Arr extends typeof TABS> = {
   [P in Arr[number] as P]: number;
 };
 

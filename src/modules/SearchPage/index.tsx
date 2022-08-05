@@ -1,4 +1,4 @@
-import { AvailableTabs, API, INPUT_VALUE_KEY, tabs } from 'appConstants';
+import { AvailableTabs, API, INPUT_VALUE_KEY, TABS } from 'appConstants';
 import { fetchPokemonByParameter, fetchDetails, fetchBase } from 'utils';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { SearchBar, Tabs, Cards } from './components';
@@ -100,7 +100,7 @@ export const SearchPage = ({ componentName, location }: Props) => {
           isLoading={isLoading}
           activeTab={activeTab}
           lengths={lengths}
-          options={tabs}
+          options={TABS}
         />
         <Cards
           isLoading={isLoading}

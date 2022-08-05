@@ -9,7 +9,7 @@ import {
   FORM_VALIDATION_SCHEMA,
   MESSAGE_HIDE_TIME,
   SUCCESS_MESSAGE,
-  defaultValues,
+  DEFAULT_VALUES,
   Fields,
   FEMALE,
   MALE,
@@ -45,8 +45,8 @@ export const Form = ({ componentName, location }: Props) => {
     watch,
   } = useForm<FormFields>({
     resolver: yupResolver(FORM_VALIDATION_SCHEMA),
+    defaultValues: DEFAULT_VALUES,
     reValidateMode: 'onSubmit',
-    defaultValues,
   });
 
   const onSubmit: SubmitHandler<FormFields> = (fieldValues) => {
@@ -62,7 +62,7 @@ export const Form = ({ componentName, location }: Props) => {
     };
     setPokemons([...pokemons, customPokemon]);
     setShowSuccessMessage(true);
-    reset(defaultValues, { keepValues: false });
+    reset(DEFAULT_VALUES, { keepValues: false });
     setTimeout(() => setShowSuccessMessage(false), MESSAGE_HIDE_TIME);
   };
 

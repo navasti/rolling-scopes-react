@@ -1,19 +1,18 @@
+import { testingLocation, testingComponentName } from '__mocks__';
 import { render, screen } from '@testing-library/react';
-import { componentName, location } from '__mocks__';
 import { LocationBadge } from 'modules';
 
-const locationBadgeExpectations = () => {
-  const locationParagraph = screen.getByText('Location:');
-  const componentNameParagraph = screen.getByText('Component:');
-  const locationSpan = screen.getByText(location);
-  const componentNameSpan = screen.getByText(componentName);
-  expect(locationParagraph).toBeVisible();
-  expect(componentNameParagraph).toBeVisible();
-  expect(locationParagraph).toContainElement(locationSpan);
-  expect(componentNameParagraph).toContainElement(componentNameSpan);
-};
-
-it('Rendering location badge', () => {
-  render(<LocationBadge location={location} componentName={componentName} />);
-  locationBadgeExpectations();
+describe('LocationBadge', () => {
+  it('location badge element should be rendered and match snapshot', () => {
+    const { container } = render(
+      <LocationBadge componentName={testingComponentName} location={testingLocation} />
+    );
+    expect(container).toMatchSnapshot();
+    expect(container.children[0]).toBeInTheDocument();
+  });
+  it('location and component name should be rendered and visible', () => {
+    render(<LocationBadge componentName={testingComponentName} location={testingLocation} />);
+    expect(screen.getByText(testingComponentName)).toBeVisible();
+    expect(screen.getByText(testingLocation)).toBeVisible();
+  });
 });

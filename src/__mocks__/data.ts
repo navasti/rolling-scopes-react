@@ -17,8 +17,10 @@ export const invisible = false;
 export const isLoading = false;
 
 export const links = ['Home', 'About', 'Form', 'Invalid'];
-export const componentName = 'About';
-export const location = '/about';
+
+export const testingComponentName = 'Test';
+export const testingLocation = '/test';
+
 export const testingContent = 'Content';
 export const testingTitle = 'Title';
 
