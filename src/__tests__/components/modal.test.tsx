@@ -20,9 +20,9 @@ describe('Modal', () => {
     const { container } = render(prepareModalElement(false));
     expect(screen.queryByTestId('modal-content')).toBeNull();
     expect(screen.queryByTestId('modal-title')).toBeNull();
-    expect(container.children).toHaveLength(0);
+    expect(container).toBeEmptyDOMElement();
   });
-  it('close button should be rendered and clicking should fire handleCloseModal method', () => {
+  it('close button should be rendered and clicking it should fire handleCloseModal method', () => {
     const { container } = render(prepareModalElement(true));
     expect(container.querySelector('button')).toBeInTheDocument();
     expect(handleCloseModal).not.toHaveBeenCalled();
@@ -36,7 +36,6 @@ describe('Modal', () => {
     fireEvent.click(container.children[0]);
     expect(handleCloseModal).toHaveBeenCalledWith();
     expect(handleCloseModal).toHaveBeenCalledTimes(1);
-    screen.debug();
   });
   it('modal should match the snapshot', () => {
     const { container } = render(prepareModalElement(true));

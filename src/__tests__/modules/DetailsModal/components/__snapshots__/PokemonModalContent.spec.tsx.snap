@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PokemonModalContent content should match the snapshot with passed first element of pokemonsMock as a prop 1`] = `
+<div>
+  <div>
+    <p
+      class="sc-jSMfEi fVTeHB"
+    >
+      <b>
+        Weight
+        :
+      </b>
+       
+      85
+    </p>
+    <p
+      class="sc-jSMfEi fVTeHB"
+    >
+      <b>
+        Height
+        :
+      </b>
+       
+      6
+    </p>
+    <p
+      class="sc-jSMfEi fVTeHB"
+    >
+      <b>
+        Base experience
+        :
+      </b>
+       
+      62
+    </p>
+    <p
+      class="sc-jSMfEi fVTeHB"
+    >
+      <b>
+        Types:
+      </b>
+       
+      fire
+    </p>
+    <div
+      class="sc-hKMtZM isCUBw"
+    >
+      <span
+        class="sc-eCYdqJ hhpgjz"
+      >
+        Pokemon abilities:
+      </span>
+      <p>
+        Blaze
+         - hidden: 
+        no
+        , slot: 
+        1
+      </p>
+    </div>
+    <div
+      class="sc-hKMtZM isCUBw"
+    >
+      <span
+        class="sc-eCYdqJ hhpgjz"
+      >
+        Pokemon statistics:
+      </span>
+      <p>
+        Attack
+         - power: 
+        52
+        , effort: 
+        0
+      </p>
+    </div>
+  </div>
+</div>
+`;

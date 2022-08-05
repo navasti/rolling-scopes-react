@@ -15,16 +15,19 @@ type Props = {
 };
 
 export const Cards = ({ activeTab, isLoading, moves, pokemons, types }: Props) => {
-  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>();
-  const [selectedType, setSelectedType] = useState<PokemonTypeDetails | null>();
-  const [selectedMove, setSelectedMove] = useState<PokemonMoveDetails | null>();
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | undefined>();
+  const [selectedType, setSelectedType] = useState<PokemonTypeDetails | undefined>();
+  const [selectedMove, setSelectedMove] = useState<PokemonMoveDetails | undefined>();
   const [isModalOpened, setIsModalOpened] = useState(false);
 
-  const pokemonModalRef = useRef<HTMLDivElement>(null);
-  const moveModalRef = useRef<HTMLDivElement>(null);
-  const typeModalRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  const handleCloseModal = useCallback(() => setIsModalOpened(false), []);
+  const handleCloseModal = useCallback(() => {
+    setSelectedPokemon(undefined);
+    setSelectedType(undefined);
+    setSelectedMove(undefined);
+    setIsModalOpened(false);
+  }, []);
   const handleOpenModal = useCallback(() => setIsModalOpened(true), []);
 
   return (
@@ -37,81 +40,53 @@ export const Cards = ({ activeTab, isLoading, moves, pokemons, types }: Props) =
           center={activeTab !== AvailableTabs.pokemons}
           isLoading={isLoading}
         >
+          <DetailsModal
+            handleCloseModal={handleCloseModal}
+            selectedPokemon={selectedPokemon}
+            isModalOpened={isModalOpened}
+            selectedMove={selectedMove}
+            selectedType={selectedType}
+            ref={modalRef}
+          />
           {activeTab === AvailableTabs.pokemons ? (
-            <>
-              {pokemons.length > 0 ? (
-                <>
-                  {selectedPokemon && (
-                    <DetailsModal
-                      handleCloseModal={handleCloseModal}
-                      selectedPokemon={selectedPokemon}
-                      isModalOpened={isModalOpened}
-                      ref={pokemonModalRef}
-                    />
-                  )}
-                  {pokemons.map((pokemon) => (
-                    <PokemonCard
-                      handlePokemonSelect={(pokemon: PokemonDetails) => setSelectedPokemon(pokemon)}
-                      handleOpenModal={handleOpenModal}
-                      pokemon={pokemon}
-                      key={pokemon.id}
-                    />
-                  ))}
-                </>
-              ) : (
-                <S.NoDataInfo>No pokemons were found</S.NoDataInfo>
-              )}
-            </>
+            pokemons.length > 0 ? (
+              pokemons.map((pokemon) => (
+                <PokemonCard
+                  handlePokemonSelect={(pokemon: PokemonDetails) => setSelectedPokemon(pokemon)}
+                  handleOpenModal={handleOpenModal}
+                  pokemon={pokemon}
+                  key={pokemon.id}
+                />
+              ))
+            ) : (
+              <S.NoDataInfo>No pokemons were found</S.NoDataInfo>
+            )
           ) : activeTab === AvailableTabs.moves ? (
-            <>
-              {moves.length > 0 ? (
-                <>
-                  {selectedMove && (
-                    <DetailsModal
-                      handleCloseModal={handleCloseModal}
-                      isModalOpened={isModalOpened}
-                      selectedMove={selectedMove}
-                      ref={moveModalRef}
-                    />
-                  )}
-                  {moves.map((move) => (
-                    <MoveCard
-                      handleMoveSelect={(move: PokemonMoveDetails) => setSelectedMove(move)}
-                      handleOpenModal={handleOpenModal}
-                      move={move}
-                      key={move.id}
-                    />
-                  ))}
-                </>
-              ) : (
-                <S.NoDataInfo>No moves were found</S.NoDataInfo>
-              )}
-            </>
+            moves.length > 0 ? (
+              moves.map((move) => (
+                <MoveCard
+                  handleMoveSelect={(move: PokemonMoveDetails) => setSelectedMove(move)}
+                  handleOpenModal={handleOpenModal}
+                  key={move.id}
+                  move={move}
+                />
+              ))
+            ) : (
+              <S.NoDataInfo>No moves were found</S.NoDataInfo>
+            )
           ) : activeTab === AvailableTabs.types ? (
-            <>
-              {types.length > 0 ? (
-                <>
-                  {selectedType && (
-                    <DetailsModal
-                      handleCloseModal={handleCloseModal}
-                      isModalOpened={isModalOpened}
-                      selectedType={selectedType}
-                      ref={typeModalRef}
-                    />
-                  )}
-                  {types.map((type) => (
-                    <TypeCard
-                      handleTypeSelect={(type: PokemonTypeDetails) => setSelectedType(type)}
-                      handleOpenModal={handleOpenModal}
-                      key={type.id}
-                      type={type}
-                    />
-                  ))}
-                </>
-              ) : (
-                <S.NoDataInfo>No types were found</S.NoDataInfo>
-              )}
-            </>
+            types.length > 0 ? (
+              types.map((type) => (
+                <TypeCard
+                  handleTypeSelect={(type: PokemonTypeDetails) => setSelectedType(type)}
+                  handleOpenModal={handleOpenModal}
+                  key={type.id}
+                  type={type}
+                />
+              ))
+            ) : (
+              <S.NoDataInfo>No types were found</S.NoDataInfo>
+            )
           ) : null}
         </S.CardsWrapper>
       )}

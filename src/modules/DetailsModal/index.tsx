@@ -16,22 +16,26 @@ export const DetailsModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { handleCloseModal, isModalOpened, selectedMove, selectedPokemon, selectedType } = props;
   return (
     <>
-      {selectedPokemon ? (
-        <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
-          <S.ModalTitle>{selectedPokemon.name}</S.ModalTitle>
+      <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
+        <S.ModalTitle>
+          {selectedPokemon
+            ? selectedPokemon.name
+            : selectedMove
+            ? selectedMove.name
+            : selectedType
+            ? selectedType.name
+            : null}
+        </S.ModalTitle>
+        {selectedPokemon ? (
           <PokemonModalContent selectedPokemon={selectedPokemon} />
-        </Modal>
-      ) : selectedMove ? (
-        <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
-          <S.ModalTitle>{selectedMove.name}</S.ModalTitle>
+        ) : selectedMove ? (
           <MoveModalContent selectedMove={selectedMove} />
-        </Modal>
-      ) : selectedType ? (
-        <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} ref={ref}>
-          <S.ModalTitle>{selectedType.name}</S.ModalTitle>
+        ) : selectedType ? (
           <TypeModalContent selectedType={selectedType} />
-        </Modal>
-      ) : null}
+        ) : (
+          <div></div>
+        )}
+      </Modal>
     </>
   );
 });
