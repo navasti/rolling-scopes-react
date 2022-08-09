@@ -14,6 +14,13 @@ export enum MessageType {
   success = 'success',
 }
 
+export type MessageProps = {
+  message: string | null;
+  type: MessageType;
+  visible: boolean;
+  center?: boolean;
+};
+
 export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
 export type CardsProps = {

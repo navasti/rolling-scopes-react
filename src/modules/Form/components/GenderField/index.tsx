@@ -8,8 +8,8 @@ type Props = FieldReturnType<Fields.gender>;
 
 export const GenderField = forwardRef<HTMLInputElement, Props>(({ value, name, onChange }, ref) => {
   return (
-    <S.RadioField>
-      <input onChange={onChange} value={value} type="radio" name={name} ref={ref} />
+    <S.RadioField htmlFor={name}>
+      <input onChange={onChange} id={name} value={value} type="radio" name={name} ref={ref} />
       {capitalize(value || '')}
     </S.RadioField>
   );

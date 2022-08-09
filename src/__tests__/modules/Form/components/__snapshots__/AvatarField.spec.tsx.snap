@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AvatarField should be rendered and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-dkzDqf bMkHQX"
+    for="avatar"
+  >
+    Avatar
+    <input
+      id="avatar"
+      name="avatar"
+      type="file"
+    />
+  </label>
+</div>
+`;

@@ -1,6 +1,14 @@
 import { testingContent, testingTitle } from './data';
 import { createRef, RefObject } from 'react';
-import { CardsProps, LayoutProps, SearchBarProps, TabsProps } from 'types';
+import { capitalize } from 'utils';
+import {
+  SearchBarProps,
+  MessageProps,
+  LayoutProps,
+  MessageType,
+  CardsProps,
+  TabsProps,
+} from 'types';
 
 export const modalRef: RefObject<HTMLDivElement> = createRef();
 export const errorRef: RefObject<HTMLSpanElement> = createRef();
@@ -64,6 +72,20 @@ export const ComponentMocks = {
           </div>
         )}
       </div>
+    );
+  },
+  Message: ({ message, type, visible, center }: MessageProps) => {
+    return (
+      <span
+        data-testid="message-mock"
+        style={{
+          opacity: visible ? '1' : '0',
+          textAlign: center ? 'center' : 'left',
+          color: type === MessageType.error ? 'red' : 'green',
+        }}
+      >
+        {message && capitalize(message)}
+      </span>
     );
   },
 };

@@ -1,4 +1,4 @@
-export { BirthdayField } from './BirthdateField';
+export { BirthdayField } from './BirthdayField';
 export { ConsentField } from './ConsentField';
 export { AvatarField } from './AvatarField';
 export { GenderField } from './GenderField';

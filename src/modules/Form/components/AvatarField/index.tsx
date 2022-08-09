@@ -7,9 +7,9 @@ type Props = FieldReturnType<Fields.avatar>;
 
 export const AvatarField = forwardRef<HTMLInputElement, Props>(({ name, onChange }, ref) => {
   return (
-    <S.FileField>
+    <S.FileField htmlFor="avatar">
       Avatar
-      <input name={name} type="file" ref={ref} onChange={onChange} />
+      <input name={name} id="avatar" type="file" ref={ref} onChange={onChange} />
     </S.FileField>
   );
 });

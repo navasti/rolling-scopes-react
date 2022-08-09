@@ -62,11 +62,20 @@ jest.mock('utils/api.ts', () => {
 });
 
 describe('SearchPage', () => {
-  it('Layout should be rendered with componentName and location props given further', () => {
-    act(() => {
-      render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
+  it('should match snapshot before and after data fetching', async () => {
+    const { container } = render(
+      <SearchPage componentName={testingComponentName} location={testingLocation} />,
+      {
         wrapper: BrowserRouter,
-      });
+      }
+    );
+    expect(container).toMatchSnapshot();
+    await waitForElementToBeRemoved(() => screen.queryAllByText('loading'));
+    expect(container).toMatchSnapshot();
+  });
+  it('Layout should be rendered with componentName and location props given further', () => {
+    render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
+      wrapper: BrowserRouter,
     });
     expect(screen.getByTestId('component-mock')).toHaveTextContent(testingComponentName);
     expect(screen.getByTestId('location-mock')).toHaveTextContent(testingLocation);
@@ -90,10 +99,8 @@ describe('SearchPage', () => {
     expect(screen.getByText(typesMock[0].name)).toBeVisible();
   });
   it('SearchBar should be rendered and localStorage input should be visible', () => {
-    act(() => {
-      render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
-        wrapper: BrowserRouter,
-      });
+    render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
+      wrapper: BrowserRouter,
     });
     const input = screen.getByLabelText('testing label');
     const instructions = screen.getAllByText('and press enter', { exact: false });

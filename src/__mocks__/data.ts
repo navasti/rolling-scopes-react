@@ -84,7 +84,7 @@ export const testErrors: ErrorsObject = {
 
 export const customPokemon: CustomPokemon = {
   birthday: '01-01-1999',
-  name: 'pokemonix',
+  name: 'charmander',
   gender: 'male',
   avatar: null,
   type: 'fire',
