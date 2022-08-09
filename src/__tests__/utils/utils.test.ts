@@ -1,13 +1,11 @@
 import { capitalize, uuid, getTodayDate, appendComma } from 'utils';
 
-const testingArray = ['test1', 'test2'];
-
-describe('General utils', () => {
-  it('Capitalize first letter', () => {
+describe('Utils', () => {
+  it('should capitalize first letter', () => {
     const test = 'test-string';
     expect(capitalize(test)).toEqual('Test-string');
   });
-  it('Generate UUID', () => {
+  it('should generate UUID', () => {
     Array(40)
       .fill(null)
       .forEach(() => {
@@ -16,7 +14,7 @@ describe('General utils', () => {
         expect(id.length).toBeLessThan(25);
       });
   });
-  it('Get today date', () => {
+  it('should get today date', () => {
     const now = new Date();
     const date = getTodayDate();
     expect(date.length).toEqual(10);
@@ -24,7 +22,8 @@ describe('General utils', () => {
     expect(date).toContain(`${now.getFullYear()}`);
     expect(date).toContain(`${now.getMonth() + 1}`);
   });
-  it('Append comma', () => {
+  it('should append comma', () => {
+    const testingArray = ['test1', 'test2'];
     expect(appendComma(testingArray.length, 0, testingArray[0])).toEqual(`${testingArray[0]}, `);
     expect(appendComma(testingArray.length, 1, testingArray[1])).toEqual(`${testingArray[1]}`);
   });

@@ -25,19 +25,9 @@ export const testingLocation = '/test';
 export const testingContent = 'Content';
 export const testingTitle = 'Title';
 
-export const pokemonType: PokemonType = {
-  name: 'typex',
-  url: 'url',
-};
-
-export const pokemon: Pokemon = {
-  name: 'pokemonix',
-  url: 'url',
-};
-
-export const pokemonMove: PokemonMove = {
-  name: 'movix',
-  url: 'url',
+export const baseData: Pokemon | PokemonType | PokemonMove = {
+  name: 'baseName',
+  url: 'baseUrl',
 };
 
 export const typeModalContentProperties = [

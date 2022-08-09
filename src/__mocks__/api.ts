@@ -1,11 +1,4 @@
-import {
-  PokemonMoveDetails,
-  PokemonTypeDetails,
-  PokemonDetails,
-  PokemonMove,
-  PokemonType,
-  Pokemon,
-} from 'types';
+import { PokemonDetails, PokemonMove, PokemonType, Pokemon, Details } from 'types';
 import { hasError } from 'utils';
 
 export const fetchBaseMock = (mockData: Pokemon | PokemonMove | PokemonType) => {
@@ -17,9 +10,7 @@ export const fetchBaseMock = (mockData: Pokemon | PokemonMove | PokemonType) => 
   ) as jest.Mock;
 };
 
-export const fetchByParameterMock = (
-  mockData: PokemonDetails | PokemonMoveDetails | PokemonTypeDetails
-) => {
+export const fetchByParameterMock = (mockData: Details) => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
@@ -28,7 +19,7 @@ export const fetchByParameterMock = (
   ) as jest.Mock;
 };
 
-export const fetchDetailsMock = <T>(mockData: Array<T>) => {
+export const fetchDetailsMock = (mockData: Array<Details>) => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
       status: 200,
