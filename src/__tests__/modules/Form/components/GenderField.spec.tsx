@@ -3,8 +3,8 @@ import { GenderField } from 'modules/Form/components';
 import { FEMALE, Fields, MALE } from 'appConstants';
 import { createRef } from 'react';
 
-const onChange = () => Promise.resolve(true);
-const onBlur = () => Promise.resolve(true);
+const onChange = jest.fn();
+const onBlur = jest.fn();
 const ref = createRef<HTMLInputElement>();
 
 jest.mock('modules/Form/components', () => {
@@ -56,6 +56,7 @@ describe('GenderField', () => {
     expect(input.type).toEqual('radio');
     expect(input).not.toBeChecked();
     fireEvent.click(input);
+    expect(onChange).toHaveBeenCalledTimes(1);
     expect(input).toBeChecked();
   });
 });

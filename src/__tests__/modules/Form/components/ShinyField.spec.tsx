@@ -3,8 +3,8 @@ import { ShinyField } from 'modules/Form/components';
 import { Fields } from 'appConstants';
 import { createRef } from 'react';
 
-const onChange = () => Promise.resolve(true);
-const onBlur = () => Promise.resolve(true);
+const onChange = jest.fn();
+const onBlur = jest.fn();
 const ref = createRef<HTMLInputElement>();
 
 jest.mock('modules/Form/components', () => {
@@ -31,6 +31,7 @@ describe('ShinyField', () => {
     expect(input.type).toEqual('checkbox');
     expect(input).not.toBeChecked();
     fireEvent.click(input);
+    expect(onChange).toHaveBeenCalledTimes(1);
     expect(input).toBeChecked();
   });
 });

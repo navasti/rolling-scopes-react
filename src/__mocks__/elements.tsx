@@ -1,5 +1,6 @@
+import { createRef, forwardRef, RefObject } from 'react';
 import { testingContent, testingTitle } from './data';
-import { createRef, RefObject } from 'react';
+import { MALE, POKEMON_TYPES } from 'appConstants';
 import { capitalize } from 'utils';
 import {
   SearchBarProps,
@@ -8,6 +9,7 @@ import {
   MessageType,
   CardsProps,
   TabsProps,
+  CustomPokemon,
 } from 'types';
 
 export const modalRef: RefObject<HTMLDivElement> = createRef();
@@ -74,6 +76,33 @@ export const ComponentMocks = {
       </div>
     );
   },
+  FormCard: ({ customPokemon }: { customPokemon: CustomPokemon }) => {
+    const { name, gender, type, birthday, shiny } = customPokemon;
+    return (
+      <div data-testid="form-card-mock">
+        <div>
+          <img src="questionmark.png" />
+        </div>
+        <div>
+          <p>
+            Name :<span>{capitalize(name)}</span>
+          </p>
+          <p>
+            Gender :<span>{capitalize(gender)}</span>
+          </p>
+          <p>
+            Main type :<span>{capitalize(type)}</span>
+          </p>
+          <p>
+            Birthday :<span>{capitalize(birthday)}</span>
+          </p>
+          <p>
+            Shiny :<span>{shiny ? 'Yes' : 'No'}</span>
+          </p>
+        </div>
+      </div>
+    );
+  },
   Message: ({ message, type, visible, center }: MessageProps) => {
     return (
       <span
@@ -88,4 +117,39 @@ export const ComponentMocks = {
       </span>
     );
   },
+  BirthdayField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="birth" data-testid="birth-mock">
+      <input id="birth" type="date" ref={ref} value="2000-02-02" onChange={onChange} />
+    </label>
+  )),
+  ConsentField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="consent" data-testid="consent-mock">
+      <input type="checkbox" id="consent" ref={ref} checked onChange={onChange} />
+    </label>
+  )),
+  AvatarField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="avatar" data-testid="avatar-mock">
+      <input type="file" id="avatar" ref={ref} onChange={onChange} />
+    </label>
+  )),
+  ShinyField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="shiny" data-testid="shiny-mock">
+      <input type="checkbox" id="shiny" ref={ref} onChange={onChange} checked />
+    </label>
+  )),
+  GenderField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="gender" data-testid="gender-mock">
+      <input type="radio" id="gender" ref={ref} value={MALE} onChange={onChange} />
+    </label>
+  )),
+  TypeField: forwardRef<HTMLSelectElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="type" data-testid="type-mock">
+      <select id="type" ref={ref} value={POKEMON_TYPES[0]} onChange={onChange}></select>
+    </label>
+  )),
+  NameField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
+    <label htmlFor="name" data-testid="name-mock">
+      <input type="text" id="name" ref={ref} value="charmander" onChange={onChange} />
+    </label>
+  )),
 };

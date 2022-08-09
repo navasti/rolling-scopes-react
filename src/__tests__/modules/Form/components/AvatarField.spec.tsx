@@ -3,8 +3,8 @@ import { Fields } from 'appConstants';
 import { AvatarField } from 'modules/Form/components';
 import { createRef } from 'react';
 
-const onChange = () => Promise.resolve(true);
-const onBlur = () => Promise.resolve(true);
+const onChange = jest.fn();
+const onBlur = jest.fn();
 const ref = createRef<HTMLInputElement>();
 
 const file = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
@@ -21,6 +21,7 @@ describe('AvatarField', () => {
     const input = screen.getByLabelText('Avatar') as HTMLInputElement;
     expect(input.type).toEqual('file');
     fireEvent.change(input, { target: { files: [file] } });
+    expect(onChange).toHaveBeenCalledTimes(1);
     expect(input.files?.[0].name).toEqual('test.png');
     expect(input.files).toHaveLength(1);
   });

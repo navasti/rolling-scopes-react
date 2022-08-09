@@ -3,8 +3,8 @@ import { TypeField } from 'modules/Form/components';
 import { Fields, POKEMON_TYPES } from 'appConstants';
 import { createRef } from 'react';
 
-const onChange = () => Promise.resolve(true);
-const onBlur = () => Promise.resolve(true);
+const onChange = jest.fn();
+const onBlur = jest.fn();
 const ref = createRef<HTMLSelectElement>();
 
 jest.mock('modules/Form/components', () => {
@@ -46,6 +46,7 @@ describe('TypeField', () => {
     const select = screen.getByLabelText('*Main type') as HTMLSelectElement;
     expect(select).toHaveValue('');
     fireEvent.change(select, { target: { value: POKEMON_TYPES[0] } });
+    expect(onChange).toHaveBeenCalledTimes(1);
     expect(select.children.length).toEqual(POKEMON_TYPES.length + 1);
     expect(select).toHaveValue(POKEMON_TYPES[0]);
   });
