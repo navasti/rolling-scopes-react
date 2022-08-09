@@ -1,4 +1,4 @@
-import { createRef, RefObject } from 'react';
+import { createRef, forwardRef, RefObject } from 'react';
 import { testingContent, testingTitle } from './data';
 
 export const modalRef: RefObject<HTMLDivElement> = createRef();

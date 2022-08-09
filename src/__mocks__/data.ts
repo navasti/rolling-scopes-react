@@ -10,6 +10,7 @@ import {
   PokemonType,
   Details,
   Pokemon,
+  Lengths,
 } from 'types';
 
 export const visible = true;
@@ -101,6 +102,8 @@ export const customPokemon: CustomPokemon = {
 };
 
 //
+
+export const lengths: Lengths = { pokemons: 10, moves: 15, types: 20 };
 
 const samplePokemon = (): PokemonDetails => ({
   base_experience: 62,
