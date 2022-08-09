@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MoveCard move card should be rendered and match snapshot 1`] = `
+<div>
+  <button
+    class="sc-kDDrLX cmYwwA"
+    data-testid="move-card"
+  >
+    <p>
+      water-gun
+    </p>
+  </button>
+</div>
+`;

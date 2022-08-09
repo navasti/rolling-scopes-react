@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent } from 'react';
 import { SearchIcon } from 'assets/images/svg';
 import * as S from './styled';
+import { SEARCH_BAR_INSTRUCTIONS } from 'appConstants';
 
 type Props = {
   label: string;
@@ -16,7 +17,7 @@ export const SearchBar = ({ inputValue, label, isLoading, onChange, onKeyDown }:
       <S.SearchBar>
         <S.Label htmlFor="storage-input">{label}</S.Label>
         <S.InputWrapper>
-          <SearchIcon />
+          <SearchIcon data-testid="search-icon" />
           <S.Input
             placeholder="Type here"
             onKeyDown={onKeyDown}
@@ -29,12 +30,9 @@ export const SearchBar = ({ inputValue, label, isLoading, onChange, onKeyDown }:
         </S.InputWrapper>
       </S.SearchBar>
       <S.InputInstructions>
-        <S.InputInstruction>
-          Type and press enter to search for specific pokemon, type or move.
-        </S.InputInstruction>
-        <S.InputInstruction>
-          Clear input and press enter to search for all pokemons, types and moves.
-        </S.InputInstruction>
+        {SEARCH_BAR_INSTRUCTIONS.map((instruction) => (
+          <S.InputInstruction key={instruction}>{instruction}</S.InputInstruction>
+        ))}
       </S.InputInstructions>
     </>
   );

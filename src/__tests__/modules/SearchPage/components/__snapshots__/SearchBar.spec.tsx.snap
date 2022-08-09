@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBar search bar should display passed label, input value and match snapshot 1`] = `
+<div>
+  <div
+    class="sc-jSMfEi kxOYXq"
+  >
+    <label
+      class="sc-iBkjds dwoShf"
+      for="storage-input"
+    >
+      search-bar-label
+    </label>
+    <div
+      class="sc-gKXOVf fLruuU"
+    >
+      <svg
+        data-testid="search-icon"
+      >
+        search.svg
+      </svg>
+      <input
+        class="sc-ftvSup cFIHpo"
+        id="storage-input"
+        placeholder="Type here"
+        type="text"
+        value="input-value"
+      />
+    </div>
+  </div>
+  <div
+    class="sc-papXJ kNpxOz"
+  >
+    <span
+      class="sc-jqUVSM gmbDoA"
+    >
+      Type and press enter to search for specific pokemon, type or move.
+    </span>
+    <span
+      class="sc-jqUVSM gmbDoA"
+    >
+      Clear input and press enter to search for all pokemons, types and moves.
+    </span>
+  </div>
+</div>
+`;

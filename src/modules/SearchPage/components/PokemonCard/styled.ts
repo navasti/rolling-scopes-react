@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
-export const Card = styled.div`
+export const Card = styled.button`
   border: 2px solid #aaa;
+  background-color: #fff;
   flex-direction: column;
   border-radius: 10px;
   font-size: 0.775rem;
   cursor: pointer;
+  text-align: left;
   display: flex;
   padding: 5px;
   &:hover {

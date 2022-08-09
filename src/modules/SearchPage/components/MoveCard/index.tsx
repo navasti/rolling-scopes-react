@@ -13,7 +13,7 @@ export const MoveCard = ({ move, handleOpenModal, handleMoveSelect }: Props) => 
     setTimeout(() => handleOpenModal(), 0);
   };
   return (
-    <S.Card onClick={onClick}>
+    <S.Card onClick={onClick} data-testid="move-card">
       <p>{move.name}</p>
     </S.Card>
   );

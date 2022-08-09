@@ -1,0 +1,160 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cards when moves are set as an active tab, move cards should be visible and match the snapshot 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ MMRei"
+    min="130px"
+  >
+    <div />
+    <button
+      data-testid="move-card-mock"
+    >
+      <p>
+        water-gun
+      </p>
+    </button>
+    <button
+      data-testid="move-card-mock"
+    >
+      <p>
+        disable
+      </p>
+    </button>
+    <button
+      data-testid="move-card-mock"
+    >
+      <p>
+        tackle
+      </p>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Cards when pokemons are set as an active tab, pokemons cards should be visible and match the snapshot 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ dkoYgU"
+    min="190px"
+  >
+    <div />
+    <button
+      data-testid="pokemon-card-mock"
+    >
+      <div>
+        <img
+          alt="bulbasaur"
+          data-testid="pokemon-img-mock"
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+        />
+        <div>
+          <span>
+            Base:
+          </span>
+          <p>
+            Name: 
+            <span>
+              bulbasaur
+            </span>
+          </p>
+          <p>
+            Types: 
+            <span>
+              fire
+            </span>
+          </p>
+        </div>
+      </div>
+    </button>
+    <button
+      data-testid="pokemon-card-mock"
+    >
+      <div>
+        <img
+          alt="pikachu"
+          data-testid="pokemon-img-mock"
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+        />
+        <div>
+          <span>
+            Base:
+          </span>
+          <p>
+            Name: 
+            <span>
+              pikachu
+            </span>
+          </p>
+          <p>
+            Types: 
+            <span>
+              fire
+            </span>
+          </p>
+        </div>
+      </div>
+    </button>
+    <button
+      data-testid="pokemon-card-mock"
+    >
+      <div>
+        <img
+          alt="charmander"
+          data-testid="pokemon-img-mock"
+          src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+        />
+        <div>
+          <span>
+            Base:
+          </span>
+          <p>
+            Name: 
+            <span>
+              charmander
+            </span>
+          </p>
+          <p>
+            Types: 
+            <span>
+              fire
+            </span>
+          </p>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Cards when types are set as an active tab, types cards should be visible and match the snapshot 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ MMRei"
+    min="130px"
+  >
+    <div />
+    <button
+      data-testid="type-card-mock"
+    >
+      <p>
+        fighting
+      </p>
+    </button>
+    <button
+      data-testid="type-card-mock"
+    >
+      <p>
+        ground
+      </p>
+    </button>
+    <button
+      data-testid="type-card-mock"
+    >
+      <p>
+        flying
+      </p>
+    </button>
+  </div>
+</div>
+`;

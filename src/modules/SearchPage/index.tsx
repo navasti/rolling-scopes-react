@@ -1,21 +1,20 @@
 import { AvailableTabs, API, INPUT_VALUE_KEY, TABS } from 'appConstants';
-import { fetchPokemonByParameter, fetchDetails, fetchBase } from 'utils';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import {
+  fetchPokemonByParameter,
+  fetchMoveByParameter,
+  fetchTypeByParameter,
+  fetchPokemonDetails,
+  fetchPokemonBase,
+  fetchMoveDetails,
+  fetchTypeDetails,
+  fetchTypeBase,
+  fetchMoveBase,
+} from 'utils';
 import { SearchBar, Tabs, Cards } from './components';
 import { Layout } from 'modules';
 import * as S from './styled';
-import {
-  PokemonTypeDetails,
-  PokemonMoveDetails,
-  PokemonDetails,
-  PokemonData,
-  PokemonMove,
-  PokemonType,
-  MovesData,
-  TypesData,
-  Pokemon,
-  Lengths,
-} from 'types';
+import { PokemonTypeDetails, PokemonMoveDetails, PokemonDetails, Lengths } from 'types';
 
 type Props = {
   componentName: string;
@@ -40,9 +39,9 @@ export const SearchPage = ({ componentName, location }: Props) => {
   }, []);
 
   const fetchAndSetSpecificData = async (value: string) => {
-    const type = await fetchPokemonByParameter<PokemonTypeDetails>(`${API.TYPE}/${value}`);
-    const move = await fetchPokemonByParameter<PokemonMoveDetails>(`${API.MOVE}/${value}`);
-    const pokemon = await fetchPokemonByParameter<PokemonDetails>(`${API.POKEMON}/${value}`);
+    const type = await fetchTypeByParameter(`${API.TYPE}/${value}`);
+    const move = await fetchMoveByParameter(`${API.MOVE}/${value}`);
+    const pokemon = await fetchPokemonByParameter(`${API.POKEMON}/${value}`);
     setPokemons(pokemon ? [pokemon] : []);
     setTypes(type ? [type] : []);
     setMoves(move ? [move] : []);
@@ -54,12 +53,12 @@ export const SearchPage = ({ componentName, location }: Props) => {
   };
 
   const fetchAndSetAllData = async () => {
-    const pokemons = await fetchBase<PokemonData, Pokemon>(`${API.POKEMON}${API.POKEMON_LIMIT}`);
-    const pokemonsDetailed = await fetchDetails<Pokemon, PokemonDetails>(pokemons);
-    const moves = await fetchBase<MovesData, PokemonMove>(`${API.MOVE}${API.MOVE_LIMIT}`);
-    const movesDetailed = await fetchDetails<PokemonMove, PokemonMoveDetails>(moves);
-    const types = await fetchBase<TypesData, PokemonType>(`${API.TYPE}${API.TYPE_LIMIT}`);
-    const typesDetailed = await fetchDetails<PokemonType, PokemonTypeDetails>(types);
+    const pokemons = await fetchPokemonBase(`${API.POKEMON}${API.POKEMON_LIMIT}`);
+    const pokemonsDetailed = await fetchPokemonDetails(pokemons);
+    const moves = await fetchMoveBase(`${API.MOVE}${API.MOVE_LIMIT}`);
+    const movesDetailed = await fetchMoveDetails(moves);
+    const types = await fetchTypeBase(`${API.TYPE}${API.TYPE_LIMIT}`);
+    const typesDetailed = await fetchTypeDetails(types);
     setPokemons(pokemonsDetailed);
     setTypes(typesDetailed);
     setMoves(movesDetailed);

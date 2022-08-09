@@ -1,7 +1,7 @@
 import { PokemonCard, MoveCard, TypeCard } from 'modules/SearchPage/components';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
-import { AvailableTabs } from 'appConstants';
 import { useCallback, useRef, useState } from 'react';
+import { AvailableTabs } from 'appConstants';
 import { DetailsModal } from 'modules';
 import { Loader } from 'components';
 import * as S from './styled';

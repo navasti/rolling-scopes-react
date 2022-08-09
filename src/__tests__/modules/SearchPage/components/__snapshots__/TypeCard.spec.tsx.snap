@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TypeCard type card should be rendered and match snapshot 1`] = `
+<div>
+  <button
+    class="sc-evZas dKpMqe"
+    data-testid="type-card"
+  >
+    <p>
+      fighting
+    </p>
+  </button>
+</div>
+`;
