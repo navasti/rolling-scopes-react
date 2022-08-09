@@ -1,5 +1,5 @@
+import { screen, render, waitForElementToBeRemoved, act } from '@testing-library/react';
 import { AvailableTabs, INPUT_VALUE_KEY, TABS } from 'appConstants';
-import { screen, render, waitForElementToBeRemoved, waitFor, act } from '@testing-library/react';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { SearchPage } from 'modules';

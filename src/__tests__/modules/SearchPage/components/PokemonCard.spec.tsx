@@ -32,7 +32,7 @@ describe('PokemonCard', () => {
     expect(screen.getByText(pokemonsMock[0].types[0].type.name)).toBeInTheDocument();
   });
   it('clicking on card should invoke handleOpenModal and handlePokemonSelect methods', () => {
-    const { container } = render(
+    render(
       <PokemonCard
         handlePokemonSelect={handleCardSelect}
         handleOpenModal={handleOpenModal}

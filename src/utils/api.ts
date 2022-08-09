@@ -1,4 +1,15 @@
 import { ErrorStatuses } from 'appConstants';
+import {
+  PokemonMoveDetails,
+  PokemonTypeDetails,
+  PokemonDetails,
+  PokemonData,
+  PokemonMove,
+  PokemonType,
+  TypesData,
+  MovesData,
+  Pokemon,
+} from 'types';
 
 export const isServerError = (status: number) => String(status).startsWith(ErrorStatuses.server);
 
@@ -28,7 +39,7 @@ export const handleMappedResponse = async <T>(arr: Array<Promise<Response>>) => 
   return await Promise.all(promises);
 };
 
-export const fetchPokemonByParameter = async <T>(url: string): Promise<T | null> => {
+export const fetchByParameter = async <T>(url: string): Promise<T | null> => {
   let results: T | null = null;
   try {
     const response = await fetch(url);
@@ -40,6 +51,15 @@ export const fetchPokemonByParameter = async <T>(url: string): Promise<T | null>
     return results;
   }
 };
+
+export const fetchPokemonByParameter = async (url: string) =>
+  await fetchByParameter<PokemonDetails>(url);
+
+export const fetchMoveByParameter = async (url: string) =>
+  await fetchByParameter<PokemonMoveDetails>(url);
+
+export const fetchTypeByParameter = async (url: string) =>
+  await fetchByParameter<PokemonTypeDetails>(url);
 
 export const fetchBase = async <T1 extends { results: Array<T2> }, T2>(url: string) => {
   let base: Array<T2> = [];
@@ -54,6 +74,10 @@ export const fetchBase = async <T1 extends { results: Array<T2> }, T2>(url: stri
   }
 };
 
+export const fetchPokemonBase = async (url: string) => await fetchBase<PokemonData, Pokemon>(url);
+export const fetchMoveBase = async (url: string) => await fetchBase<MovesData, PokemonMove>(url);
+export const fetchTypeBase = async (url: string) => await fetchBase<TypesData, PokemonType>(url);
+
 export const fetchDetails = async <T1 extends { url: string }, T2>(arr: Array<T1>) => {
   let detailed: Array<T2> = [];
   try {
@@ -66,3 +90,12 @@ export const fetchDetails = async <T1 extends { url: string }, T2>(arr: Array<T1
     return detailed;
   }
 };
+
+export const fetchPokemonDetails = async (pokemons: Array<Pokemon>) =>
+  await fetchDetails<Pokemon, PokemonDetails>(pokemons);
+
+export const fetchMoveDetails = async (moves: Array<PokemonMove>) =>
+  await fetchDetails<PokemonMove, PokemonMoveDetails>(moves);
+
+export const fetchTypeDetails = async (types: Array<PokemonType>) =>
+  await fetchDetails<PokemonType, PokemonTypeDetails>(types);

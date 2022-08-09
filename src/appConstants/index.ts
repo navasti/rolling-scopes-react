@@ -55,6 +55,10 @@ export const MESSAGE_HIDE_TIME = 5000;
 export const INPUT_VALUE_KEY = 'input-value';
 export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
 export const LINKS = ['home', 'about', 'form', 'invalid'] as const;
+export const SEARCH_BAR_INSTRUCTIONS = [
+  'Type and press enter to search for specific pokemon, type or move.',
+  'Clear input and press enter to search for all pokemons, types and moves.',
+] as const;
 
 export const TABS = Object.values(AvailableTabs);
 export const POKEMON_TYPES = Object.values(Types);

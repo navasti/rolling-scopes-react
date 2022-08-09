@@ -1,4 +1,4 @@
-import { testingLocation, testingComponentName } from '__mocks__';
+import { testingLocation, testingComponentName } from '__mocks__/data';
 import { render, screen } from '@testing-library/react';
 import { LocationBadge } from 'modules';
 
