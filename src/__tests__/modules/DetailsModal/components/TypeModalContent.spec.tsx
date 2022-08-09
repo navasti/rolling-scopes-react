@@ -1,6 +1,6 @@
 import { TypeModalContent } from 'modules/DetailsModal/components';
 import { screen, render } from '@testing-library/react';
-import { typesMock } from '__mocks__';
+import { typesMock } from '__mocks__/data';
 
 describe('TypeModalContent', () => {
   it('content should match the snapshot with passed first element of typesMock as a prop', () => {

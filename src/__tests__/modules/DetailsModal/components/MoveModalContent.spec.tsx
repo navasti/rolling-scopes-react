@@ -1,6 +1,6 @@
 import { MoveModalContent } from 'modules/DetailsModal/components';
 import { screen, render } from '@testing-library/react';
-import { movesMock } from '__mocks__';
+import { movesMock } from '__mocks__/data';
 
 describe('MoveModalContent', () => {
   it('content should match the snapshot with passed first element of movesMock as a prop', () => {

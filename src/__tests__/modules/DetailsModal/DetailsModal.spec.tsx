@@ -1,6 +1,7 @@
-import { handleCloseModal, movesMock, pokemonsMock, typesMock } from '__mocks__';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
+import { movesMock, pokemonsMock, typesMock } from '__mocks__/data';
 import { screen, render } from '@testing-library/react';
+import { handleCloseModal } from '__mocks__/handlers';
 import { DetailsModal } from 'modules';
 
 type ModalProps = {
@@ -28,24 +29,15 @@ jest.mock('components', () => ({
     opened && (
       <div>
         <header>
-          <p data-testid="details-title">{children[0]}</p>
+          <p data-testid="details-title-mock">{children[0]}</p>
           <button onClick={handleCloseModal}>
             <svg></svg>
           </button>
         </header>
-        <div data-testid="details-content">{children[1]}</div>
+        <div data-testid="details-content-mock">{children[1]}</div>
       </div>
     ),
 }));
-
-const expectContentAndTitleValues = (titleText: string, contentText: string) => {
-  const titleElement = screen.getByTestId('details-title').querySelector('span');
-  const contentElement = screen.getByTestId('details-content').querySelector('span');
-  expect(titleElement).toBeInTheDocument();
-  expect(contentElement).toBeInTheDocument();
-  expect(titleElement).toHaveTextContent(titleText);
-  expect(contentElement).toHaveTextContent(contentText);
-};
 
 describe('DetailsModal', () => {
   it('details modal should not be render if recived and passed open prop equals false', () => {
@@ -62,7 +54,8 @@ describe('DetailsModal', () => {
         isModalOpened={true}
       />
     );
-    expectContentAndTitleValues(movesMock[0].name, String(movesMock[0].id));
+    expect(screen.getByText(movesMock[0].name)).toBeInTheDocument();
+    expect(screen.getByText(String(movesMock[0].id))).toBeInTheDocument();
   });
   it('pokemon title and details should be rendered when selectedPokemon provided', () => {
     render(
@@ -72,7 +65,8 @@ describe('DetailsModal', () => {
         isModalOpened={true}
       />
     );
-    expectContentAndTitleValues(pokemonsMock[0].name, String(pokemonsMock[0].id));
+    expect(screen.getByText(pokemonsMock[0].name)).toBeInTheDocument();
+    expect(screen.getByText(String(pokemonsMock[0].id))).toBeInTheDocument();
   });
   it('type title and details should be rendered when selectedType provided', () => {
     render(
@@ -82,6 +76,7 @@ describe('DetailsModal', () => {
         isModalOpened={true}
       />
     );
-    expectContentAndTitleValues(typesMock[0].name, String(typesMock[0].id));
+    expect(screen.getByText(typesMock[0].name)).toBeInTheDocument();
+    expect(screen.getByText(String(typesMock[0].id))).toBeInTheDocument();
   });
 });

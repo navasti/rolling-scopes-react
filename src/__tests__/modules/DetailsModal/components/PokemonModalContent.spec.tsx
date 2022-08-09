@@ -1,6 +1,6 @@
 import { PokemonModalContent } from 'modules/DetailsModal/components';
 import { screen, render } from '@testing-library/react';
-import { pokemonsMock } from '__mocks__';
+import { pokemonsMock } from '__mocks__/data';
 import { capitalize } from 'utils';
 
 describe('PokemonModalContent', () => {
