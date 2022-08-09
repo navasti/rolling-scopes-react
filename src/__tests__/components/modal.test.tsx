@@ -1,5 +1,6 @@
-import { ModalContent, ModalTitle, modalRef, handleCloseModal } from '__mocks__';
+import { ModalContent, modalRef, ModalTitle } from '__mocks__/elements';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { handleCloseModal } from '__mocks__/handlers';
 import { Modal } from 'components';
 
 const prepareModalElement = (opened: boolean) => (
@@ -10,7 +11,7 @@ const prepareModalElement = (opened: boolean) => (
 );
 
 describe('Modal', () => {
-  afterEach(() => handleCloseModal.mockReset());
+  afterAll(() => handleCloseModal.mockReset());
   it('modal should be rendered when open prop equals true', () => {
     render(prepareModalElement(true));
     expect(screen.getByTestId('modal-title')).toBeInTheDocument();

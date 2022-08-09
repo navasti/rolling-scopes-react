@@ -31,5 +31,6 @@ describe('Header', () => {
     expect(container).toContainElement(screen.getByTestId('location-badge-mock'));
     expect(screen.getByTestId('location-badge-mock')).toBeInTheDocument();
     expect(screen.getByTestId('navigation-mock')).toBeInTheDocument();
+    screen.debug();
   });
 });

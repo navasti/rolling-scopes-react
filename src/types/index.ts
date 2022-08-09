@@ -1,6 +1,6 @@
-import { FEMALE, Fields, Limits, MALE, TABS } from 'appConstants';
+import { AvailableTabs, FEMALE, Fields, Limits, MALE, TABS } from 'appConstants';
 import { UseFormRegisterReturn } from 'react-hook-form';
-import { RefObject } from 'react';
+import { ChangeEvent, KeyboardEvent, RefObject } from 'react';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;
@@ -15,6 +15,35 @@ export enum MessageType {
 }
 
 export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+
+export type CardsProps = {
+  types: Array<PokemonTypeDetails>;
+  moves: Array<PokemonMoveDetails>;
+  pokemons: Array<PokemonDetails>;
+  activeTab: AvailableTabs;
+  isLoading: boolean;
+};
+export type LayoutProps = {
+  children: JSX.Element;
+  componentName: string;
+  location: string;
+};
+
+export type TabsProps = {
+  onClick: (tab: AvailableTabs) => void;
+  activeTab: AvailableTabs;
+  options: typeof TABS;
+  isLoading: boolean;
+  lengths: Lengths;
+};
+
+export type SearchBarProps = {
+  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  inputValue: string;
+  isLoading: boolean;
+  label: string;
+};
 
 export type FormFields = {
   gender: typeof MALE | typeof FEMALE;

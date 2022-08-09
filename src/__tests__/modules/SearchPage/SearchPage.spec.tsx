@@ -1,10 +1,9 @@
 import { screen, render, waitForElementToBeRemoved, act } from '@testing-library/react';
-import { AvailableTabs, INPUT_VALUE_KEY, TABS } from 'appConstants';
-import { ChangeEvent, KeyboardEvent } from 'react';
+import { localStorageMock } from '__mocks__/localStorage';
 import { BrowserRouter } from 'react-router-dom';
+import { INPUT_VALUE_KEY } from 'appConstants';
 import { SearchPage } from 'modules';
 import {
-  Lengths,
   Pokemon,
   PokemonMove,
   PokemonType,
@@ -13,43 +12,12 @@ import {
   PokemonTypeDetails,
 } from 'types';
 import {
-  typesMock,
-  movesMock,
-  pokemonsMock,
-  testingLocation,
   testingComponentName,
+  testingLocation,
+  pokemonsMock,
+  movesMock,
+  typesMock,
 } from '__mocks__/data';
-import { localStorageMock } from '__mocks__/localStorage';
-
-type CardsProps = {
-  types: Array<PokemonTypeDetails>;
-  moves: Array<PokemonMoveDetails>;
-  pokemons: Array<PokemonDetails>;
-  activeTab: AvailableTabs;
-  isLoading: boolean;
-};
-
-type LayoutProps = {
-  children: JSX.Element;
-  componentName: string;
-  location: string;
-};
-
-type TabsProps = {
-  onClick: (tab: AvailableTabs) => void;
-  activeTab: AvailableTabs;
-  options: typeof TABS;
-  isLoading: boolean;
-  lengths: Lengths;
-};
-
-type SearchBarProps = {
-  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  inputValue: string;
-  isLoading: boolean;
-  label: string;
-};
 
 const localStorage = localStorageMock(INPUT_VALUE_KEY, 'testing-value');
 
@@ -58,71 +26,22 @@ Object.defineProperty(window, 'localStorage', {
 });
 
 jest.mock('modules', () => {
+  const { ComponentMocks } = require('__mocks__/elements.tsx');
   const { SearchPage } = jest.requireActual('modules/SearchPage');
   return {
     __esModule: true,
     SearchPage,
-    Layout: ({ componentName, children, location }: LayoutProps) => (
-      <div>
-        <p>
-          <span data-testid="component-mock">{componentName}</span>
-          <span data-testid="location-mock">{location}</span>
-        </p>
-        <main>{children}</main>
-      </div>
-    ),
+    Layout: ComponentMocks.Layout,
   };
 });
 
 jest.mock('modules/SearchPage/components', () => {
+  const { ComponentMocks } = require('__mocks__/elements.tsx');
   return {
     __esModule: true,
-    SearchBar: ({ onChange, onKeyDown }: SearchBarProps) => {
-      return (
-        <div>
-          <div>
-            <label htmlFor="input-mock">testing label</label>
-            <svg />
-            <input
-              data-testid="input-mock"
-              value="testing-value"
-              onKeyDown={onKeyDown}
-              onChange={onChange}
-              id="input-mock"
-              type="text"
-            />
-          </div>
-          <div>
-            <span>Type and press enter to search for specific pokemon, type or move.</span>
-            <span>Clear input and press enter to search for all pokemons, types and moves.</span>
-          </div>
-        </div>
-      );
-    },
-    Tabs: ({ isLoading, lengths }: TabsProps) => (
-      <div>
-        <span data-testid="pokemons-length-mock">
-          pokemons {isLoading ? null : `(${lengths.moves})`}
-        </span>
-        <span data-testid="moves-length-mock">moves {isLoading ? null : `(${lengths.moves})`}</span>
-        <span data-testid="types-length-mock">types {isLoading ? null : `(${lengths.types})`}</span>
-      </div>
-    ),
-    Cards: (props: CardsProps) => {
-      return (
-        <div data-testid="cards-mock">
-          {props.isLoading ? (
-            <p>loading</p>
-          ) : (
-            <div>
-              <p>{props.types[0].name}</p>
-              <p>{props.moves[0].name}</p>
-              <p>{props.pokemons[0].name}</p>
-            </div>
-          )}
-        </div>
-      );
-    },
+    Tabs: ComponentMocks.Tabs,
+    Cards: ComponentMocks.Cards,
+    SearchBar: ComponentMocks.SearchBar,
   };
 });
 

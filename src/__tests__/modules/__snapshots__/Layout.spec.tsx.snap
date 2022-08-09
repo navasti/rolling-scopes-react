@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout layout should match snapshot and display header and main with passed children 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ febMQd"
+  >
+    <header>
+      <nav
+        data-testid="navigation-mock"
+      >
+        <div>
+          <a
+            href="/test"
+          >
+            testing link
+          </a>
+        </div>
+      </nav>
+      <div
+        data-testid="location-badge-mock"
+      >
+        <p>
+          Location:
+          <span>
+            /test
+          </span>
+        </p>
+        <p>
+          Component:
+          <span>
+            Test
+          </span>
+        </p>
+      </div>
+    </header>
+    <main
+      role="main"
+    >
+      <p>
+        testing children
+      </p>
+    </main>
+  </div>
+</div>
+`;
