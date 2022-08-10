@@ -1,4 +1,4 @@
-import { FormFields, LimitParams } from 'types';
+import { FormFields } from 'types';
 import * as yup from 'yup';
 
 export enum Limits {
@@ -63,19 +63,17 @@ export const SEARCH_BAR_INSTRUCTIONS = [
 export const TABS = Object.values(AvailableTabs);
 export const POKEMON_TYPES = Object.values(Types);
 
-export const API = (({ typeLimit, moveLimit, pokemonLimit }: LimitParams) => {
-  const BASE = 'https://pokeapi.co/api/v2';
-  const setLimit = (limit: number) => `?limit=${limit}`;
-  return {
-    POKEMON_LIMIT: setLimit(pokemonLimit),
-    TYPE_LIMIT: setLimit(typeLimit),
-    MOVE_LIMIT: setLimit(moveLimit),
-    POKEMON: `${BASE}/pokemon`,
-    TYPE: `${BASE}/type`,
-    MOVE: `${BASE}/move`,
-    BASE,
-  };
-})({ moveLimit: Limits.move, pokemonLimit: Limits.pokemon, typeLimit: Limits.type });
+const BASE = 'https://pokeapi.co/api/v2';
+
+export const API = {
+  POKEMON_LIMIT: `?limit=${Limits.pokemon}`,
+  TYPE_LIMIT: `?limit=${Limits.type}`,
+  MOVE_LIMIT: `?limit=${Limits.move}`,
+  POKEMON: `${BASE}/pokemon`,
+  TYPE: `${BASE}/type`,
+  MOVE: `${BASE}/move`,
+  BASE,
+};
 
 export const FORM_VALIDATION_SCHEMA = yup.object().shape({
   type: yup.string().required(ErrorMessages.type),

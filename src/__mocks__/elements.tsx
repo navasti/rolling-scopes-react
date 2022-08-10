@@ -1,15 +1,14 @@
 import { createRef, forwardRef, RefObject } from 'react';
 import { testingContent, testingTitle } from './data';
-import { MALE, POKEMON_TYPES } from 'appConstants';
 import { capitalize } from 'utils';
 import {
   SearchBarProps,
+  CustomPokemon,
   MessageProps,
   LayoutProps,
   MessageType,
   CardsProps,
   TabsProps,
-  CustomPokemon,
 } from 'types';
 
 export const modalRef: RefObject<HTMLDivElement> = createRef();
@@ -30,28 +29,26 @@ export const ComponentMocks = {
       <main>{children}</main>
     </div>
   ),
-  SearchBar: ({ onChange, onKeyDown }: SearchBarProps) => {
-    return (
+  SearchBar: ({ onChange, onKeyDown }: SearchBarProps) => (
+    <div>
       <div>
-        <div>
-          <label htmlFor="input-mock">testing label</label>
-          <svg />
-          <input
-            data-testid="input-mock"
-            value="testing-value"
-            onKeyDown={onKeyDown}
-            onChange={onChange}
-            id="input-mock"
-            type="text"
-          />
-        </div>
-        <div>
-          <span>Type and press enter to search for specific pokemon, type or move.</span>
-          <span>Clear input and press enter to search for all pokemons, types and moves.</span>
-        </div>
+        <label htmlFor="input-mock">testing label</label>
+        <svg />
+        <input
+          data-testid="input-mock"
+          value="testing-value"
+          onKeyDown={onKeyDown}
+          onChange={onChange}
+          id="input-mock"
+          type="text"
+        />
       </div>
-    );
-  },
+      <div>
+        <span>Type and press enter to search for specific pokemon, type or move.</span>
+        <span>Clear input and press enter to search for all pokemons, types and moves.</span>
+      </div>
+    </div>
+  ),
   Tabs: ({ isLoading, lengths }: TabsProps) => (
     <div>
       <span data-testid="pokemons-length-mock">
@@ -61,95 +58,103 @@ export const ComponentMocks = {
       <span data-testid="types-length-mock">types {isLoading ? null : `(${lengths.types})`}</span>
     </div>
   ),
-  Cards: (props: CardsProps) => {
-    return (
-      <div data-testid="cards-mock">
-        {props.isLoading ? (
-          <p>loading</p>
-        ) : (
-          <div>
-            <p>{props.types[0].name}</p>
-            <p>{props.moves[0].name}</p>
-            <p>{props.pokemons[0].name}</p>
-          </div>
-        )}
-      </div>
-    );
-  },
-  FormCard: ({ customPokemon }: { customPokemon: CustomPokemon }) => {
-    const { name, gender, type, birthday, shiny } = customPokemon;
-    return (
-      <div data-testid="form-card-mock">
+  Cards: (props: CardsProps) => (
+    <div data-testid="cards-mock">
+      {props.isLoading ? (
+        <p>loading</p>
+      ) : (
         <div>
-          <img src="questionmark.png" />
+          <p>{props.types[0].name}</p>
+          <p>{props.moves[0].name}</p>
+          <p>{props.pokemons[0].name}</p>
         </div>
-        <div>
-          <p>
-            Name :<span>{capitalize(name)}</span>
-          </p>
-          <p>
-            Gender :<span>{capitalize(gender)}</span>
-          </p>
-          <p>
-            Main type :<span>{capitalize(type)}</span>
-          </p>
-          <p>
-            Birthday :<span>{capitalize(birthday)}</span>
-          </p>
-          <p>
-            Shiny :<span>{shiny ? 'Yes' : 'No'}</span>
-          </p>
-        </div>
+      )}
+    </div>
+  ),
+  FormCard: ({ customPokemon }: { customPokemon: CustomPokemon }) => (
+    <div data-testid="form-card-mock">
+      <div>
+        <img src="questionmark.png" />
       </div>
-    );
-  },
-  Message: ({ message, type, visible, center }: MessageProps) => {
-    return (
-      <span
-        data-testid="message-mock"
-        style={{
-          opacity: visible ? '1' : '0',
-          textAlign: center ? 'center' : 'left',
-          color: type === MessageType.error ? 'red' : 'green',
-        }}
-      >
-        {message && capitalize(message)}
-      </span>
-    );
-  },
+      <div>
+        <p>
+          Name :<span>{capitalize(customPokemon.name)}</span>
+        </p>
+        <p>
+          Gender :<span>{capitalize(customPokemon.gender)}</span>
+        </p>
+        <p>
+          Main type :<span>{capitalize(customPokemon.type)}</span>
+        </p>
+        <p>
+          Birthday :<span>{capitalize(customPokemon.birthday)}</span>
+        </p>
+        <p>
+          Shiny :<span>{customPokemon.shiny ? 'Yes' : 'No'}</span>
+        </p>
+      </div>
+    </div>
+  ),
+  Message: ({ message, type, visible, center }: MessageProps) => (
+    <span
+      data-testid="message-mock"
+      style={{
+        opacity: visible ? '1' : '0',
+        textAlign: center ? 'center' : 'left',
+        color: type === MessageType.error ? 'red' : 'green',
+      }}
+    >
+      {message && capitalize(message)}
+    </span>
+  ),
   BirthdayField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="birth" data-testid="birth-mock">
-      <input id="birth" type="date" ref={ref} value="2000-02-02" onChange={onChange} />
+    <label htmlFor="birth">
+      <input id="birth" ref={ref} type="date" onChange={onChange} data-testid="birth-mock" />
     </label>
   )),
   ConsentField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="consent" data-testid="consent-mock">
-      <input type="checkbox" id="consent" ref={ref} checked onChange={onChange} />
+    <label htmlFor="consent">
+      <input
+        ref={ref}
+        id="consent"
+        type="checkbox"
+        onChange={onChange}
+        data-testid="consent-mock"
+      />
     </label>
   )),
   AvatarField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="avatar" data-testid="avatar-mock">
-      <input type="file" id="avatar" ref={ref} onChange={onChange} />
+    <label htmlFor="avatar">
+      <input type="file" id="avatar" data-testid="avatar-mock" ref={ref} onChange={onChange} />
     </label>
   )),
   ShinyField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="shiny" data-testid="shiny-mock">
-      <input type="checkbox" id="shiny" ref={ref} onChange={onChange} checked />
+    <label htmlFor="shiny">
+      <input ref={ref} id="shiny" type="checkbox" onChange={onChange} data-testid="shiny-mock" />
     </label>
   )),
-  GenderField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="gender" data-testid="gender-mock">
-      <input type="radio" id="gender" ref={ref} value={MALE} onChange={onChange} />
-    </label>
-  )),
+  GenderField: forwardRef<HTMLInputElement, { onChange: () => void; value: string }>(
+    ({ onChange, value }, ref) => (
+      <label htmlFor="gender">
+        <input
+          ref={ref}
+          id="gender"
+          type="radio"
+          value={value}
+          onChange={onChange}
+          data-testid="gender-mock"
+        />
+      </label>
+    )
+  ),
   TypeField: forwardRef<HTMLSelectElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="type" data-testid="type-mock">
-      <select id="type" ref={ref} value={POKEMON_TYPES[0]} onChange={onChange}></select>
+    <label htmlFor="type">
+      <select id="type" ref={ref} onChange={onChange} data-testid="type-mock"></select>
     </label>
   )),
   NameField: forwardRef<HTMLInputElement, { onChange: () => void }>(({ onChange }, ref) => (
-    <label htmlFor="name" data-testid="name-mock">
-      <input type="text" id="name" ref={ref} value="charmander" onChange={onChange} />
+    <label htmlFor="name">
+      <input id="name" ref={ref} type="text" onChange={onChange} data-testid="name-mock" />
     </label>
   )),
 };

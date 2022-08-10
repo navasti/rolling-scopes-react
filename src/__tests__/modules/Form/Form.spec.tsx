@@ -1,9 +1,6 @@
 import { testingComponentName, testingLocation } from '__mocks__/data';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Form } from 'modules';
-import React from 'react';
-import { FEMALE, Fields, MALE, POKEMON_TYPES, Types } from 'appConstants';
-import { capitalize } from 'utils';
 
 jest.mock('modules', () => {
   const { ComponentMocks } = require('__mocks__/elements');
@@ -51,18 +48,5 @@ describe('Form', () => {
     const genders = screen.getAllByTestId('gender-mock');
     expect(genders[0]).toBeVisible();
     expect(genders[1]).toBeVisible();
-  });
-  it('submitting the form should display custom pokemon in the list of FormCard components', () => {
-    // jest.useFakeTimers();
-    const { container } = render(
-      <Form componentName={testingComponentName} location={testingLocation} />
-    );
-    expect(screen.queryByTestId('form-card-mock')).toBeNull();
-    const nameField = screen.getByTestId('type-mock') as HTMLInputElement;
-    console.log(nameField.value);
-    // const submitButton = container.querySelector('button') as HTMLButtonElement;
-    // fireEvent.click(submitButton);
-    // jest.runAllTimers();
-    screen.debug();
   });
 });

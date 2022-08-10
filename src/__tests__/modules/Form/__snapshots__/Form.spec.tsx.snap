@@ -28,20 +28,19 @@ exports[`Form should be rendered and match snapshot 1`] = `
           class="sc-dkzDqf jQzErX"
         >
           <label
-            data-testid="name-mock"
             for="name"
           >
             <input
+              data-testid="name-mock"
               id="name"
               type="text"
-              value="charmander"
             />
           </label>
           <label
-            data-testid="type-mock"
             for="type"
           >
             <select
+              data-testid="type-mock"
               id="type"
             />
           </label>
@@ -56,20 +55,20 @@ exports[`Form should be rendered and match snapshot 1`] = `
                 class="sc-ftvSup lbyCAw"
               >
                 <label
-                  data-testid="gender-mock"
                   for="gender"
                 >
                   <input
+                    data-testid="gender-mock"
                     id="gender"
                     type="radio"
-                    value="male"
+                    value="female"
                   />
                 </label>
                 <label
-                  data-testid="gender-mock"
                   for="gender"
                 >
                   <input
+                    data-testid="gender-mock"
                     id="gender"
                     type="radio"
                     value="male"
@@ -83,40 +82,37 @@ exports[`Form should be rendered and match snapshot 1`] = `
             />
           </div>
           <label
-            data-testid="birth-mock"
             for="birth"
           >
             <input
+              data-testid="birth-mock"
               id="birth"
               type="date"
-              value="2000-02-02"
             />
           </label>
           <label
-            data-testid="avatar-mock"
             for="avatar"
           >
             <input
+              data-testid="avatar-mock"
               id="avatar"
               type="file"
             />
           </label>
           <label
-            data-testid="shiny-mock"
             for="shiny"
           >
             <input
-              checked=""
+              data-testid="shiny-mock"
               id="shiny"
               type="checkbox"
             />
           </label>
           <label
-            data-testid="consent-mock"
             for="consent"
           >
             <input
-              checked=""
+              data-testid="consent-mock"
               id="consent"
               type="checkbox"
             />
