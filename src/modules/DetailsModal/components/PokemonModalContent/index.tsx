@@ -1,5 +1,5 @@
-import { capitalize, appendComma } from 'utils';
 import { PokemonDetails } from 'types';
+import { capitalize } from 'utils';
 import * as S from './styled';
 
 type Props = {
@@ -22,7 +22,7 @@ export const PokemonModalContent = ({ selectedPokemon }: Props) => {
       ))}
 
       <S.ParagraphContentProperty>
-        <b>Types:</b> {types.map(({ type }, index) => appendComma(types.length, index, type.name))}
+        <b>Types:</b> {types.map(({ type }) => type.name).join(', ')}
       </S.ParagraphContentProperty>
 
       <S.DivContentProperty>

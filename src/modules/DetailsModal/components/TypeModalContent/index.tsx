@@ -1,6 +1,5 @@
 import { PokemonTypeDetails } from 'types';
 import { NONE } from 'appConstants';
-import { appendComma } from 'utils';
 import * as S from './styled';
 
 type Props = {
@@ -21,23 +20,15 @@ export const TypeModalContent = ({ selectedType }: Props) => {
     <div>
       {damageContent.map(({ array, label, id }) => (
         <S.ParagraphContentProperty key={id}>
-          <b>{label}:</b>{' '}
-          {array.length > 0
-            ? array.map(({ name }, index) => appendComma(array.length, index, name))
-            : NONE}
+          <b>{label}:</b> {!!array.length ? array.map(({ name }) => name).join(', ') : NONE}
         </S.ParagraphContentProperty>
       ))}
       <S.ParagraphContentProperty>
-        <b>Moves:</b>{' '}
-        {moves.length > 0
-          ? moves.map(({ name }, index) => appendComma(moves.length, index, name))
-          : NONE}
+        <b>Moves:</b> {!!moves.length ? moves.map(({ name }) => name).join(', ') : NONE}
       </S.ParagraphContentProperty>
       <S.ParagraphContentProperty>
         <b>Pokemons:</b>{' '}
-        {pokemon.length > 0
-          ? pokemon.map((item, index) => appendComma(pokemon.length, index, item.pokemon.name))
-          : NONE}
+        {!!pokemon.length ? pokemon.map(({ pokemon: { name } }) => name).join(', ') : NONE}
       </S.ParagraphContentProperty>
     </div>
   );

@@ -76,7 +76,7 @@ export class SearchPage extends React.Component<Props, State> {
     if (key === 'Enter') {
       this.setState({ isLoading: true });
       const value = this.state.inputValue;
-      if (value.trim().length > 0) await this.fetchAndSetSpecificData(value);
+      if (!!value.trim().length) await this.fetchAndSetSpecificData(value);
       else await this.fetchAndSetAllData();
       this.setState({ isLoading: false });
     }
@@ -119,33 +119,31 @@ export class SearchPage extends React.Component<Props, State> {
 
   render() {
     return (
-      <>
-        <Layout componentName={this.props.componentName} location={this.props.location}>
-          <S.SearchPageView>
-            <SearchBar
-              label="Local Storage Input"
-              onKeyDown={this.onKeyDown}
-              onChange={this.onChange}
-              inputValue={this.state.inputValue}
-              isLoading={this.state.isLoading}
-            />
-            <Tabs
-              onClick={this.onClick}
-              isLoading={this.state.isLoading}
-              activeTab={this.state.activeTab}
-              lengths={this.state.lengths}
-              options={tabs}
-            />
-            <Cards
-              isLoading={this.state.isLoading}
-              activeTab={this.state.activeTab}
-              pokemons={this.state.pokemons}
-              types={this.state.types}
-              moves={this.state.moves}
-            />
-          </S.SearchPageView>
-        </Layout>
-      </>
+      <Layout componentName={this.props.componentName} location={this.props.location}>
+        <S.SearchPageView>
+          <SearchBar
+            label="Local Storage Input"
+            onKeyDown={this.onKeyDown}
+            onChange={this.onChange}
+            inputValue={this.state.inputValue}
+            isLoading={this.state.isLoading}
+          />
+          <Tabs
+            onClick={this.onClick}
+            isLoading={this.state.isLoading}
+            activeTab={this.state.activeTab}
+            lengths={this.state.lengths}
+            options={tabs}
+          />
+          <Cards
+            isLoading={this.state.isLoading}
+            activeTab={this.state.activeTab}
+            pokemons={this.state.pokemons}
+            types={this.state.types}
+            moves={this.state.moves}
+          />
+        </S.SearchPageView>
+      </Layout>
     );
   }
 }

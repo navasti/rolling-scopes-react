@@ -1,5 +1,3 @@
-import { LimitParams } from 'types';
-
 export enum Limits {
   pokemon = 20,
   type = 10,
@@ -53,19 +51,17 @@ export const FEMALE = 'female';
 export const INPUT_VALUE_KEY = 'input-value';
 export const tabs = Object.values(AvailableTabs);
 
-export const API = (({ typeLimit, moveLimit, pokemonLimit }: LimitParams) => {
-  const BASE = 'https://pokeapi.co/api/v2';
-  const setLimit = (limit: number) => `?limit=${limit}`;
-  return {
-    POKEMON_LIMIT: setLimit(pokemonLimit),
-    TYPE_LIMIT: setLimit(typeLimit),
-    MOVE_LIMIT: setLimit(moveLimit),
-    POKEMON: `${BASE}/pokemon`,
-    TYPE: `${BASE}/type`,
-    MOVE: `${BASE}/move`,
-    BASE,
-  };
-})({ moveLimit: Limits.move, pokemonLimit: Limits.pokemon, typeLimit: Limits.type });
+const BASE = 'https://pokeapi.co/api/v2';
+
+export const API = {
+  POKEMON_LIMIT: `?limit=${Limits.pokemon}`,
+  TYPE_LIMIT: `?limit=${Limits.type}`,
+  MOVE_LIMIT: `?limit=${Limits.move}`,
+  POKEMON: `${BASE}/pokemon`,
+  TYPE: `${BASE}/type`,
+  MOVE: `${BASE}/move`,
+  BASE,
+};
 
 export const POKEMON_TYPES = Object.values(Types);
 

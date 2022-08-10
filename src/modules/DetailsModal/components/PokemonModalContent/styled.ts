@@ -15,3 +15,7 @@ export const ParagraphContentProperty = styled.p`
   font-size: 0.875rem;
   margin-top: 5px;
 `;
+
+export const Ability = styled.p`
+  text-transform: capitalize;
+`;
