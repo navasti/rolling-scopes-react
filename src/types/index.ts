@@ -64,6 +64,7 @@ export type FormFields = {
 
 export type FieldReturnType<T extends Fields> = {
   name: string;
+  maxDate?: string;
   error?: string;
   value?: string;
 } & UseFormRegisterReturn<T>;

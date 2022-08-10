@@ -1,23 +1,14 @@
-import { ErrorMessages } from 'appConstants';
 import {
   PokemonMoveDetails,
   PokemonTypeDetails,
   PokemonDetails,
   CustomPokemon,
-  ErrorsObject,
-  PokemonData,
   PokemonMove,
   PokemonType,
   Details,
   Pokemon,
   Lengths,
 } from 'types';
-
-export const visible = true;
-export const invisible = false;
-export const isLoading = false;
-
-export const links = ['Home', 'About', 'Form', 'Invalid'];
 
 export const testingComponentName = 'Test';
 export const testingLocation = '/test';
@@ -30,58 +21,6 @@ export const baseData: Pokemon | PokemonType | PokemonMove = {
   url: 'baseUrl',
 };
 
-export const typeModalContentProperties = [
-  'Double damage from',
-  'Double damage to',
-  'Half damage from',
-  'Half damage to',
-  'No damage from',
-  'No damage to',
-  'Pokemons',
-  'Moves',
-] as const;
-
-export const moveModalContentProperties = [
-  'Learned by',
-  'Priority',
-  'Accuracy',
-  'Power',
-  'Type',
-  'PP',
-] as const;
-
-export const pokemonModalContentProperties = [
-  'Pokemon statistics',
-  'Pokemon abilities',
-  'Base experience',
-  'Height',
-  'Weight',
-  'Types',
-] as const;
-
-export const pokemonData: PokemonData = {
-  results: [{ name: 'testName', url: 'testURL' }],
-  previous: null,
-  next: null,
-  count: 1,
-};
-
-export const testEmptyErrors: ErrorsObject = {
-  birthday: null,
-  consent: null,
-  gender: null,
-  name: null,
-  type: null,
-};
-
-export const testErrors: ErrorsObject = {
-  birthday: ErrorMessages.birthday,
-  consent: ErrorMessages.consent,
-  gender: ErrorMessages.gender,
-  name: ErrorMessages.name,
-  type: ErrorMessages.type,
-};
-
 export const customPokemon: CustomPokemon = {
   birthday: '01-01-1999',
   name: 'charmander',
@@ -90,8 +29,6 @@ export const customPokemon: CustomPokemon = {
   type: 'fire',
   shiny: true,
 };
-
-//
 
 export const lengths: Lengths = { pokemons: 10, moves: 15, types: 20 };
 

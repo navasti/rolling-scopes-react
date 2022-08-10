@@ -20,7 +20,13 @@ jest.mock('modules/Form/components', () => {
 describe('BirthdayField', () => {
   it('should be rendered and match snapshot', () => {
     const { container } = render(
-      <BirthdayField ref={ref} name={Fields.birthday} onChange={onChange} onBlur={onBlur} />
+      <BirthdayField
+        name={Fields.birthday}
+        maxDate="2022-08-09"
+        onChange={onChange}
+        onBlur={onBlur}
+        ref={ref}
+      />
     );
     expect(container).toMatchSnapshot();
   });
