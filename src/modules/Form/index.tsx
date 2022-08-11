@@ -7,7 +7,6 @@ import * as S from './styled';
 import { uuid } from 'utils';
 import {
   FORM_VALIDATION_SCHEMA,
-  MESSAGE_HIDE_TIME,
   SUCCESS_MESSAGE,
   DEFAULT_VALUES,
   Fields,
@@ -60,16 +59,18 @@ export const Form = ({ componentName, location }: Props) => {
       type,
       name,
     };
-    setPokemons([...pokemons, customPokemon]);
     setShowSuccessMessage(true);
+    setPokemons([...pokemons, customPokemon]);
     reset(DEFAULT_VALUES, { keepValues: false });
-    setTimeout(() => setShowSuccessMessage(false), MESSAGE_HIDE_TIME);
   };
 
   watch(() => initialEnter && setInitialEnter(false));
 
   const onChange = (field: Fields) => ({
-    onChange: () => !!errors[field]?.message && clearErrors(field),
+    onChange: () => {
+      !!errors[field]?.message && clearErrors(field);
+      !!showSuccessMessage && setShowSuccessMessage(false);
+    },
   });
 
   return (
@@ -103,8 +104,11 @@ export const Form = ({ componentName, location }: Props) => {
             {...register(Fields.birthday, onChange(Fields.birthday))}
             error={errors.birthday?.message}
           />
-          <AvatarField {...register(Fields.avatar)} />
-          <ShinyField {...register(Fields.shiny)} />
+          <AvatarField
+            error={errors.avatar?.message}
+            {...register(Fields.avatar, onChange(Fields.avatar))}
+          />
+          <ShinyField {...register(Fields.shiny, onChange(Fields.shiny))} />
           <ConsentField
             error={errors.consent?.message}
             {...register(Fields.consent, onChange(Fields.consent))}

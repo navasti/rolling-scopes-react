@@ -16,15 +16,3 @@ export const Card = styled.button`
     border-color: #000;
   }
 `;
-
-export const MovePropertiesWrapper = styled.div`
-  flex-direction: column;
-  display: flex;
-`;
-
-export const ModalTitle = styled.span`
-  text-transform: uppercase;
-  display: inline-block;
-  font-weight: 600;
-  font-size: 1rem;
-`;

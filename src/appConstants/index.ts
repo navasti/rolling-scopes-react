@@ -51,7 +51,6 @@ export enum Types {
 export const NONE = 'none';
 export const MALE = 'male';
 export const FEMALE = 'female';
-export const MESSAGE_HIDE_TIME = 5000;
 export const INPUT_VALUE_KEY = 'input-value';
 export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
 export const LINKS = ['home', 'about', 'form', 'invalid'] as const;
@@ -62,6 +61,20 @@ export const SEARCH_BAR_INSTRUCTIONS = [
 
 export const TABS = Object.values(AvailableTabs);
 export const POKEMON_TYPES = Object.values(Types);
+
+export const FORM_VALIDATION_SCHEMA = yup.object().shape({
+  type: yup.string().required(ErrorMessages.type),
+  name: yup.string().min(2, ErrorMessages.name).required(ErrorMessages.name),
+  gender: yup.string().nullable().required(ErrorMessages.gender),
+  avatar: yup
+    .mixed()
+    .test('fileSize', 'The file is too large', (value) =>
+      !value.length ? true : value[0].size <= 20
+    ),
+  birthday: yup.string().required(ErrorMessages.birthday),
+  consent: yup.bool().oneOf([true], ErrorMessages.consent),
+  shiny: yup.bool(),
+});
 
 const BASE = 'https://pokeapi.co/api/v2';
 
@@ -74,14 +87,6 @@ export const API = {
   MOVE: `${BASE}/move`,
   BASE,
 };
-
-export const FORM_VALIDATION_SCHEMA = yup.object().shape({
-  type: yup.string().required(ErrorMessages.type),
-  name: yup.string().min(2, ErrorMessages.name).required(ErrorMessages.name),
-  gender: yup.string().nullable().required(ErrorMessages.gender),
-  birthday: yup.string().required(ErrorMessages.birthday),
-  consent: yup.bool().oneOf([true], ErrorMessages.consent),
-});
 
 export const FIELDS_VALIDATION_BY_NAME = {
   TEXT: [Fields.name, Fields.birthday, Fields.type],

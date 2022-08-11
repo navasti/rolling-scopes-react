@@ -4,7 +4,7 @@ exports[`PokemonModalContent content should match the snapshot with passed first
 <div>
   <div>
     <p
-      class="sc-jSMfEi fVTeHB"
+      class="sc-eCYdqJ huYwGr"
     >
       <b>
         Weight
@@ -14,7 +14,7 @@ exports[`PokemonModalContent content should match the snapshot with passed first
       85
     </p>
     <p
-      class="sc-jSMfEi fVTeHB"
+      class="sc-eCYdqJ huYwGr"
     >
       <b>
         Height
@@ -24,7 +24,7 @@ exports[`PokemonModalContent content should match the snapshot with passed first
       6
     </p>
     <p
-      class="sc-jSMfEi fVTeHB"
+      class="sc-eCYdqJ huYwGr"
     >
       <b>
         Base experience
@@ -34,7 +34,7 @@ exports[`PokemonModalContent content should match the snapshot with passed first
       62
     </p>
     <p
-      class="sc-jSMfEi fVTeHB"
+      class="sc-eCYdqJ huYwGr"
     >
       <b>
         Types:
@@ -43,10 +43,10 @@ exports[`PokemonModalContent content should match the snapshot with passed first
       fire
     </p>
     <div
-      class="sc-hKMtZM isCUBw"
+      class="sc-dkzDqf gFhgQr"
     >
       <span
-        class="sc-eCYdqJ hhpgjz"
+        class="sc-hKMtZM fINAMi"
       >
         Pokemon abilities:
       </span>
@@ -59,10 +59,10 @@ exports[`PokemonModalContent content should match the snapshot with passed first
       </p>
     </div>
     <div
-      class="sc-hKMtZM isCUBw"
+      class="sc-dkzDqf gFhgQr"
     >
       <span
-        class="sc-eCYdqJ hhpgjz"
+        class="sc-hKMtZM fINAMi"
       >
         Pokemon statistics:
       </span>

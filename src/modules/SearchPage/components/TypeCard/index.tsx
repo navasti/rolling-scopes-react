@@ -10,7 +10,7 @@ type Props = {
 export const TypeCard = ({ type, handleOpenModal, handleTypeSelect }: Props) => {
   const onClick = () => {
     handleTypeSelect(type);
-    setTimeout(() => handleOpenModal(), 0);
+    handleOpenModal();
   };
   return (
     <S.Card onClick={onClick} data-testid="type-card">

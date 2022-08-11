@@ -1,5 +1,4 @@
 import { PokemonMoveDetails } from 'types';
-import { appendComma } from 'utils';
 import * as S from './styled';
 
 type Props = {
@@ -22,12 +21,8 @@ export const MoveModalContent = ({ selectedMove }: Props) => {
           <b>{label}:</b> {value}
         </S.ParagraphContentProperty>
       ))}
-
       <S.ParagraphContentProperty>
-        <b>Learned by:</b>{' '}
-        {learned_by_pokemon.map(({ name }, index) =>
-          appendComma(learned_by_pokemon.length, index, name)
-        )}
+        <b>Learned by:</b> {learned_by_pokemon.map(({ name }) => name).join(', ')}
       </S.ParagraphContentProperty>
     </div>
   );

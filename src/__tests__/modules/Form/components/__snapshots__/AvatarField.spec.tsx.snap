@@ -3,7 +3,7 @@
 exports[`AvatarField should be rendered and match snapshot 1`] = `
 <div>
   <label
-    class="sc-dkzDqf bMkHQX"
+    class="sc-bczRLJ dJSjfS"
     for="avatar"
   >
     Avatar
@@ -13,5 +13,9 @@ exports[`AvatarField should be rendered and match snapshot 1`] = `
       type="file"
     />
   </label>
+  <span
+    data-testid="message-mock"
+    style="opacity: 0; text-align: left; color: red;"
+  />
 </div>
 `;

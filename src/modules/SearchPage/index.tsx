@@ -1,5 +1,9 @@
+import { PokemonTypeDetails, PokemonMoveDetails, PokemonDetails, Lengths } from 'types';
 import { AvailableTabs, API, INPUT_VALUE_KEY, TABS } from 'appConstants';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { SearchBar, Tabs, Cards } from './components';
+import { Layout } from 'modules';
+import * as S from './styled';
 import {
   fetchPokemonByParameter,
   fetchMoveByParameter,
@@ -11,10 +15,6 @@ import {
   fetchTypeBase,
   fetchMoveBase,
 } from 'utils';
-import { SearchBar, Tabs, Cards } from './components';
-import { Layout } from 'modules';
-import * as S from './styled';
-import { PokemonTypeDetails, PokemonMoveDetails, PokemonDetails, Lengths } from 'types';
 
 type Props = {
   componentName: string;
@@ -34,8 +34,8 @@ export const SearchPage = ({ componentName, location }: Props) => {
     const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
     if (inputValue && inputValue.trim().length > 0) {
       setInputValue(inputValue);
-      fetchAndSetSpecificData(inputValue).then(() => setTimeout(() => setIsLoading(false), 500));
-    } else fetchAndSetAllData().then(() => setTimeout(() => setIsLoading(false), 500));
+      fetchAndSetSpecificData(inputValue).then(() => setIsLoading(false));
+    } else fetchAndSetAllData().then(() => setIsLoading(false));
   }, []);
 
   const fetchAndSetSpecificData = async (value: string) => {
@@ -72,7 +72,7 @@ export const SearchPage = ({ componentName, location }: Props) => {
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
       setIsLoading(true);
-      inputValue.trim().length > 0
+      !!inputValue.trim().length
         ? await fetchAndSetSpecificData(inputValue)
         : await fetchAndSetAllData();
       setIsLoading(false);

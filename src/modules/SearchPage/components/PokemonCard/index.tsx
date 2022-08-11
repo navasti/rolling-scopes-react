@@ -1,5 +1,4 @@
 import { PokemonDetails } from 'types';
-import { appendComma } from 'utils';
 import * as S from './styled';
 
 type Props = {
@@ -11,7 +10,7 @@ type Props = {
 export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: Props) => {
   const onClick = () => {
     handlePokemonSelect(pokemon);
-    setTimeout(() => handleOpenModal(), 0);
+    handleOpenModal();
   };
   return (
     <S.Card onClick={onClick} data-testid="pokemon-card">
@@ -21,12 +20,7 @@ export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: P
           <S.Title>Base:</S.Title>
           <p>Name: {pokemon.name}</p>
           <p>
-            Types:{' '}
-            {pokemon.types.map(({ type }, index) => (
-              <span key={`${pokemon.name}-${type.name}`}>
-                {appendComma(pokemon.types.length, index, type.name)}
-              </span>
-            ))}
+            Types: <span>{pokemon.types.map(({ type }) => type.name).join(', ')}</span>
           </p>
         </S.BaseInformation>
       </S.ImageWrapper>

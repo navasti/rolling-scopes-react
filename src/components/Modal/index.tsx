@@ -1,5 +1,5 @@
-import { forwardRef, RefObject, useEffect } from 'react';
 import { TimesIcon } from 'assets/images/svg';
+import { createPortal } from 'react-dom';
 import * as S from './styled';
 
 type Props = {
@@ -8,27 +8,15 @@ type Props = {
   opened: boolean;
 };
 
-export const Modal = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { children, opened, handleCloseModal } = props;
-
-  useEffect(() => {
-    const handleClickOutside = ({ target }: MouseEvent) => {
-      const current = (ref as RefObject<HTMLDivElement>).current;
-      opened && current && !current.contains(target as HTMLElement) && handleCloseModal();
-    };
-    const callback = (event: MouseEvent) => handleClickOutside(event);
-    document.addEventListener('click', callback);
-    return () => document.removeEventListener('click', callback);
-  }, [handleCloseModal, opened, ref]);
-
-  return (
+export const Modal = ({ children, opened, handleCloseModal }: Props) => {
+  return createPortal(
     <>
       {opened && (
-        <S.ModalWrapper>
-          <S.ModalWindow ref={ref}>
+        <S.ModalWrapper onClick={handleCloseModal}>
+          <S.ModalWindow onClick={(event) => event.stopPropagation()}>
             <S.Header>
               <p>{children[0]}</p>
-              <S.CloseButton onClick={() => handleCloseModal()}>
+              <S.CloseButton onClick={handleCloseModal}>
                 <TimesIcon />
               </S.CloseButton>
             </S.Header>
@@ -36,6 +24,7 @@ export const Modal = forwardRef<HTMLDivElement, Props>((props, ref) => {
           </S.ModalWindow>
         </S.ModalWrapper>
       )}
-    </>
+    </>,
+    document.getElementById('modal-root') as HTMLDivElement
   );
-});
+};

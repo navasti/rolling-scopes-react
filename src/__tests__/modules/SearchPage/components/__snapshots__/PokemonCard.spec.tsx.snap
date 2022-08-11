@@ -27,8 +27,7 @@ exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
           bulbasaur
         </p>
         <p>
-          Types:
-           
+          Types: 
           <span>
             fire
           </span>

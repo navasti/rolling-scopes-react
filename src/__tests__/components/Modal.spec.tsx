@@ -1,19 +1,32 @@
-import { ModalContent, modalRef, ModalTitle } from '__mocks__/elements';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { ModalContent, ModalTitle } from '__mocks__/elements';
 import { handleCloseModal } from '__mocks__/handlers';
 import { Modal } from 'components';
 
 const prepareModalElement = (opened: boolean) => (
-  <Modal handleCloseModal={handleCloseModal} opened={opened} ref={modalRef}>
+  <Modal handleCloseModal={handleCloseModal} opened={opened}>
     <ModalTitle />
     <ModalContent />
   </Modal>
 );
 
 describe('Modal', () => {
+  beforeAll(() => {
+    const div = document.createElement('div');
+    div.id = 'modal-root';
+    div.dataset.testid = 'modal-mock';
+    document.body.appendChild(div);
+  });
   afterAll(() => handleCloseModal.mockReset());
   it('modal should be rendered when open prop equals true', () => {
-    render(prepareModalElement(true));
+    render(
+      <>
+        <Modal handleCloseModal={handleCloseModal} opened={true}>
+          <ModalTitle />
+          <ModalContent />
+        </Modal>
+      </>
+    );
     expect(screen.getByTestId('modal-title')).toBeInTheDocument();
     expect(screen.getByTestId('modal-content')).toBeInTheDocument();
   });
@@ -24,22 +37,23 @@ describe('Modal', () => {
     expect(container).toBeEmptyDOMElement();
   });
   it('close button should be rendered and clicking it should fire handleCloseModal method', () => {
-    const { container } = render(prepareModalElement(true));
-    expect(container.querySelector('button')).toBeInTheDocument();
+    render(prepareModalElement(true));
+    const modal = screen.getByTestId('modal-mock');
+    const button = modal.querySelector('button') as HTMLButtonElement;
+    expect(button).toBeInTheDocument();
     expect(handleCloseModal).not.toHaveBeenCalled();
-    fireEvent.click(container.querySelector('button') as HTMLButtonElement);
-    expect(handleCloseModal).toHaveBeenCalledWith();
+    fireEvent.click(button);
     expect(handleCloseModal).toHaveBeenCalledTimes(1);
   });
   it('clicking outside the modal should fire handleCloseModal method', () => {
-    const { container } = render(prepareModalElement(true));
+    render(prepareModalElement(true));
+    const modal = screen.getByTestId('modal-mock');
     expect(handleCloseModal).not.toHaveBeenCalled();
-    fireEvent.click(container.children[0]);
-    expect(handleCloseModal).toHaveBeenCalledWith();
+    fireEvent.click(modal.children[0]);
     expect(handleCloseModal).toHaveBeenCalledTimes(1);
   });
   it('modal should match the snapshot', () => {
-    const { container } = render(prepareModalElement(true));
-    expect(container).toMatchSnapshot();
+    render(prepareModalElement(true));
+    expect(screen.getByTestId('modal-mock')).toMatchSnapshot();
   });
 });

@@ -11,8 +11,6 @@ import {
   TabsProps,
 } from 'types';
 
-export const modalRef: RefObject<HTMLDivElement> = createRef();
-
 export const ModalTitle = () => <span data-testid="modal-title">{testingTitle}</span>;
 export const ModalContent = () => <div data-testid="modal-content">{testingContent}</div>;
 

@@ -3,7 +3,7 @@
 exports[`TypeCard type card should be rendered and match snapshot 1`] = `
 <div>
   <button
-    class="sc-evZas dKpMqe"
+    class="sc-iqcoie iHaGah"
     data-testid="type-card"
   >
     <p>

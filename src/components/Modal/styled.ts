@@ -49,5 +49,3 @@ export const CloseButton = styled.button`
 export const Content = styled.div`
   margin: 15px 0;
 `;
-
-export const Footer = styled.footer``;
