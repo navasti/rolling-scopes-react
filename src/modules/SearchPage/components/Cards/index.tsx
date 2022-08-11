@@ -1,10 +1,10 @@
 import { PokemonCard, MoveCard, TypeCard } from 'modules/SearchPage/components';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
-import React, { createRef, RefObject } from 'react';
 import { AvailableTabs } from 'appConstants';
 import { DetailsModal } from 'modules';
 import { Loader } from 'components';
 import * as S from './styled';
+import React from 'react';
 
 type Props = {
   types: Array<PokemonTypeDetails>;
@@ -22,8 +22,6 @@ type State = {
 };
 
 export class Cards extends React.Component<Props, State> {
-  modalRef: RefObject<HTMLDivElement>;
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -32,7 +30,6 @@ export class Cards extends React.Component<Props, State> {
       selectedMove: undefined,
       selectedType: undefined,
     };
-    this.modalRef = createRef();
   }
 
   handlePokemonSelect = (selectedPokemon: PokemonDetails) => this.setState({ selectedPokemon });
@@ -52,7 +49,7 @@ export class Cards extends React.Component<Props, State> {
           return !!pokemons.length ? (
             pokemons.map((pokemon) => (
               <PokemonCard
-                handlePokemonSelect={(pokemon: PokemonDetails) => this.handlePokemonSelect(pokemon)}
+                handlePokemonSelect={this.handlePokemonSelect}
                 handleModalOpened={this.handleModalOpened}
                 pokemon={pokemon}
                 key={pokemon.id}
@@ -65,7 +62,7 @@ export class Cards extends React.Component<Props, State> {
           return !!moves.length ? (
             moves.map((move) => (
               <MoveCard
-                handleMoveSelect={(move: PokemonMoveDetails) => this.handleMoveSelect(move)}
+                handleMoveSelect={this.handleMoveSelect}
                 handleModalOpened={this.handleModalOpened}
                 key={move.id}
                 move={move}
@@ -78,7 +75,7 @@ export class Cards extends React.Component<Props, State> {
           return !!types.length ? (
             types.map((type) => (
               <TypeCard
-                handleTypeSelect={(type: PokemonTypeDetails) => this.handleTypeSelect(type)}
+                handleTypeSelect={this.handleTypeSelect}
                 handleModalOpened={this.handleModalOpened}
                 key={type.id}
                 type={type}
@@ -104,7 +101,6 @@ export class Cards extends React.Component<Props, State> {
           isModalOpened={isModalOpened}
           selectedMove={selectedMove}
           selectedType={selectedType}
-          ref={this.modalRef}
         />
         {renderSwitch(activeTab)}
       </S.CardsWrapper>

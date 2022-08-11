@@ -10,7 +10,7 @@ type Props = {
 export const PokemonCard = ({ pokemon, handlePokemonSelect, handleModalOpened }: Props) => {
   const onClick = () => {
     handlePokemonSelect(pokemon);
-    setTimeout(() => handleModalOpened(true), 0);
+    handleModalOpened(true);
   };
   return (
     <>

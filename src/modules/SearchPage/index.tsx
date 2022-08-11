@@ -54,13 +54,9 @@ export class SearchPage extends React.Component<Props, State> {
     const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
     if (inputValue && inputValue.trim().length > 0) {
       this.setState({ inputValue });
-      this.fetchAndSetSpecificData(inputValue).then(() =>
-        setTimeout(() => this.setState({ isLoading: false }), 500)
-      );
+      this.fetchAndSetSpecificData(inputValue).then(() => this.setState({ isLoading: false }));
     } else {
-      this.fetchAndSetAllData().then(() =>
-        setTimeout(() => this.setState({ isLoading: false }), 500)
-      );
+      this.fetchAndSetAllData().then(() => this.setState({ isLoading: false }));
     }
   }
 

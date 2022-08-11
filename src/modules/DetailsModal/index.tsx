@@ -1,6 +1,5 @@
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { Modal } from 'components';
-import { forwardRef } from 'react';
 import * as S from './styled';
 import {
   PokemonModalContent,
@@ -16,10 +15,10 @@ type Props = {
   isModalOpened: boolean;
 };
 
-export const DetailsModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { isModalOpened, selectedMove, selectedPokemon, selectedType, handleModalOpened } = props;
+export const DetailsModal = (props: Props) => {
+  const { handleModalOpened, isModalOpened, selectedMove, selectedPokemon, selectedType } = props;
   return (
-    <Modal handleModalOpened={handleModalOpened} opened={isModalOpened} ref={ref}>
+    <Modal handleModalOpened={handleModalOpened} opened={isModalOpened}>
       <S.ModalTitle>
         {selectedPokemon
           ? selectedPokemon.name
@@ -40,4 +39,4 @@ export const DetailsModal = forwardRef<HTMLDivElement, Props>((props, ref) => {
       )}
     </Modal>
   );
-});
+};

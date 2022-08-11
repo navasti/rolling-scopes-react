@@ -8,7 +8,7 @@ import {
   modalRef,
 } from '__mocks__';
 
-describe('Modal', () => {
+describe.skip('Modal', () => {
   it('Render opened modal', () => {
     let opened = true;
     const { container } = render(

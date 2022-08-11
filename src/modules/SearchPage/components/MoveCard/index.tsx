@@ -10,7 +10,7 @@ type Props = {
 export const MoveCard = ({ move, handleModalOpened, handleMoveSelect }: Props) => {
   const onClick = () => {
     handleMoveSelect(move);
-    setTimeout(() => handleModalOpened(true), 0);
+    handleModalOpened(true);
   };
   return (
     <S.Card onClick={onClick}>

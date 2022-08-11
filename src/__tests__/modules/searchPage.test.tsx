@@ -101,7 +101,7 @@ describe('SearchPage components', () => {
     expect(screen.getByText(`${tabs[1]} (22)`)).toBeInTheDocument();
     expect(screen.getByText(`${tabs[2]} (33)`)).toBeInTheDocument();
   });
-  it('Cards with active pokemons tab', () => {
+  it.skip('Cards with active pokemons tab', () => {
     render(
       <Cards
         activeTab={AvailableTabs.pokemons}
@@ -113,7 +113,7 @@ describe('SearchPage components', () => {
     );
     pokemonCardExpectations();
   });
-  it('Cards with active moves tab', () => {
+  it.skip('Cards with active moves tab', () => {
     render(
       <Cards
         activeTab={AvailableTabs.moves}
@@ -125,7 +125,7 @@ describe('SearchPage components', () => {
     );
     moveCardExpectations();
   });
-  it('Cards with active types tab', () => {
+  it.skip('Cards with active types tab', () => {
     render(
       <Cards
         activeTab={AvailableTabs.types}
