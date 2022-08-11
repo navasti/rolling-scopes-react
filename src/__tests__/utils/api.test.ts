@@ -64,7 +64,7 @@ describe('API utils', () => {
     let errorShown = 0;
     window.alert = jest.fn(() => (errorShown += 1));
     handleMappedResponseMock<PokemonDetails>(500, detailedPokemons[0]);
-    const responses = ['url', 'url2'].map((url) => fetch(url));
+    const responses = ['url', 'url2'].map(() => Promise.reject());
     const data = await handleMappedResponse<PokemonDetails>(responses);
     expect(data).toEqual([]);
     expect(errorShown).toEqual(1);

@@ -23,7 +23,7 @@ export const ConsentField = forwardRef<HTMLInputElement, Props>((props, ref) => 
         />
         I have read and accept the regulations
       </S.CheckboxField>
-      <ErrorMessage visible={!!errors.consent} message={errors.consent} />
+      <ErrorMessage visible={!!errors.consent} message={errors.consent} center />
     </>
   );
 });

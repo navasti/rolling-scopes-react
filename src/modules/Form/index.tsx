@@ -1,5 +1,6 @@
-import React, { createRef, FormEvent, RefObject } from 'react';
+import { FIELDS_VALIDATION_BY_NAME, FEMALE, MALE, ErrorMessages } from 'appConstants';
 import { CheckFields, CustomPokemon, ErrorsObject, TextFields } from 'types';
+import React, { createRef, FormEvent, RefObject } from 'react';
 import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
@@ -13,8 +14,7 @@ import {
   TypeField,
   NameField,
   FormCard,
-} from 'modules/Form/components';
-import { FIELDS_VALIDATION_BY_NAME, FEMALE, MALE, ErrorMessages } from 'appConstants';
+} from './components';
 
 type Props = {
   componentName: string;

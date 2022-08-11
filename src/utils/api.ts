@@ -17,15 +17,14 @@ export const handleResponse = async <T>(response: Response) => {
 };
 
 export const handleMappedResponse = async <T>(arr: Array<Promise<Response>>) => {
-  const responses = await Promise.all(arr);
-  const promises: Array<Promise<T>> = [];
-  let errors = 0;
-  responses.forEach((response) => {
-    if (isServerError(response.status)) errors += 1;
-    else promises.push(response.json() as Promise<T>);
-  });
+  const responses = await Promise.allSettled(arr);
+  const errors = responses.filter((res) => res.status === 'rejected').length;
+  const fullfilled = responses.filter((res) => res.status === 'fulfilled') as Array<
+    PromiseFulfilledResult<Response>
+  >;
+  const data = fullfilled.map((res) => res.value.json() as Promise<T>);
   if (errors > 0) window.alert(`There was ${errors} errors on ${arr.length} requests.`);
-  return await Promise.all(promises);
+  return await Promise.all(data);
 };
 
 export const fetchPokemonByParameter = async <T>(url: string): Promise<T | null> => {
