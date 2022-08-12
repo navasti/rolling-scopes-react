@@ -14,12 +14,10 @@ exports[`Modal modal should match the snapshot 1`] = `
       <header
         class="sc-hKMtZM cuhbOU"
       >
-        <p>
-          <span
-            data-testid="modal-title"
-          >
-            Title
-          </span>
+        <p
+          class="sc-gKXOVf iuBSNt"
+        >
+          Title
         </p>
         <button
           class="sc-eCYdqJ iPyUzY"

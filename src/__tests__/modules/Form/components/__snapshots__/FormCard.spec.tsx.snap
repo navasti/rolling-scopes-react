@@ -6,14 +6,16 @@ exports[`FormCard should be rendered and match snapshot 1`] = `
     class="sc-ftvSup gMTpqP"
   >
     <div
-      class="sc-papXJ jiIdkW"
+      class="sc-papXJ hdrgJG"
     >
       <img
+        height="100"
         src="questionmark.png"
+        width="100"
       />
     </div>
     <div
-      class="sc-jqUVSM grfOpy"
+      class="sc-jqUVSM kaNsMT"
     >
       <p>
         Name

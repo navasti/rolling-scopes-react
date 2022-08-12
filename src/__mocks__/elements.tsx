@@ -1,7 +1,10 @@
-import { createRef, forwardRef, RefObject } from 'react';
 import { testingContent, testingTitle } from './data';
+import { forwardRef } from 'react';
 import { capitalize } from 'utils';
 import {
+  PokemonTypeDetails,
+  PokemonMoveDetails,
+  PokemonDetails,
   SearchBarProps,
   CustomPokemon,
   MessageProps,
@@ -13,6 +16,13 @@ import {
 
 export const ModalTitle = () => <span data-testid="modal-title">{testingTitle}</span>;
 export const ModalContent = () => <div data-testid="modal-content">{testingContent}</div>;
+
+export type ModalProps = {
+  handleCloseModal: () => void;
+  children: JSX.Element;
+  opened: boolean;
+  title: string;
+};
 
 export const ComponentMocks = {
   Layout: ({ componentName, children, location }: LayoutProps) => (
@@ -65,6 +75,27 @@ export const ComponentMocks = {
         </div>
       )}
     </div>
+  ),
+  Modal: ({ title, children, opened, handleCloseModal }: ModalProps) =>
+    opened && (
+      <div>
+        <header>
+          <p data-testid="details-title-mock">{title}</p>
+          <button onClick={handleCloseModal}>
+            <svg></svg>
+          </button>
+        </header>
+        <div data-testid="details-content-mock">{children}</div>
+      </div>
+    ),
+  MoveModalContent: ({ selectedMove }: { selectedMove: PokemonMoveDetails }) => (
+    <span>{selectedMove.id}</span>
+  ),
+  PokemonModalContent: ({ selectedPokemon }: { selectedPokemon: PokemonDetails }) => (
+    <span>{selectedPokemon.id}</span>
+  ),
+  TypeModalContent: ({ selectedType }: { selectedType: PokemonTypeDetails }) => (
+    <span>{selectedType.id}</span>
   ),
   FormCard: ({ customPokemon }: { customPokemon: CustomPokemon }) => (
     <div data-testid="form-card-mock">

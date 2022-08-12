@@ -11,8 +11,10 @@ exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
     >
       <img
         alt="bulbasaur"
-        class="sc-dkzDqf hDcUNn"
+        class="sc-dkzDqf eivUOB"
+        height="85"
         src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+        width="85"
       />
       <div
         class="sc-eCYdqJ iRZBcd"

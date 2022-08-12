@@ -3,24 +3,24 @@
 exports[`Tabs tabs should match snapshot and display lengths if isLoading prop equal false 1`] = `
 <div>
   <div
-    class="sc-ckMVTt gayxNr"
+    class="sc-ehmTmK deDLQu"
   >
     <span
-      class="sc-fbPSWO gzrfze"
+      class="sc-lbOyJj esoaLR"
     >
       pokemons
        
       (10)
     </span>
     <span
-      class="sc-fbPSWO erHYoJ"
+      class="sc-lbOyJj hMluIu"
     >
       moves
        
       (15)
     </span>
     <span
-      class="sc-fbPSWO erHYoJ"
+      class="sc-lbOyJj hMluIu"
     >
       types
        
@@ -33,22 +33,22 @@ exports[`Tabs tabs should match snapshot and display lengths if isLoading prop e
 exports[`Tabs tabs should match snapshot and should not display lengths if isLoading prop equals true 1`] = `
 <div>
   <div
-    class="sc-ckMVTt gayxNr"
+    class="sc-ehmTmK deDLQu"
   >
     <span
-      class="sc-fbPSWO gzrfze"
+      class="sc-lbOyJj esoaLR"
     >
       pokemons
        
     </span>
     <span
-      class="sc-fbPSWO erHYoJ"
+      class="sc-lbOyJj hMluIu"
     >
       moves
        
     </span>
     <span
-      class="sc-fbPSWO erHYoJ"
+      class="sc-lbOyJj hMluIu"
     >
       types
        

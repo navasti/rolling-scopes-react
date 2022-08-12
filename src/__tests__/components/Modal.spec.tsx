@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { ModalContent, ModalTitle } from '__mocks__/elements';
 import { handleCloseModal } from '__mocks__/handlers';
+import { ModalContent } from '__mocks__/elements';
+import { testingTitle } from '__mocks__/data';
 import { Modal } from 'components';
 
 const prepareModalElement = (opened: boolean) => (
-  <Modal handleCloseModal={handleCloseModal} opened={opened}>
-    <ModalTitle />
+  <Modal handleCloseModal={handleCloseModal} opened={opened} title={testingTitle}>
     <ModalContent />
   </Modal>
 );
@@ -21,13 +21,12 @@ describe('Modal', () => {
   it('modal should be rendered when open prop equals true', () => {
     render(
       <>
-        <Modal handleCloseModal={handleCloseModal} opened={true}>
-          <ModalTitle />
+        <Modal handleCloseModal={handleCloseModal} opened={true} title={testingTitle}>
           <ModalContent />
         </Modal>
       </>
     );
-    expect(screen.getByTestId('modal-title')).toBeInTheDocument();
+    expect(screen.getByText(testingTitle)).toBeInTheDocument();
     expect(screen.getByTestId('modal-content')).toBeInTheDocument();
   });
   it('modal should not be rendered when open prop equals false', () => {

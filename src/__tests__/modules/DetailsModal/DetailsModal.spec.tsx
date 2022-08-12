@@ -1,43 +1,25 @@
-import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { movesMock, pokemonsMock, typesMock } from '__mocks__/data';
 import { screen, render } from '@testing-library/react';
 import { handleCloseModal } from '__mocks__/handlers';
 import { DetailsModal } from 'modules';
 
-type ModalProps = {
-  children: [JSX.Element, JSX.Element];
-  handleCloseModal: () => void;
-  opened: boolean;
-};
+jest.mock('modules/DetailsModal/components', () => {
+  const { ComponentMocks } = require('__mocks__/elements');
+  return {
+    __esModule: true,
+    MoveModalContent: ComponentMocks.MoveModalContent,
+    TypeModalContent: ComponentMocks.TypeModalContent,
+    PokemonModalContent: ComponentMocks.PokemonModalContent,
+  };
+});
 
-jest.mock('modules/DetailsModal/components', () => ({
-  __esModule: true,
-  MoveModalContent: ({ selectedMove }: { selectedMove: PokemonMoveDetails }) => (
-    <span>{selectedMove.id}</span>
-  ),
-  PokemonModalContent: ({ selectedPokemon }: { selectedPokemon: PokemonDetails }) => (
-    <span>{selectedPokemon.id}</span>
-  ),
-  TypeModalContent: ({ selectedType }: { selectedType: PokemonTypeDetails }) => (
-    <span>{selectedType.id}</span>
-  ),
-}));
-
-jest.mock('components', () => ({
-  __esModule: true,
-  Modal: ({ children, opened, handleCloseModal }: ModalProps) =>
-    opened && (
-      <div>
-        <header>
-          <p data-testid="details-title-mock">{children[0]}</p>
-          <button onClick={handleCloseModal}>
-            <svg></svg>
-          </button>
-        </header>
-        <div data-testid="details-content-mock">{children[1]}</div>
-      </div>
-    ),
-}));
+jest.mock('components', () => {
+  const { ComponentMocks } = require('__mocks__/elements');
+  return {
+    __esModule: true,
+    Modal: ComponentMocks.Modal,
+  };
+});
 
 describe('DetailsModal', () => {
   it('details modal should not be render if recived and passed open prop equals false', () => {
