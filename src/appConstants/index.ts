@@ -69,7 +69,7 @@ export const FORM_VALIDATION_SCHEMA = yup.object().shape({
   avatar: yup
     .mixed()
     .test('fileSize', 'The file is too large', (value) =>
-      !value.length ? true : value[0].size <= 20
+      !value.length ? true : value[0].size <= 200000
     ),
   birthday: yup.string().required(ErrorMessages.birthday),
   consent: yup.bool().oneOf([true], ErrorMessages.consent),
