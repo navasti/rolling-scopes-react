@@ -49,3 +49,10 @@ export const CloseButton = styled.button`
 export const Content = styled.div`
   margin: 15px 0;
 `;
+
+export const ModalTitle = styled.span`
+  text-transform: uppercase;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 1rem;
+`;

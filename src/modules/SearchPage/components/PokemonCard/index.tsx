@@ -16,7 +16,13 @@ export const PokemonCard = ({ pokemon, handlePokemonSelect, handleModalOpened }:
     <>
       <S.Card onClick={onClick}>
         <S.ImageWrapper>
-          <S.Image src={pokemon.sprites.front_default} alt={pokemon.name} role="img" />
+          <S.Image
+            src={pokemon.sprites.front_default}
+            alt={pokemon.name}
+            height="85"
+            width="85"
+            role="img"
+          />
           <S.BaseInformation>
             <S.Title>Base:</S.Title>
             <p>Name: {pokemon.name}</p>

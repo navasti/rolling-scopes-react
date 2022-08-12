@@ -1,7 +1,6 @@
 import { PokemonModalContent, MoveModalContent, TypeModalContent } from './components';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { Modal } from 'components';
-import * as S from './styled';
 
 type Props = {
   handleModalOpened: (isModalOpened: boolean) => void;
@@ -13,17 +12,9 @@ type Props = {
 
 export const DetailsModal = (props: Props) => {
   const { handleModalOpened, isModalOpened, selectedMove, selectedPokemon, selectedType } = props;
+  const title = selectedPokemon?.name || selectedMove?.name || selectedType?.name || '';
   return (
-    <Modal handleModalOpened={handleModalOpened} opened={isModalOpened}>
-      <S.ModalTitle>
-        {selectedPokemon
-          ? selectedPokemon.name
-          : selectedMove
-          ? selectedMove.name
-          : selectedType
-          ? selectedType.name
-          : null}
-      </S.ModalTitle>
+    <Modal handleModalOpened={handleModalOpened} opened={isModalOpened} title={title}>
       {selectedPokemon ? (
         <PokemonModalContent selectedPokemon={selectedPokemon} />
       ) : selectedMove ? (
