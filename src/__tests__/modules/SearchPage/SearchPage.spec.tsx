@@ -1,4 +1,4 @@
-import { screen, render, waitForElementToBeRemoved, act } from '@testing-library/react';
+import { screen, render, waitForElementToBeRemoved } from '@testing-library/react';
 import { localStorageMock } from '__mocks__/localStorage';
 import { BrowserRouter } from 'react-router-dom';
 import { INPUT_VALUE_KEY } from 'appConstants';
@@ -73,39 +73,32 @@ describe('SearchPage', () => {
     await waitForElementToBeRemoved(() => screen.queryAllByText('loading'));
     expect(container).toMatchSnapshot();
   });
-  it('Layout should be rendered with componentName and location props given further', () => {
-    render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
-      wrapper: BrowserRouter,
-    });
-    expect(screen.getByTestId('component-mock')).toHaveTextContent(testingComponentName);
-    expect(screen.getByTestId('location-mock')).toHaveTextContent(testingLocation);
-  });
-  it('Tabs should be rendered and display length of data after fetching', async () => {
-    act(() => {
-      render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
-        wrapper: BrowserRouter,
-      });
-    });
-    expect(screen.getByTestId('pokemons-length-mock')).toHaveTextContent('pokemons');
-    expect(screen.getByTestId('moves-length-mock')).toHaveTextContent('moves');
-    expect(screen.getByTestId('types-length-mock')).toHaveTextContent('types');
-    expect(screen.queryByText('loading')).toBeInTheDocument();
-    await waitForElementToBeRemoved(() => screen.queryAllByText('loading'));
-    expect(screen.getByTestId('pokemons-length-mock')).toHaveTextContent('pokemons (1)');
-    expect(screen.getByTestId('moves-length-mock')).toHaveTextContent('moves (1)');
-    expect(screen.getByTestId('types-length-mock')).toHaveTextContent('types (1)');
-    expect(screen.getByText(pokemonsMock[0].name)).toBeVisible();
-    expect(screen.getByText(movesMock[0].name)).toBeVisible();
-    expect(screen.getByText(typesMock[0].name)).toBeVisible();
-  });
-  it('SearchBar should be rendered and localStorage input should be visible', () => {
+  it('loader should be rendered initially and replaced by cards after data fetching search bar should be static', async () => {
     render(<SearchPage componentName={testingComponentName} location={testingLocation} />, {
       wrapper: BrowserRouter,
     });
     const input = screen.getByLabelText('testing label');
-    const instructions = screen.getAllByText('and press enter', { exact: false });
+    const instructions = screen.getAllByText(/and press enter/i, { exact: false });
     instructions.forEach((instruction) => expect(instruction).toBeVisible());
+
     expect(instructions).toHaveLength(2);
     expect(input).toBeVisible();
+
+    expect(screen.getByTestId('component-mock')).toHaveTextContent(testingComponentName);
+    expect(screen.getByTestId('location-mock')).toHaveTextContent(testingLocation);
+
+    expect(screen.getByTestId('pokemons-length-mock')).toHaveTextContent('pokemons');
+    expect(screen.getByTestId('moves-length-mock')).toHaveTextContent('moves');
+    expect(screen.getByTestId('types-length-mock')).toHaveTextContent('types');
+
+    await waitForElementToBeRemoved(() => screen.queryAllByText('loading'));
+
+    expect(screen.getByTestId('pokemons-length-mock')).toHaveTextContent('pokemons (1)');
+    expect(screen.getByTestId('moves-length-mock')).toHaveTextContent('moves (1)');
+    expect(screen.getByTestId('types-length-mock')).toHaveTextContent('types (1)');
+
+    expect(screen.getByText(pokemonsMock[0].name)).toBeVisible();
+    expect(screen.getByText(movesMock[0].name)).toBeVisible();
+    expect(screen.getByText(typesMock[0].name)).toBeVisible();
   });
 });
