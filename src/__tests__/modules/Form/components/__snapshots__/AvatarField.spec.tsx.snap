@@ -15,7 +15,7 @@ exports[`AvatarField should be rendered and match snapshot 1`] = `
   </label>
   <span
     data-testid="message-mock"
-    style="opacity: 0; text-align: left; color: red;"
+    style="opacity: 0; text-align: center; color: red;"
   />
 </div>
 `;
