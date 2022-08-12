@@ -19,7 +19,7 @@ export const FormCard = ({ customPokemon }: Props) => {
   return (
     <S.Card>
       <S.ImageWrapper>
-        <img src={avatar ? URL.createObjectURL(avatar) : questionmark} />
+        <img src={avatar ? URL.createObjectURL(avatar) : questionmark} width="100" height="100" />
       </S.ImageWrapper>
       <S.Details>
         {baseContent.map(({ id, label, value }) => (

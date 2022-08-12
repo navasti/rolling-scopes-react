@@ -12,7 +12,6 @@ export const Card = styled.div`
 
 export const ImageWrapper = styled.div`
   img {
-    max-height: 100px;
     border-radius: 10px;
   }
 `;

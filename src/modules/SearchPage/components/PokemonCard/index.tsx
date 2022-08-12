@@ -13,17 +13,26 @@ export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: P
     handleOpenModal();
   };
   return (
-    <S.Card onClick={onClick} data-testid="pokemon-card">
-      <S.ImageWrapper>
-        <S.Image src={pokemon.sprites.front_default} alt={pokemon.name} />
-        <S.BaseInformation>
-          <S.Title>Base:</S.Title>
-          <p>Name: {pokemon.name}</p>
-          <p>
-            Types: <span>{pokemon.types.map(({ type }) => type.name).join(', ')}</span>
-          </p>
-        </S.BaseInformation>
-      </S.ImageWrapper>
-    </S.Card>
+    <>
+      <S.Card onClick={onClick}>
+        <S.ImageWrapper>
+          <S.Image
+            src={pokemon.sprites.front_default}
+            data-testid="pokemon-card"
+            alt={pokemon.name}
+            height="85"
+            width="85"
+            role="img"
+          />
+          <S.BaseInformation>
+            <S.Title>Base:</S.Title>
+            <p>Name: {pokemon.name}</p>
+            <p>
+              Types: <span>{pokemon.types.map(({ type }) => type.name).join(', ')}</span>
+            </p>
+          </S.BaseInformation>
+        </S.ImageWrapper>
+      </S.Card>
+    </>
   );
 };

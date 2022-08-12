@@ -25,7 +25,6 @@ export const ImageWrapper = styled.div`
 
 export const Image = styled.img`
   border-right: 1px solid #aaa;
-  width: 70px;
 `;
 
 export const Title = styled.span`

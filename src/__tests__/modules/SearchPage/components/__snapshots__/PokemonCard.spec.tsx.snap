@@ -4,7 +4,6 @@ exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
 <div>
   <button
     class="sc-bczRLJ iNqNZV"
-    data-testid="pokemon-card"
   >
     <div
       class="sc-gsnTZi eYDdFq"
@@ -12,7 +11,9 @@ exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
       <img
         alt="bulbasaur"
         class="sc-dkzDqf eivUOB"
+        data-testid="pokemon-card"
         height="85"
+        role="img"
         src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
         width="85"
       />

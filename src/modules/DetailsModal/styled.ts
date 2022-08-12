@@ -14,10 +14,3 @@ export const PokemonModalContentTitle = styled.span`
   margin-bottom: 2px;
   font-weight: 600;
 `;
-
-export const ModalTitle = styled.span`
-  text-transform: uppercase;
-  display: inline-block;
-  font-weight: 600;
-  font-size: 1rem;
-`;

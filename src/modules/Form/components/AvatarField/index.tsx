@@ -1,5 +1,5 @@
-import { Message } from 'modules/Form/components';
 import { FieldReturnType, MessageType } from 'types';
+import { Message } from 'modules/Form/components';
 import { Fields } from 'appConstants';
 import { forwardRef } from 'react';
 import * as S from './styled';
@@ -13,7 +13,7 @@ export const AvatarField = forwardRef<HTMLInputElement, Props>(({ name, error, o
         Avatar
         <input name={name} id="avatar" type="file" ref={ref} onChange={onChange} />
       </S.FileField>
-      <Message visible={!!error} message={error || ''} type={MessageType.error} />
+      <Message visible={!!error} message={error || ''} type={MessageType.error} center />
     </>
   );
 });
