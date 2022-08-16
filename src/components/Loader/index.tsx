@@ -1,6 +1,3 @@
-import React from 'react';
 import * as S from './styled';
 
-export const Loader = () => {
-  return <S.Loader title="loader" />;
-};
+export const Loader = () => <S.Loader title="loader" />;

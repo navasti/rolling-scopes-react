@@ -1,7 +1,6 @@
-import { LocationBadge } from './components';
+import { LocationBadge } from 'modules/Header/components';
 import { Link } from 'react-router-dom';
 import * as S from './styled';
-import React from 'react';
 
 type Props = {
   componentName: string;

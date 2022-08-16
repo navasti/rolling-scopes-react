@@ -1,6 +1,5 @@
 import { SearchPage, About, NotFound, Form } from 'modules';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import React from 'react';
 
 export const App = () => {
   return (

@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client';
 import { App } from 'modules';
 import React from 'react';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById('app-root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
