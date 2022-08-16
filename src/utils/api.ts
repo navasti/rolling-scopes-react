@@ -16,7 +16,7 @@ export const isServerError = (status: number) => String(status).startsWith(Error
 export const hasError = (status: number) => !String(status).startsWith(ErrorStatuses.success);
 
 const handleCatch = (error: unknown) => {
-  error instanceof Error && window.alert(error.message);
+  error instanceof Error && console.error(error.message);
 };
 
 export const fetchByParameter = async <T>(url: string) => {
