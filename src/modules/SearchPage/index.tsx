@@ -53,12 +53,12 @@ export const SearchPage = ({ componentName, location }: Props) => {
   };
 
   const fetchAndSetAllData = async () => {
-    const pokemons = await fetchPokemonBase(`${API.POKEMON}${API.POKEMON_LIMIT}`);
-    const pokemonsDetailed = await fetchPokemonDetails(pokemons);
-    const moves = await fetchMoveBase(`${API.MOVE}${API.MOVE_LIMIT}`);
-    const movesDetailed = await fetchMoveDetails(moves);
-    const types = await fetchTypeBase(`${API.TYPE}${API.TYPE_LIMIT}`);
-    const typesDetailed = await fetchTypeDetails(types);
+    const pokemons = (await fetchPokemonBase(`${API.POKEMON}${API.POKEMON_LIMIT}`)) || [];
+    const pokemonsDetailed = (await fetchPokemonDetails(pokemons)) || [];
+    const moves = (await fetchMoveBase(`${API.MOVE}${API.MOVE_LIMIT}`)) || [];
+    const movesDetailed = (await fetchMoveDetails(moves)) || [];
+    const types = (await fetchTypeBase(`${API.TYPE}${API.TYPE_LIMIT}`)) || [];
+    const typesDetailed = (await fetchTypeDetails(types)) || [];
     setPokemons(pokemonsDetailed);
     setTypes(typesDetailed);
     setMoves(movesDetailed);
