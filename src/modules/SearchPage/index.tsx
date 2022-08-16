@@ -95,12 +95,13 @@ export class SearchPage extends React.Component<Props, State> {
   };
 
   fetchAndSetAllData = async () => {
-    const pokemons = await fetchBase<PokemonData, Pokemon>(`${API.POKEMON}${API.POKEMON_LIMIT}`);
-    const pokemonDetailed = await fetchDetails<Pokemon, PokemonDetails>(pokemons);
-    const moves = await fetchBase<MovesData, PokemonMove>(`${API.MOVE}${API.MOVE_LIMIT}`);
-    const movesDetailed = await fetchDetails<PokemonMove, PokemonMoveDetails>(moves);
-    const types = await fetchBase<TypesData, PokemonType>(`${API.TYPE}${API.TYPE_LIMIT}`);
-    const typesDetailed = await fetchDetails<PokemonType, PokemonTypeDetails>(types);
+    const pokemons =
+      (await fetchBase<PokemonData, Pokemon>(`${API.POKEMON}${API.POKEMON_LIMIT}`)) ?? [];
+    const pokemonDetailed = (await fetchDetails<Pokemon, PokemonDetails>(pokemons)) || [];
+    const moves = (await fetchBase<MovesData, PokemonMove>(`${API.MOVE}${API.MOVE_LIMIT}`)) || [];
+    const movesDetailed = (await fetchDetails<PokemonMove, PokemonMoveDetails>(moves)) || [];
+    const types = (await fetchBase<TypesData, PokemonType>(`${API.TYPE}${API.TYPE_LIMIT}`)) || [];
+    const typesDetailed = (await fetchDetails<PokemonType, PokemonTypeDetails>(types)) || [];
     this.setState({
       pokemons: [...pokemonDetailed],
       types: [...typesDetailed],

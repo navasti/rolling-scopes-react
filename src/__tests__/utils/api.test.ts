@@ -1,12 +1,4 @@
-import {
-  fetchPokemonByParameter,
-  handleMappedResponse,
-  handleResponse,
-  isServerError,
-  fetchDetails,
-  fetchBase,
-  hasError,
-} from 'utils';
+import { fetchPokemonByParameter, isServerError, fetchDetails, fetchBase, hasError } from 'utils';
 import {
   PokemonMoveDetails,
   PokemonTypeDetails,
@@ -19,9 +11,7 @@ import {
   Pokemon,
 } from 'types';
 import {
-  handleMappedResponseMock,
   fetchByParameterMock,
-  handleResponseMock,
   detailedPokemons,
   fetchDetailsMock,
   fetchBaseMock,
@@ -33,42 +23,6 @@ import {
 } from '__mocks__';
 
 describe('API utils', () => {
-  it('handleResponse success', async () => {
-    let error = false;
-    window.alert = jest.fn(() => (error = true));
-    handleResponseMock<Pokemon>(200, pokemon);
-    const response = await fetch('url');
-    const data = await handleResponse<Pokemon>(response);
-    expect(data).toEqual(pokemon);
-    expect(error).toBeFalsy();
-  });
-  it('handleResponse error', async () => {
-    let error = false;
-    window.alert = jest.fn(() => (error = true));
-    handleResponseMock<Pokemon>(500, pokemon);
-    const response = await fetch('url');
-    const data = await handleResponse<Pokemon>(response);
-    expect(data).toBeUndefined();
-    expect(error).toBeTruthy();
-  });
-  it('handleMappedResponse success', async () => {
-    let errorShown = 0;
-    window.alert = jest.fn(() => (errorShown += 1));
-    handleMappedResponseMock<PokemonDetails>(200, detailedPokemons[0]);
-    const responses = [fetch('url')];
-    const data = await handleMappedResponse<PokemonDetails>(responses);
-    expect(data).toEqual([detailedPokemons[0]]);
-    expect(errorShown).toEqual(0);
-  });
-  it('handleMappedResponse errors', async () => {
-    let errorShown = 0;
-    window.alert = jest.fn(() => (errorShown += 1));
-    handleMappedResponseMock<PokemonDetails>(500, detailedPokemons[0]);
-    const responses = ['url', 'url2'].map(() => Promise.reject());
-    const data = await handleMappedResponse<PokemonDetails>(responses);
-    expect(data).toEqual([]);
-    expect(errorShown).toEqual(1);
-  });
   it('fetchBase pokemons', async () => {
     fetchBaseMock<Pokemon>(pokemon);
     const data = await fetchBase<PokemonData, Pokemon>('url');

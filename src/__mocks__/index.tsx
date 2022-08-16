@@ -65,24 +65,6 @@ export const fetchDetailsMock = <T,>(mockData: Array<T>) => {
   ) as jest.Mock;
 };
 
-export const handleResponseMock = <T,>(status: number, mockData: T) => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      status,
-      json: () => Promise.resolve(hasError(status) ? undefined : mockData),
-    })
-  ) as jest.Mock;
-};
-
-export const handleMappedResponseMock = <T,>(status: number, mockData: T) => {
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      status,
-      json: () => Promise.resolve(hasError(status) ? undefined : mockData),
-    })
-  ) as jest.Mock;
-};
-
 export const pokemonType: PokemonType = {
   name: 'typex',
   url: 'url',
