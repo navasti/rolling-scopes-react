@@ -2,13 +2,13 @@
 
 exports[`TypeCard type card should be rendered and match snapshot 1`] = `
 <div>
-  <button
-    class="sc-iqcoie iHaGah"
+  <div
+    class="sc-dkzDqf fBtRFE"
     data-testid="type-card"
   >
     <p>
       fighting
     </p>
-  </button>
+  </div>
 </div>
 `;

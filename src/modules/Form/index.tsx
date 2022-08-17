@@ -66,12 +66,10 @@ export const Form = ({ componentName, location }: Props) => {
 
   watch(() => initialEnter && setInitialEnter(false));
 
-  const onChange = (field: Fields) => ({
-    onChange: () => {
-      !!errors[field]?.message && clearErrors(field);
-      !!showSuccessMessage && setShowSuccessMessage(false);
-    },
-  });
+  const onChange = (field: Fields) => {
+    !!errors[field]?.message && clearErrors(field);
+    !!showSuccessMessage && setShowSuccessMessage(false);
+  };
 
   return (
     <Layout location={location} componentName={componentName}>
@@ -80,18 +78,26 @@ export const Form = ({ componentName, location }: Props) => {
         <S.Form onSubmit={handleSubmit(onSubmit)}>
           <NameField
             error={errors.name?.message}
-            {...register(Fields.name, onChange(Fields.name))}
+            {...register(Fields.name, {
+              onChange: () => onChange(Fields.name),
+            })}
           />
           <TypeField
             error={errors.type?.message}
-            {...register(Fields.type, onChange(Fields.type))}
+            {...register(Fields.type, { onChange: () => onChange(Fields.type) })}
           />
           <S.GenderWrapper>
             <S.RadioWrapper>
               *Gender
               <S.RadioFields>
-                <GenderField {...register(Fields.gender, onChange(Fields.gender))} value={FEMALE} />
-                <GenderField {...register(Fields.gender, onChange(Fields.gender))} value={MALE} />
+                <GenderField
+                  {...register(Fields.gender, { onChange: () => onChange(Fields.gender) })}
+                  value={FEMALE}
+                />
+                <GenderField
+                  {...register(Fields.gender, { onChange: () => onChange(Fields.gender) })}
+                  value={MALE}
+                />
               </S.RadioFields>
             </S.RadioWrapper>
             <Message
@@ -101,17 +107,17 @@ export const Form = ({ componentName, location }: Props) => {
             />
           </S.GenderWrapper>
           <BirthdayField
-            {...register(Fields.birthday, onChange(Fields.birthday))}
+            {...register(Fields.birthday, { onChange: () => onChange(Fields.birthday) })}
             error={errors.birthday?.message}
           />
           <AvatarField
             error={errors.avatar?.message}
-            {...register(Fields.avatar, onChange(Fields.avatar))}
+            {...register(Fields.avatar, { onChange: () => onChange(Fields.avatar) })}
           />
-          <ShinyField {...register(Fields.shiny, onChange(Fields.shiny))} />
+          <ShinyField {...register(Fields.shiny, { onChange: () => onChange(Fields.shiny) })} />
           <ConsentField
             error={errors.consent?.message}
-            {...register(Fields.consent, onChange(Fields.consent))}
+            {...register(Fields.consent, { onChange: () => onChange(Fields.consent) })}
           />
           <S.SubmitButton
             disabled={

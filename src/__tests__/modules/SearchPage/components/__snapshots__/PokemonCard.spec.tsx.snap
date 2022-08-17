@@ -2,15 +2,15 @@
 
 exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
 <div>
-  <button
-    class="sc-bczRLJ iNqNZV"
+  <div
+    class="sc-dkzDqf eitniG"
   >
     <div
-      class="sc-gsnTZi eYDdFq"
+      class="sc-hKMtZM jcSmlG"
     >
       <img
         alt="bulbasaur"
-        class="sc-dkzDqf eivUOB"
+        class="sc-eCYdqJ gbXGPj"
         data-testid="pokemon-card"
         height="85"
         role="img"
@@ -18,10 +18,10 @@ exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
         width="85"
       />
       <div
-        class="sc-eCYdqJ iRZBcd"
+        class="sc-gKXOVf dOkNJe"
       >
         <span
-          class="sc-hKMtZM fINAMi"
+          class="sc-jSMfEi jXKmd"
         >
           Base:
         </span>
@@ -37,6 +37,6 @@ exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
         </p>
       </div>
     </div>
-  </button>
+  </div>
 </div>
 `;

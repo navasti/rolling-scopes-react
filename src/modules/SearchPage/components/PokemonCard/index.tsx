@@ -14,7 +14,7 @@ export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: P
   };
   return (
     <>
-      <S.Card onClick={onClick}>
+      <S.Card onClick={onClick} align="left" stretch>
         <S.ImageWrapper>
           <S.Image
             src={pokemon.sprites.front_default}

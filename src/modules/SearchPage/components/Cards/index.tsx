@@ -15,15 +15,15 @@ type Props = {
 };
 
 export const Cards = ({ activeTab, isLoading, moves, pokemons, types }: Props) => {
-  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails>();
-  const [selectedType, setSelectedType] = useState<PokemonTypeDetails>();
-  const [selectedMove, setSelectedMove] = useState<PokemonMoveDetails>();
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null);
+  const [selectedType, setSelectedType] = useState<PokemonTypeDetails | null>(null);
+  const [selectedMove, setSelectedMove] = useState<PokemonMoveDetails | null>(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
   const handleCloseModal = useCallback(() => {
-    setSelectedPokemon(undefined);
-    setSelectedType(undefined);
-    setSelectedMove(undefined);
+    setSelectedPokemon(null);
+    setSelectedType(null);
+    setSelectedMove(null);
     setIsModalOpened(false);
   }, []);
 

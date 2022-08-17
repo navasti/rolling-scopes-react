@@ -13,7 +13,7 @@ export const MoveCard = ({ move, handleOpenModal, handleMoveSelect }: Props) => 
     handleOpenModal();
   };
   return (
-    <S.Card onClick={onClick} data-testid="move-card">
+    <S.Card onClick={onClick} data-testid="move-card" align="center">
       <p>{move.name}</p>
     </S.Card>
   );

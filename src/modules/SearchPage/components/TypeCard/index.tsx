@@ -13,7 +13,7 @@ export const TypeCard = ({ type, handleOpenModal, handleTypeSelect }: Props) => 
     handleOpenModal();
   };
   return (
-    <S.Card onClick={onClick} data-testid="type-card">
+    <S.Card onClick={onClick} data-testid="type-card" align="center">
       <p>{type.name}</p>
     </S.Card>
   );

@@ -2,13 +2,13 @@
 
 exports[`MoveCard move card should be rendered and match snapshot 1`] = `
 <div>
-  <button
-    class="sc-kDDrLX cmYwwA"
+  <div
+    class="sc-dkzDqf fBtRFE"
     data-testid="move-card"
   >
     <p>
       water-gun
     </p>
-  </button>
+  </div>
 </div>
 `;

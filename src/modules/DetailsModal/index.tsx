@@ -3,9 +3,9 @@ import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { Modal } from 'components';
 
 type Props = {
-  selectedType?: PokemonTypeDetails;
-  selectedMove?: PokemonMoveDetails;
-  selectedPokemon?: PokemonDetails;
+  selectedType?: PokemonTypeDetails | null;
+  selectedMove?: PokemonMoveDetails | null;
+  selectedPokemon?: PokemonDetails | null;
   handleCloseModal: () => void;
   isModalOpened: boolean;
 };
