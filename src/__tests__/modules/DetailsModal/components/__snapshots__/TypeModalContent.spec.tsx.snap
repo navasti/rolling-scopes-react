@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TypeModalContent content should match the snapshot with passed first element of typesMock as a prop 1`] = `
+<div>
+  <div>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        Double damage from
+        :
+      </b>
+       
+      electric, rock
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        Double damage to
+        :
+      </b>
+       
+      fighting
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        Half damage from
+        :
+      </b>
+       
+      bug
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        Half damage to
+        :
+      </b>
+       
+      steel
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        No damage from
+        :
+      </b>
+       
+      ground
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        No damage to
+        :
+      </b>
+       
+      none
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        Moves:
+      </b>
+       
+      gust
+    </p>
+    <p
+      class="sc-bczRLJ glWDJY"
+    >
+      <b>
+        Pokemons:
+      </b>
+       
+      charizard
+    </p>
+  </div>
+</div>
+`;

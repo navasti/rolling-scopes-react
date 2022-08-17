@@ -3,21 +3,22 @@ import * as S from './styled';
 
 type Props = {
   handlePokemonSelect: (selectedPokemon: PokemonDetails) => void;
-  handleModalOpened: (opened: boolean) => void;
+  handleOpenModal: () => void;
   pokemon: PokemonDetails;
 };
 
-export const PokemonCard = ({ pokemon, handlePokemonSelect, handleModalOpened }: Props) => {
+export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: Props) => {
   const onClick = () => {
     handlePokemonSelect(pokemon);
-    handleModalOpened(true);
+    handleOpenModal();
   };
   return (
     <>
-      <S.Card onClick={onClick}>
+      <S.Card onClick={onClick} align="left" stretch>
         <S.ImageWrapper>
           <S.Image
             src={pokemon.sprites.front_default}
+            data-testid="pokemon-card"
             alt={pokemon.name}
             height="85"
             width="85"

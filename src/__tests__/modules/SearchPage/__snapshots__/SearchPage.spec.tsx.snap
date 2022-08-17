@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchPage should match snapshot before and after data fetching 1`] = `
+<div>
+  <div>
+    <p>
+      <span
+        data-testid="component-mock"
+      >
+        Test
+      </span>
+      <span
+        data-testid="location-mock"
+      >
+        /test
+      </span>
+    </p>
+    <main>
+      <div
+        class="sc-bczRLJ frUuCi"
+      >
+        <div>
+          <div>
+            <label
+              for="input-mock"
+            >
+              testing label
+            </label>
+            <svg />
+            <input
+              data-testid="input-mock"
+              id="input-mock"
+              type="text"
+              value="testing-value"
+            />
+          </div>
+          <div>
+            <span>
+              Type and press enter to search for specific pokemon, type or move.
+            </span>
+            <span>
+              Clear input and press enter to search for all pokemons, types and moves.
+            </span>
+          </div>
+        </div>
+        <div>
+          <span
+            data-testid="pokemons-length-mock"
+          >
+            pokemons 
+          </span>
+          <span
+            data-testid="moves-length-mock"
+          >
+            moves 
+          </span>
+          <span
+            data-testid="types-length-mock"
+          >
+            types 
+          </span>
+        </div>
+        <div
+          data-testid="cards-mock"
+        >
+          <p>
+            loading
+          </p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;
+
+exports[`SearchPage should match snapshot before and after data fetching 2`] = `
+<div>
+  <div>
+    <p>
+      <span
+        data-testid="component-mock"
+      >
+        Test
+      </span>
+      <span
+        data-testid="location-mock"
+      >
+        /test
+      </span>
+    </p>
+    <main>
+      <div
+        class="sc-bczRLJ frUuCi"
+      >
+        <div>
+          <div>
+            <label
+              for="input-mock"
+            >
+              testing label
+            </label>
+            <svg />
+            <input
+              data-testid="input-mock"
+              id="input-mock"
+              type="text"
+              value="testing-value"
+            />
+          </div>
+          <div>
+            <span>
+              Type and press enter to search for specific pokemon, type or move.
+            </span>
+            <span>
+              Clear input and press enter to search for all pokemons, types and moves.
+            </span>
+          </div>
+        </div>
+        <div>
+          <span
+            data-testid="pokemons-length-mock"
+          >
+            pokemons 
+            (1)
+          </span>
+          <span
+            data-testid="moves-length-mock"
+          >
+            moves 
+            (1)
+          </span>
+          <span
+            data-testid="types-length-mock"
+          >
+            types 
+            (1)
+          </span>
+        </div>
+        <div
+          data-testid="cards-mock"
+        >
+          <div>
+            <p>
+              fighting
+            </p>
+            <p>
+              water-gun
+            </p>
+            <p>
+              bulbasaur
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+`;

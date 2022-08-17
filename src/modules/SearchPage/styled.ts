@@ -13,3 +13,22 @@ export const CommonMessage = styled.p`
   margin-top: 20px;
   font-size: 1.4rem;
 `;
+
+export const Card = styled.div<{ stretch?: boolean; align: 'left' | 'center' }>`
+  width: ${({ stretch }) => (stretch ? '' : '130px')};
+  text-align: ${({ align }) => align};
+  border: 2px solid #aaa;
+  background-color: #fff;
+  flex-direction: column;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  padding: 8px 10px;
+  cursor: pointer;
+  display: flex;
+  &:hover {
+    border-color: #000;
+    img {
+      border-color: #000;
+    }
+  }
+`;

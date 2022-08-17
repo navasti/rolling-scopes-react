@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MoveModalContent content should match the snapshot with passed first element of movesMock as a prop 1`] = `
+<div>
+  <div>
+    <p
+      class="sc-gsnTZi hZMIDi"
+    >
+      <b>
+        Accuracy
+        :
+      </b>
+       
+      100
+    </p>
+    <p
+      class="sc-gsnTZi hZMIDi"
+    >
+      <b>
+        Type
+        :
+      </b>
+       
+      normal
+    </p>
+    <p
+      class="sc-gsnTZi hZMIDi"
+    >
+      <b>
+        Power
+        :
+      </b>
+       
+      40
+    </p>
+    <p
+      class="sc-gsnTZi hZMIDi"
+    >
+      <b>
+        Priority
+        :
+      </b>
+       
+      0
+    </p>
+    <p
+      class="sc-gsnTZi hZMIDi"
+    >
+      <b>
+        PP
+        :
+      </b>
+       
+      35
+    </p>
+    <p
+      class="sc-gsnTZi hZMIDi"
+    >
+      <b>
+        Learned by:
+      </b>
+       
+      bulbasaur
+    </p>
+  </div>
+</div>
+`;

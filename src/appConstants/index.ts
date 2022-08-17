@@ -1,3 +1,6 @@
+import { FormFields } from 'types';
+import * as yup from 'yup';
+
 export enum Limits {
   pokemon = 20,
   type = 10,
@@ -49,7 +52,29 @@ export const NONE = 'none';
 export const MALE = 'male';
 export const FEMALE = 'female';
 export const INPUT_VALUE_KEY = 'input-value';
-export const tabs = Object.values(AvailableTabs);
+export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
+export const LINKS = ['home', 'about', 'form', 'invalid'] as const;
+export const SEARCH_BAR_INSTRUCTIONS = [
+  'Type and press enter to search for specific pokemon, type or move.',
+  'Clear input and press enter to search for all pokemons, types and moves.',
+] as const;
+
+export const TABS = Object.values(AvailableTabs);
+export const POKEMON_TYPES = Object.values(Types);
+
+export const FORM_VALIDATION_SCHEMA = yup.object().shape({
+  type: yup.string().required(ErrorMessages.type),
+  name: yup.string().min(2, ErrorMessages.name).required(ErrorMessages.name),
+  gender: yup.string().nullable().required(ErrorMessages.gender),
+  avatar: yup
+    .mixed()
+    .test('fileSize', 'The file is too large', (value) =>
+      !value?.length ? true : value?.[0]?.size <= 200000
+    ),
+  birthday: yup.string().required(ErrorMessages.birthday),
+  consent: yup.bool().oneOf([true], ErrorMessages.consent),
+  shiny: yup.bool(),
+});
 
 const BASE = 'https://pokeapi.co/api/v2';
 
@@ -63,9 +88,17 @@ export const API = {
   BASE,
 };
 
-export const POKEMON_TYPES = Object.values(Types);
-
 export const FIELDS_VALIDATION_BY_NAME = {
   TEXT: [Fields.name, Fields.birthday, Fields.type],
   CHECK: [Fields.consent, Fields.gender],
+};
+
+export const DEFAULT_VALUES: FormFields = {
+  consent: false,
+  avatar: null,
+  gender: MALE,
+  shiny: false,
+  birthday: '',
+  name: '',
+  type: '',
 };

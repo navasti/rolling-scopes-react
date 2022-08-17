@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ShinyField should be rendered and match snapshot 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ iUqdxC"
+  >
+    Shiny
+    <label
+      class="sc-gsnTZi dsqYxf"
+    >
+      <input
+        name="shiny"
+        type="checkbox"
+      />
+      <span />
+    </label>
+  </div>
+</div>
+`;

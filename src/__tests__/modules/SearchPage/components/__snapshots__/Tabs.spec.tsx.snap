@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tabs tabs should match snapshot and display lengths if isLoading prop equal false 1`] = `
+<div>
+  <div
+    class="sc-olbas ghNiGT"
+  >
+    <span
+      class="sc-hiMGwR hAxTaP"
+    >
+      pokemons
+       
+      (10)
+    </span>
+    <span
+      class="sc-hiMGwR knipss"
+    >
+      moves
+       
+      (15)
+    </span>
+    <span
+      class="sc-hiMGwR knipss"
+    >
+      types
+       
+      (20)
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Tabs tabs should match snapshot and should not display lengths if isLoading prop equals true 1`] = `
+<div>
+  <div
+    class="sc-olbas ghNiGT"
+  >
+    <span
+      class="sc-hiMGwR hAxTaP"
+    >
+      pokemons
+       
+    </span>
+    <span
+      class="sc-hiMGwR knipss"
+    >
+      moves
+       
+    </span>
+    <span
+      class="sc-hiMGwR knipss"
+    >
+      types
+       
+    </span>
+  </div>
+</div>
+`;

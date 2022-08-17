@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LocationBadge location badge element should be rendered and match snapshot 1`] = `
+<div>
+  <div
+    class="sc-bczRLJ oDGbA"
+  >
+    <p
+      class="sc-gsnTZi iueXfi"
+    >
+      Location: 
+      <span
+        class="sc-dkzDqf buRVPe"
+      >
+        /test
+      </span>
+    </p>
+    <p
+      class="sc-gsnTZi iueXfi"
+    >
+      Component: 
+      <span
+        class="sc-dkzDqf buRVPe"
+      >
+        Test
+      </span>
+    </p>
+  </div>
+</div>
+`;

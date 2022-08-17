@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConsentField should be rendered and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-bczRLJ cvFYSp"
+    for="consent"
+  >
+    <input
+      id="consent"
+      name="consent"
+      type="checkbox"
+    />
+    I have read and accept the regulations
+  </label>
+  <span
+    data-testid="message-mock"
+    style="opacity: 0; text-align: center; color: red;"
+  />
+</div>
+`;

@@ -8,7 +8,7 @@ export const getTodayDate = (): string => {
   return `${year}-${formatMonth}-${formatDay}`;
 };
 
-export const uuid = () => Date.now().toString(36) + Math.random().toString(36).substr(2);
+export const uuid = () => Date.now().toString(36) + Math.random().toString(36);
 
 export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 

@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NameField should be rendered and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-bczRLJ csbavH"
+    for="name"
+  >
+    *Name
+    <input
+      id="name"
+      name="name"
+      placeholder="name"
+      type="text"
+    />
+  </label>
+  <span
+    data-testid="message-mock"
+    style="opacity: 0; text-align: left; color: red;"
+  />
+</div>
+`;

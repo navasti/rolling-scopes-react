@@ -3,17 +3,17 @@ import * as S from './styled';
 
 type Props = {
   handleMoveSelect: (selectedMove: PokemonMoveDetails) => void;
-  handleModalOpened: (opened: boolean) => void;
+  handleOpenModal: () => void;
   move: PokemonMoveDetails;
 };
 
-export const MoveCard = ({ move, handleModalOpened, handleMoveSelect }: Props) => {
+export const MoveCard = ({ move, handleOpenModal, handleMoveSelect }: Props) => {
   const onClick = () => {
     handleMoveSelect(move);
-    handleModalOpened(true);
+    handleOpenModal();
   };
   return (
-    <S.Card onClick={onClick}>
+    <S.Card onClick={onClick} data-testid="move-card" align="center">
       <p>{move.name}</p>
     </S.Card>
   );

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenderField should be rendered with value female and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-bczRLJ bFNtk"
+    for="gender"
+  >
+    <input
+      id="gender"
+      name="gender"
+      type="radio"
+      value="female"
+    />
+    Female
+  </label>
+</div>
+`;
+
+exports[`GenderField should be rendered with value male and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-bczRLJ bFNtk"
+    for="gender"
+  >
+    <input
+      id="gender"
+      name="gender"
+      type="radio"
+      value="male"
+    />
+    Male
+  </label>
+</div>
+`;

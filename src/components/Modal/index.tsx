@@ -3,21 +3,21 @@ import { createPortal } from 'react-dom';
 import * as S from './styled';
 
 type Props = {
-  handleModalOpened: (isModalOpened: boolean) => void;
+  handleCloseModal: () => void;
   children: JSX.Element;
   opened: boolean;
   title: string;
 };
 
-export const Modal = ({ title, children, opened, handleModalOpened }: Props) => {
+export const Modal = ({ title, children, opened, handleCloseModal }: Props) => {
   return createPortal(
     <>
       {opened && (
-        <S.ModalWrapper onClick={() => handleModalOpened(false)}>
+        <S.ModalWrapper onClick={handleCloseModal}>
           <S.ModalWindow onClick={(event) => event.stopPropagation()}>
             <S.Header>
               <S.ModalTitle>{title}</S.ModalTitle>
-              <S.CloseButton onClick={() => handleModalOpened(false)}>
+              <S.CloseButton onClick={handleCloseModal}>
                 <TimesIcon />
               </S.CloseButton>
             </S.Header>

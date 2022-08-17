@@ -1,20 +1,6 @@
 import styled from 'styled-components';
 
-export const Card = styled.div`
-  border: 2px solid #aaa;
-  flex-direction: column;
-  border-radius: 10px;
-  font-size: 0.775rem;
-  cursor: pointer;
-  display: flex;
-  padding: 5px;
-  &:hover {
-    border-color: #000;
-    img {
-      border-color: #000;
-    }
-  }
-`;
+export { Card } from 'modules/SearchPage/styled';
 
 export const ImageWrapper = styled.div`
   align-items: center;

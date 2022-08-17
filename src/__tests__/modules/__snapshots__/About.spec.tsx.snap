@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`About component should match snapshot and about us page text should be visible 1`] = `
+<div>
+  <div>
+    <p>
+      <span
+        data-testid="component-mock"
+      >
+        Test
+      </span>
+      <span
+        data-testid="location-mock"
+      >
+        /test
+      </span>
+    </p>
+    <main>
+      <div
+        class="sc-bczRLJ kBMGpg"
+      >
+        <p
+          class="sc-gsnTZi ejVgEr"
+        >
+          About us page
+        </p>
+      </div>
+    </main>
+  </div>
+</div>
+`;

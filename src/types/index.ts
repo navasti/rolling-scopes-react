@@ -1,12 +1,73 @@
-import { Fields, Limits, tabs } from 'appConstants';
-import { RefObject } from 'react';
+import { AvailableTabs, FEMALE, Fields, Limits, MALE, TABS } from 'appConstants';
+import { UseFormRegisterReturn } from 'react-hook-form';
+import { ChangeEvent, KeyboardEvent, RefObject } from 'react';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;
-export type Lengths = PrepareLengths<typeof tabs>;
-export type PrepareLengths<Arr extends typeof tabs> = {
+export type Lengths = PrepareLengths<typeof TABS>;
+export type PrepareLengths<Arr extends typeof TABS> = {
   [P in Arr[number] as P]: number;
 };
+
+export enum MessageType {
+  error = 'error',
+  success = 'success',
+}
+
+export type MessageProps = {
+  message: string | null;
+  type: MessageType;
+  visible: boolean;
+  center?: boolean;
+};
+
+export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+
+export type CardsProps = {
+  types: Array<PokemonTypeDetails>;
+  moves: Array<PokemonMoveDetails>;
+  pokemons: Array<PokemonDetails>;
+  activeTab: AvailableTabs;
+  isLoading: boolean;
+};
+export type LayoutProps = {
+  children: JSX.Element;
+  componentName: string;
+  location: string;
+};
+
+export type TabsProps = {
+  onClick: (tab: AvailableTabs) => void;
+  activeTab: AvailableTabs;
+  options: typeof TABS;
+  isLoading: boolean;
+  lengths: Lengths;
+};
+
+export type SearchBarProps = {
+  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  inputValue: string;
+  isLoading: boolean;
+  label: string;
+};
+
+export type FormFields = {
+  gender: typeof MALE | typeof FEMALE;
+  avatar: FileList | null;
+  consent: boolean;
+  birthday: string;
+  shiny: boolean;
+  name: string;
+  type: string;
+};
+
+export type FieldReturnType<T extends Fields> = {
+  name: string;
+  maxDate?: string;
+  error?: string;
+  value?: string;
+} & UseFormRegisterReturn<T>;
 
 export type LimitParams = {
   pokemonLimit: Limits.pokemon;
@@ -46,9 +107,6 @@ export type MovesData = {
   next: null | string;
   count: number;
 };
-
-export type MockBaseDataType = Pokemon | PokemonMove | PokemonType;
-export type MockDetailedDataType = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
 export type DamageRelations = {
   double_damage_from: Array<PokemonType>;
@@ -130,6 +188,7 @@ export type Area = {
 export type Ability = {
   ability: {
     name: string;
+    url: string;
   };
   is_hidden: boolean;
   slot: number;
@@ -140,6 +199,7 @@ export type Stat = {
   effort: number;
   stat: {
     name: string;
+    url: string;
   };
 };
 
@@ -147,6 +207,7 @@ export type Type = {
   slot: number;
   type: {
     name: string;
+    url: string;
   };
 };
 
@@ -172,9 +233,9 @@ export type SelectFieldType = {
 };
 
 export type CustomPokemon = {
+  gender: typeof MALE | typeof FEMALE;
   avatar: File | null;
   birthday: string;
-  gender: string;
   shiny: boolean;
   name: string;
   type: string;
