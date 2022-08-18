@@ -9,10 +9,42 @@ export type PrepareLengths<Arr extends typeof TABS> = {
   [P in Arr[number] as P]: number;
 };
 
+export enum GlobalActionType {
+  pokemons = 'pokemons',
+  sorting = 'sorting',
+  lengths = 'lengths',
+  types = 'types',
+  moves = 'moves',
+}
+
 export enum MessageType {
   error = 'error',
   success = 'success',
 }
+
+export enum Sorting {
+  ascending = 'ascending',
+  descending = 'descending',
+  alphabetical = 'alphabetical',
+}
+
+export type GlobalState = {
+  setPokemons: (pokemons: Array<PokemonDetails>) => void;
+  setMoves: (moves: Array<PokemonMoveDetails>) => void;
+  setTypes: (types: Array<PokemonTypeDetails>) => void;
+  setSorting: (sorting: Sorting) => void;
+  setLengths: (lengths: Lengths) => void;
+  types: Array<PokemonTypeDetails>;
+  moves: Array<PokemonMoveDetails>;
+  pokemons: Array<PokemonDetails>;
+  sorting: Sorting;
+  lengths: Lengths;
+};
+
+export type GlobalAction = {
+  type: GlobalActionType;
+  payload: Partial<GlobalState>;
+};
 
 export type MessageProps = {
   message: string | null;

@@ -24,7 +24,6 @@ import {
   FormCard,
   Message,
 } from './components';
-
 type Props = {
   componentName: string;
   location: string;

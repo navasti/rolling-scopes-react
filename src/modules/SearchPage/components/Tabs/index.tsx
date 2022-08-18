@@ -1,5 +1,5 @@
 import { AvailableTabs, TABS } from 'appConstants';
-import { Lengths } from 'types';
+import { useGlobalContext } from 'contexts';
 import * as S from './styled';
 
 type Props = {
@@ -7,10 +7,10 @@ type Props = {
   activeTab: AvailableTabs;
   options: typeof TABS;
   isLoading: boolean;
-  lengths: Lengths;
 };
 
-export const Tabs = ({ activeTab, lengths, isLoading, options, onClick }: Props) => {
+export const Tabs = ({ activeTab, isLoading, options, onClick }: Props) => {
+  const { lengths } = useGlobalContext();
   return (
     <S.TabsWrapper>
       {options.map((option) => (
