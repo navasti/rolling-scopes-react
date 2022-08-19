@@ -28,48 +28,25 @@ export const Cards = ({ activeTab }: Props) => {
     setIsModalOpened(false);
   }, []);
 
-  const handleOpenModal = useCallback(() => setIsModalOpened(true), []);
-
   if (isLoading) return <Loader />;
 
   const renderSwitch = (param: AvailableTabs) => {
     switch (param) {
       case AvailableTabs.pokemons:
         return !!pokemons.length ? (
-          pokemons.map((pokemon) => (
-            <PokemonCard
-              handlePokemonSelect={(pokemon: PokemonDetails) => setSelectedPokemon(pokemon)}
-              handleOpenModal={handleOpenModal}
-              pokemon={pokemon}
-              key={pokemon.id}
-            />
-          ))
+          pokemons.map((pokemon) => <PokemonCard pokemon={pokemon} key={pokemon.id} />)
         ) : (
           <S.NoDataInfo>No pokemons were found</S.NoDataInfo>
         );
       case AvailableTabs.moves:
         return !!moves.length ? (
-          moves.map((move) => (
-            <MoveCard
-              handleMoveSelect={(move: PokemonMoveDetails) => setSelectedMove(move)}
-              handleOpenModal={handleOpenModal}
-              key={move.id}
-              move={move}
-            />
-          ))
+          moves.map((move) => <MoveCard key={move.id} move={move} />)
         ) : (
           <S.NoDataInfo>No moves were found</S.NoDataInfo>
         );
       case AvailableTabs.types:
         return !!types.length ? (
-          types.map((type) => (
-            <TypeCard
-              handleTypeSelect={(type: PokemonTypeDetails) => setSelectedType(type)}
-              handleOpenModal={handleOpenModal}
-              key={type.id}
-              type={type}
-            />
-          ))
+          types.map((type) => <TypeCard key={type.id} type={type} />)
         ) : (
           <S.NoDataInfo>No types were found</S.NoDataInfo>
         );

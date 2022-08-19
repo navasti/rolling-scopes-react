@@ -5,7 +5,7 @@ import {
   CustomPokemon,
   PokemonMove,
   PokemonType,
-  Details,
+  CardDetails,
   Pokemon,
   Lengths,
 } from 'types';
@@ -110,7 +110,7 @@ const sampleType = (): PokemonTypeDetails => ({
   ],
 });
 
-const prepareBuilder = <T extends Details>(sample: () => T) => {
+const prepareBuilder = <T extends CardDetails>(sample: () => T) => {
   const builder = (object = sample()) => ({
     withName: (name: T['name']) => builder({ ...object, name }),
     withId: (id: T['id']) => builder({ ...object, id }),

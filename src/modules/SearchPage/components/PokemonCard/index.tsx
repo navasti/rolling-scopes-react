@@ -1,16 +1,15 @@
-import { PokemonDetails } from 'types';
+import { useNavigate } from 'react-router-dom';
+import { AvailableCardDetails, PokemonDetails } from 'types';
 import * as S from './styled';
 
 type Props = {
-  handlePokemonSelect: (selectedPokemon: PokemonDetails) => void;
-  handleOpenModal: () => void;
   pokemon: PokemonDetails;
 };
 
-export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: Props) => {
+export const PokemonCard = ({ pokemon }: Props) => {
+  const navigation = useNavigate();
   const onClick = () => {
-    handlePokemonSelect(pokemon);
-    handleOpenModal();
+    navigation(`details/${AvailableCardDetails.pokemon}/${pokemon.id}`, { replace: true });
   };
   return (
     <>

@@ -53,7 +53,7 @@ export const MALE = 'male';
 export const FEMALE = 'female';
 export const INPUT_VALUE_KEY = 'input-value';
 export const SUCCESS_MESSAGE = 'Pokemon added successfuly';
-export const LINKS = ['home', 'about', 'form', 'invalid'] as const;
+export const LINKS = ['home', 'about', 'form', 'invalid', 'details'] as const;
 export const SEARCH_BAR_INSTRUCTIONS = [
   'Type and press enter to search for specific pokemon, type or move.',
   'Clear input and press enter to search for all pokemons, types and moves.',

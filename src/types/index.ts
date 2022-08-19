@@ -23,6 +23,12 @@ export enum MessageType {
   success = 'success',
 }
 
+export enum AvailableCardDetails {
+  pokemon = 'pokemon',
+  move = 'move',
+  type = 'type',
+}
+
 export enum Sorting {
   ascending = 'ascending',
   descending = 'descending',
@@ -77,7 +83,7 @@ export type MessageProps = {
   center?: boolean;
 };
 
-export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+export type CardDetails = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
 export type CardsProps = {
   types: Array<PokemonTypeDetails>;
