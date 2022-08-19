@@ -1,4 +1,4 @@
-import { GlobalContextProvider } from 'contexts';
+import { FormContextProvider, SearchContextProvider } from 'contexts';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { GlobalStyles } from 'commonStyles';
@@ -12,9 +12,11 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <GlobalStyles />
-      <GlobalContextProvider>
-        <App />
-      </GlobalContextProvider>
+      <SearchContextProvider>
+        <FormContextProvider>
+          <App />
+        </FormContextProvider>
+      </SearchContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

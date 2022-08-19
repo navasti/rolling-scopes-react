@@ -1,1 +1,2 @@
-export * from './globalReducer';
+export * from './searchReducer';
+export * from './formReducer';

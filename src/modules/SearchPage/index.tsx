@@ -1,8 +1,8 @@
-import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { AvailableTabs, API, INPUT_VALUE_KEY, TABS } from 'appConstants';
 import { SearchBar, Tabs, Cards } from './components';
-import { useGlobalContext } from 'contexts';
-import { GlobalState } from 'types';
+import { useSearchContext } from 'contexts';
+import { SearchState } from 'types';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {
@@ -25,12 +25,23 @@ type Props = {
 export const SearchPage = ({ componentName, location }: Props) => {
   const [activeTab, setActiveTab] = useState<AvailableTabs>(AvailableTabs.pokemons);
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
-  const { setLengths, setPokemons, setMoves, setTypes } = useGlobalContext();
+  const {
+    setLengths,
+    setPokemons,
+    setMoves,
+    setTypes,
+    setIsLoading,
+    searchState: { lengths },
+  } = useSearchContext();
+
+  const shouldSkipFetching = useMemo(
+    () => Object.values(lengths).some((value) => value > 0),
+    [lengths]
+  );
 
   const fetchData = useCallback(async (allData: boolean, param?: string) => {
-    const values: Pick<GlobalState, 'lengths' | 'moves' | 'pokemons' | 'types'> = {
+    const values: Pick<SearchState, 'lengths' | 'moves' | 'pokemons' | 'types'> = {
       pokemons: [],
       types: [],
       moves: [],
@@ -65,21 +76,23 @@ export const SearchPage = ({ componentName, location }: Props) => {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect');
-    const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
-    inputValue && setInputValue(inputValue);
-    const values =
-      inputValue && inputValue.trim().length > 0
-        ? fetchData(false, inputValue).then((values) => values)
-        : fetchData(true).then((values) => values);
-    values.then(({ lengths, moves, pokemons, types }) => {
-      setPokemons(pokemons);
-      setLengths(lengths);
-      setMoves(moves);
-      setTypes(types);
-      setIsLoading(false);
-    });
-  }, [fetchData, setPokemons, setTypes, setMoves, setLengths]);
+    if (!shouldSkipFetching) {
+      setIsLoading(true);
+      const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
+      inputValue && setInputValue(inputValue);
+      const values =
+        inputValue && inputValue.trim().length > 0
+          ? fetchData(false, inputValue).then((values) => values)
+          : fetchData(true).then((values) => values);
+      values.then(({ lengths, moves, pokemons, types }) => {
+        setPokemons(pokemons);
+        setLengths(lengths);
+        setMoves(moves);
+        setTypes(types);
+        setIsLoading(false);
+      });
+    }
+  }, [fetchData, setPokemons, setTypes, setMoves, setLengths, setIsLoading, shouldSkipFetching]);
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
@@ -106,17 +119,15 @@ export const SearchPage = ({ componentName, location }: Props) => {
         <SearchBar
           label="Local Storage Input"
           inputValue={inputValue}
-          isLoading={isLoading}
           onKeyDown={onKeyDown}
           onChange={onChange}
         />
         <Tabs
           onClick={(tab: AvailableTabs) => setActiveTab(tab)}
-          isLoading={isLoading}
           activeTab={activeTab}
           options={TABS}
         />
-        <Cards isLoading={isLoading} activeTab={activeTab} />
+        <Cards activeTab={activeTab} />
       </S.SearchPageView>
     </Layout>
   );

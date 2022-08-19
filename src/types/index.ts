@@ -9,7 +9,8 @@ export type PrepareLengths<Arr extends typeof TABS> = {
   [P in Arr[number] as P]: number;
 };
 
-export enum GlobalActionType {
+export enum SearchActionType {
+  isLoading = 'isLoading',
   pokemons = 'pokemons',
   sorting = 'sorting',
   lengths = 'lengths',
@@ -28,22 +29,45 @@ export enum Sorting {
   alphabetical = 'alphabetical',
 }
 
-export type GlobalState = {
+export type FormState = {
+  customPokemons: Array<CustomPokemon & { id: string }>;
+};
+
+export type FormContextProps = {
+  addPokemon: (pokemon: CustomPokemon & { id: string }) => void;
+  formState: FormState;
+};
+
+export type FormAction = {
+  type: FormActionType;
+  payload: Partial<FormState>;
+};
+
+export type SearchContextProps = {
   setPokemons: (pokemons: Array<PokemonDetails>) => void;
   setMoves: (moves: Array<PokemonMoveDetails>) => void;
   setTypes: (types: Array<PokemonTypeDetails>) => void;
-  setSorting: (sorting: Sorting) => void;
+  setIsLoading: (isLoading: boolean) => void;
   setLengths: (lengths: Lengths) => void;
+  searchState: SearchState;
+};
+
+export enum FormActionType {
+  addPokemon = 'addPokemon',
+}
+
+export type SearchState = {
   types: Array<PokemonTypeDetails>;
   moves: Array<PokemonMoveDetails>;
   pokemons: Array<PokemonDetails>;
+  isLoading: boolean;
   sorting: Sorting;
   lengths: Lengths;
 };
 
-export type GlobalAction = {
-  type: GlobalActionType;
-  payload: Partial<GlobalState>;
+export type SearchAction = {
+  type: SearchActionType;
+  payload: Partial<SearchState>;
 };
 
 export type MessageProps = {

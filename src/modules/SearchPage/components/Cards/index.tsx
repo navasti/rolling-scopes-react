@@ -2,23 +2,24 @@ import { PokemonCard, MoveCard, TypeCard } from 'modules/SearchPage/components';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { useCallback, useState } from 'react';
 import { AvailableTabs } from 'appConstants';
-import { useGlobalContext } from 'contexts';
+import { useSearchContext } from 'contexts';
 import { DetailsModal } from 'modules';
 import { Loader } from 'components';
 import * as S from './styled';
 
 type Props = {
   activeTab: AvailableTabs;
-  isLoading: boolean;
 };
 
-export const Cards = ({ activeTab, isLoading }: Props) => {
+export const Cards = ({ activeTab }: Props) => {
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null);
   const [selectedType, setSelectedType] = useState<PokemonTypeDetails | null>(null);
   const [selectedMove, setSelectedMove] = useState<PokemonMoveDetails | null>(null);
   const [isModalOpened, setIsModalOpened] = useState(false);
 
-  const { pokemons, types, moves } = useGlobalContext();
+  const {
+    searchState: { pokemons, types, moves, isLoading },
+  } = useSearchContext();
 
   const handleCloseModal = useCallback(() => {
     setSelectedPokemon(null);

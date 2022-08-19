@@ -1,6 +1,7 @@
 import { CustomPokemon, FormFields, MessageType } from 'types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useFormContext } from 'contexts';
 import { useState } from 'react';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -24,15 +25,20 @@ import {
   FormCard,
   Message,
 } from './components';
+
 type Props = {
   componentName: string;
   location: string;
 };
 
 export const Form = ({ componentName, location }: Props) => {
-  const [pokemons, setPokemons] = useState<Array<CustomPokemon & { id: string }>>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [initialEnter, setInitialEnter] = useState(true);
+
+  const {
+    formState: { customPokemons },
+    addPokemon,
+  } = useFormContext();
 
   const {
     formState: { errors },
@@ -58,8 +64,8 @@ export const Form = ({ componentName, location }: Props) => {
       type,
       name,
     };
+    addPokemon(customPokemon);
     setShowSuccessMessage(true);
-    setPokemons([...pokemons, customPokemon]);
     reset(DEFAULT_VALUES, { keepValues: false });
   };
 
@@ -135,7 +141,7 @@ export const Form = ({ componentName, location }: Props) => {
         </S.Form>
         <hr />
         <S.CardsGrid>
-          {pokemons.map((pokemon) => (
+          {customPokemons.map((pokemon) => (
             <FormCard key={pokemon.id} customPokemon={pokemon} />
           ))}
         </S.CardsGrid>

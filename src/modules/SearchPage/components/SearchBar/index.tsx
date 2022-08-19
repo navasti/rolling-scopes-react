@@ -1,17 +1,20 @@
+import { SEARCH_BAR_INSTRUCTIONS } from 'appConstants';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import { SearchIcon } from 'assets/images/svg';
 import * as S from './styled';
-import { SEARCH_BAR_INSTRUCTIONS } from 'appConstants';
+import { useSearchContext } from 'contexts';
 
 type Props = {
   label: string;
-  isLoading: boolean;
   inputValue: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export const SearchBar = ({ inputValue, label, isLoading, onChange, onKeyDown }: Props) => {
+export const SearchBar = ({ inputValue, label, onChange, onKeyDown }: Props) => {
+  const {
+    searchState: { isLoading },
+  } = useSearchContext();
   return (
     <>
       <S.SearchBar>
