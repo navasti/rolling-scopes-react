@@ -10,20 +10,23 @@ export const CardWrapper = styled.div`
 export const BaseInformationWrapper = styled.div`
   border-right: 2px solid #444;
   flex-direction: column;
-  padding-right: 10px;
+  padding-right: 20px;
   align-items: center;
-  margin-right: 30px;
+  margin-right: 20px;
   display: flex;
 `;
 
 export const BaseInformationTitle = styled.span`
   text-transform: uppercase;
   letter-spacing: 2px;
+  width: max-content;
   font-weight: 600;
   font-size: 1.5rem;
 `;
 
-export const BaseInformationImage = styled.img``;
+export const BaseInformationImage = styled.img`
+  margin-bottom: 10px;
+`;
 
 export const DetailWrapper = styled.div`
   margin-top: 5px;

@@ -1,3 +1,4 @@
+import { NO_IMAGE_PLACEHOLDER } from 'appConstants';
 import { PokemonDetails } from 'types';
 import { capitalize } from 'utils';
 import * as S from './styled';
@@ -18,7 +19,13 @@ export const PokemonCardDetails = ({ pokemon }: Props) => {
   return (
     <S.CardWrapper>
       <S.BaseInformationWrapper>
-        <S.BaseInformationImage src={sprites.front_default} alt={name} width="180" height="180" />
+        <S.BaseInformationImage
+          src={sprites.front_default || NO_IMAGE_PLACEHOLDER}
+          alt={name}
+          width="180"
+          height="180"
+        />
+
         <S.BaseInformationTitle>{name}</S.BaseInformationTitle>
       </S.BaseInformationWrapper>
 

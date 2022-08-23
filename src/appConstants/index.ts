@@ -76,6 +76,8 @@ export const FORM_VALIDATION_SCHEMA = yup.object().shape({
   shiny: yup.bool(),
 });
 
+export const NO_IMAGE_PLACEHOLDER = 'https://via.placeholder.com/200';
+
 const BASE = 'https://pokeapi.co/api/v2';
 
 export const API = {

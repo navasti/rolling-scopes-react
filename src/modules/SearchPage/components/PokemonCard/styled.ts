@@ -9,6 +9,7 @@ export const ImageWrapper = styled.div`
 
 export const Image = styled.img`
   border-right: 1px solid #aaa;
+  padding-right: 5px;
 `;
 
 export const Title = styled.span`

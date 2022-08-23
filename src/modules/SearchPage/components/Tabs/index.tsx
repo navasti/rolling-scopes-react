@@ -1,20 +1,22 @@
-import { AvailableTabs, TABS } from 'appConstants';
 import { useSearchContext } from 'contexts';
+import { AvailableTabs, TABS } from 'appConstants';
 import * as S from './styled';
 
-type Props = {
-  onClick: (tab: AvailableTabs) => void;
-  activeTab: AvailableTabs;
-  options: typeof TABS;
-};
-
-export const Tabs = ({ activeTab, options, onClick }: Props) => {
+export const Tabs = () => {
   const {
-    searchState: { isLoading, lengths },
+    searchState: { isLoading, lengths, activeTab },
+    setActiveTab,
+    setPage,
   } = useSearchContext();
+
+  const onClick = (option: AvailableTabs) => {
+    setActiveTab(option);
+    setPage(1);
+  };
+
   return (
     <S.TabsWrapper>
-      {options.map((option) => (
+      {TABS.map((option) => (
         <S.Tab active={option === activeTab} key={option} onClick={() => onClick(option)}>
           {option} {!isLoading && `(${lengths[option]})`}
         </S.Tab>
