@@ -1,20 +1,22 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { AvailableTabs, API, INPUT_VALUE_KEY, TABS } from 'appConstants';
-import { SearchBar, Tabs, Cards } from './components';
+import { API, INPUT_VALUE_KEY } from 'appConstants';
+import { SearchBar, Tabs, Cards, Pagination, SortingSelector } from './components';
 import { useSearchContext } from 'contexts';
-import { SearchState } from 'types';
+import {
+  BaseMovesData,
+  BasePokemonsData,
+  BaseTypesData,
+  PokemonDetails,
+  PokemonMoveDetails,
+  PokemonTypeDetails,
+} from 'types';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {
   fetchPokemonByParameter,
   fetchMoveByParameter,
   fetchTypeByParameter,
-  fetchPokemonDetails,
-  fetchPokemonBase,
-  fetchMoveDetails,
-  fetchTypeDetails,
-  fetchTypeBase,
-  fetchMoveBase,
+  fetchBase,
 } from 'utils';
 
 type Props = {
@@ -23,7 +25,6 @@ type Props = {
 };
 
 export const SearchPage = ({ componentName, location }: Props) => {
-  const [activeTab, setActiveTab] = useState<AvailableTabs>(AvailableTabs.pokemons);
   const [inputValue, setInputValue] = useState('');
 
   const {
@@ -41,38 +42,81 @@ export const SearchPage = ({ componentName, location }: Props) => {
   );
 
   const fetchData = useCallback(async (allData: boolean, param?: string) => {
-    const values: Pick<SearchState, 'lengths' | 'moves' | 'pokemons' | 'types'> = {
-      pokemons: [],
-      types: [],
-      moves: [],
-      lengths: {
-        moves: 0,
-        pokemons: 0,
-        types: 0,
-      },
-    };
     if (!allData && param) {
       const type = await fetchTypeByParameter(`${API.TYPE}/${param}`);
       const move = await fetchMoveByParameter(`${API.MOVE}/${param}`);
       const pokemon = await fetchPokemonByParameter(`${API.POKEMON}/${param}`);
-      pokemon && values.pokemons.push(pokemon);
-      type && values.types.push(type);
-      move && values.moves.push(move);
+      return {
+        pokemons: {
+          currentPageResults: pokemon ? [pokemon] : [],
+          count: pokemon ? 1 : 0,
+          previous: null,
+          results: [],
+          next: null,
+        },
+        moves: {
+          currentPageResults: move ? [move] : [],
+          count: move ? 1 : 0,
+          previous: null,
+          results: [],
+          next: null,
+        },
+        types: {
+          currentPageResults: type ? [type] : [],
+          count: type ? 1 : 0,
+          previous: null,
+          results: [],
+          next: null,
+        },
+        lengths: {
+          pokemons: pokemon ? 1 : 0,
+          moves: move ? 1 : 0,
+          types: type ? 1 : 0,
+        },
+      };
     }
     if (allData) {
-      const pokemons = (await fetchPokemonBase(`${API.POKEMON}${API.POKEMON_LIMIT}`)) || [];
-      const moves = (await fetchMoveBase(`${API.MOVE}${API.MOVE_LIMIT}`)) || [];
-      const types = (await fetchTypeBase(`${API.TYPE}${API.TYPE_LIMIT}`)) || [];
-      values.pokemons = [...((await fetchPokemonDetails(pokemons)) || [])];
-      values.types = [...((await fetchTypeDetails(types)) || [])];
-      values.moves = [...((await fetchMoveDetails(moves)) || [])];
+      const pokemons = await fetchBase<BasePokemonsData>(API.POKEMON);
+      const moves = await fetchBase<BaseMovesData>(API.MOVE);
+      const types = await fetchBase<BaseTypesData>(API.TYPE);
+      if (pokemons) {
+        pokemons.currentPageResults = await Promise.all(
+          pokemons.results.map(({ url }) =>
+            fetch(url)
+              .then((data) => data.json())
+              .then((pokemon: PokemonDetails) => pokemon)
+          )
+        );
+      }
+      if (types) {
+        types.currentPageResults = await Promise.all(
+          types.results.map(({ url }) =>
+            fetch(url)
+              .then((data) => data.json())
+              .then((type: PokemonTypeDetails) => type)
+          )
+        );
+      }
+      if (moves) {
+        moves.currentPageResults = await Promise.all(
+          moves.results.map(({ url }) =>
+            fetch(url)
+              .then((data) => data.json())
+              .then((move: PokemonMoveDetails) => move)
+          )
+        );
+      }
+      return {
+        pokemons,
+        types,
+        moves,
+        lengths: {
+          pokemons: pokemons?.count || 0,
+          moves: moves?.count || 0,
+          types: types?.count || 0,
+        },
+      };
     }
-    values.lengths = {
-      pokemons: values.pokemons.length,
-      moves: values.moves.length,
-      types: values.types.length,
-    };
-    return values;
   }, []);
 
   useEffect(() => {
@@ -84,11 +128,11 @@ export const SearchPage = ({ componentName, location }: Props) => {
         inputValue && inputValue.trim().length > 0
           ? fetchData(false, inputValue).then((values) => values)
           : fetchData(true).then((values) => values);
-      values.then(({ lengths, moves, pokemons, types }) => {
-        setPokemons(pokemons);
-        setLengths(lengths);
-        setMoves(moves);
-        setTypes(types);
+      values.then((value) => {
+        value?.lengths && setLengths(value.lengths);
+        value?.pokemons && setPokemons(value.pokemons);
+        value?.moves && setMoves(value.moves);
+        value?.types && setTypes(value.types);
         setIsLoading(false);
       });
     }
@@ -97,13 +141,13 @@ export const SearchPage = ({ componentName, location }: Props) => {
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
       setIsLoading(true);
-      const { lengths, moves, pokemons, types } = !!inputValue.trim().length
+      const values = !!inputValue.trim().length
         ? await fetchData(false, inputValue)
         : await fetchData(true);
-      setPokemons(pokemons);
-      setLengths(lengths);
-      setMoves(moves);
-      setTypes(types);
+      values?.lengths && setLengths(values.lengths);
+      values?.moves && setMoves(values.moves);
+      values?.pokemons && setPokemons(values.pokemons);
+      values?.types && setTypes(values.types);
       setIsLoading(false);
     }
   };
@@ -122,12 +166,10 @@ export const SearchPage = ({ componentName, location }: Props) => {
           onKeyDown={onKeyDown}
           onChange={onChange}
         />
-        <Tabs
-          onClick={(tab: AvailableTabs) => setActiveTab(tab)}
-          activeTab={activeTab}
-          options={TABS}
-        />
-        <Cards activeTab={activeTab} />
+        <Tabs />
+        <Pagination />
+        <SortingSelector />
+        <Cards />
       </S.SearchPageView>
     </Layout>
   );

@@ -15,3 +15,8 @@ export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.
 export const appendComma = (length: number, index: number, label: string) => {
   return `${label}${length === index + 1 ? '' : ', '}`;
 };
+
+export const range = (start: number, end: number) => {
+  const length = end - start + 1;
+  return Array.from({ length }, (_, index) => index + start);
+};

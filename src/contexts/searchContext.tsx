@@ -1,12 +1,14 @@
+import { AvailableTabs } from 'appConstants';
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
 import { initialSearchState, searchReducer } from 'reducers';
 import {
-  PokemonMoveDetails,
-  PokemonTypeDetails,
   SearchContextProps,
   SearchActionType,
-  PokemonDetails,
   Lengths,
+  BasePokemonsData,
+  BaseTypesData,
+  BaseMovesData,
+  Sorting,
 } from 'types';
 
 export const SearchContext = createContext<SearchContextProps>({} as SearchContextProps);
@@ -17,6 +19,24 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
     () => ({ searchState, dispatch }),
     [searchState, dispatch]
   );
+  const setSorting = useCallback(
+    (sorting: Sorting) => {
+      dispatch({ type: SearchActionType.sorting, payload: { sorting } });
+    },
+    [dispatch]
+  );
+  const setPage = useCallback(
+    (page: number) => {
+      dispatch({ type: SearchActionType.page, payload: { page } });
+    },
+    [dispatch]
+  );
+  const setActiveTab = useCallback(
+    (activeTab: AvailableTabs) => {
+      dispatch({ type: SearchActionType.tab, payload: { activeTab } });
+    },
+    [dispatch]
+  );
   const setIsLoading = useCallback(
     (isLoading: boolean) => {
       dispatch({ type: SearchActionType.isLoading, payload: { isLoading } });
@@ -24,19 +44,19 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
     [dispatch]
   );
   const setPokemons = useCallback(
-    (pokemons: Array<PokemonDetails>) => {
+    (pokemons: BasePokemonsData) => {
       dispatch({ type: SearchActionType.pokemons, payload: { pokemons } });
     },
     [dispatch]
   );
   const setMoves = useCallback(
-    (moves: Array<PokemonMoveDetails>) => {
+    (moves: BaseMovesData) => {
       dispatch({ type: SearchActionType.moves, payload: { moves } });
     },
     [dispatch]
   );
   const setTypes = useCallback(
-    (types: Array<PokemonTypeDetails>) => {
+    (types: BaseTypesData) => {
       dispatch({ type: SearchActionType.types, payload: { types } });
     },
     [dispatch]
@@ -49,7 +69,17 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
   );
   return (
     <SearchContext.Provider
-      value={{ searchState: state, setTypes, setMoves, setLengths, setPokemons, setIsLoading }}
+      value={{
+        searchState: state,
+        setPage,
+        setTypes,
+        setMoves,
+        setSorting,
+        setLengths,
+        setPokemons,
+        setIsLoading,
+        setActiveTab,
+      }}
     >
       {children}
     </SearchContext.Provider>

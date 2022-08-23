@@ -1,12 +1,33 @@
 import { SearchAction, SearchActionType, SearchState, Sorting } from 'types';
+import { AvailableTabs } from 'appConstants';
 
 export const initialSearchState: SearchState = {
   lengths: { moves: 0, pokemons: 0, types: 0 },
-  sorting: Sorting.alphabetical,
+  activeTab: AvailableTabs.pokemons,
+  sorting: Sorting.order,
   isLoading: false,
-  pokemons: [],
-  moves: [],
-  types: [],
+  page: 1,
+  pokemons: {
+    currentPageResults: [],
+    previous: null,
+    results: [],
+    next: null,
+    count: 0,
+  },
+  moves: {
+    currentPageResults: [],
+    previous: null,
+    results: [],
+    next: null,
+    count: 0,
+  },
+  types: {
+    currentPageResults: [],
+    previous: null,
+    results: [],
+    next: null,
+    count: 0,
+  },
 };
 
 export const searchReducer = (state: SearchState, action: SearchAction) => {
@@ -25,17 +46,27 @@ export const searchReducer = (state: SearchState, action: SearchAction) => {
     case SearchActionType.pokemons:
       return {
         ...state,
-        pokemons: payload.pokemons?.length ? payload.pokemons : [],
+        pokemons: payload.pokemons ? payload.pokemons : state.pokemons,
+      };
+    case SearchActionType.page:
+      return {
+        ...state,
+        page: payload.page || state.page,
       };
     case SearchActionType.moves:
       return {
         ...state,
-        moves: payload.moves?.length ? payload.moves : [],
+        moves: payload.moves ? payload.moves : state.moves,
       };
     case SearchActionType.types:
       return {
         ...state,
-        types: payload.types?.length ? payload.types : [],
+        types: payload.types ? payload.types : state.types,
+      };
+    case SearchActionType.tab:
+      return {
+        ...state,
+        activeTab: payload.activeTab || state.activeTab,
       };
     case SearchActionType.lengths:
       return {

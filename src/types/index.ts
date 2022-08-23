@@ -16,6 +16,8 @@ export enum SearchActionType {
   lengths = 'lengths',
   types = 'types',
   moves = 'moves',
+  page = 'page',
+  tab = 'tab',
 }
 
 export enum MessageType {
@@ -30,8 +32,9 @@ export enum AvailableCardDetails {
 }
 
 export enum Sorting {
-  ascending = 'ascending',
-  descending = 'descending',
+  type = 'type',
+  order = 'order',
+  power = 'power',
   alphabetical = 'alphabetical',
 }
 
@@ -50,11 +53,14 @@ export type FormAction = {
 };
 
 export type SearchContextProps = {
-  setPokemons: (pokemons: Array<PokemonDetails>) => void;
-  setMoves: (moves: Array<PokemonMoveDetails>) => void;
-  setTypes: (types: Array<PokemonTypeDetails>) => void;
+  setPokemons: (pokemons: BasePokemonsData) => void;
+  setActiveTab: (activeTab: AvailableTabs) => void;
+  setMoves: (moves: BaseMovesData) => void;
+  setTypes: (types: BaseTypesData) => void;
+  setSorting: (sorting: Sorting) => void;
   setIsLoading: (isLoading: boolean) => void;
   setLengths: (lengths: Lengths) => void;
+  setPage: (page: number) => void;
   searchState: SearchState;
 };
 
@@ -63,12 +69,15 @@ export enum FormActionType {
 }
 
 export type SearchState = {
-  types: Array<PokemonTypeDetails>;
-  moves: Array<PokemonMoveDetails>;
-  pokemons: Array<PokemonDetails>;
+  selectedDetails?: CardDetails;
+  pokemons: BasePokemonsData;
+  activeTab: AvailableTabs;
+  types: BaseTypesData;
+  moves: BaseMovesData;
   isLoading: boolean;
   sorting: Sorting;
   lengths: Lengths;
+  page: number;
 };
 
 export type SearchAction = {
@@ -149,21 +158,24 @@ export type PokemonDetails = {
   id: number;
 };
 
-export type PokemonData = {
+export type BasePokemonsData = {
+  currentPageResults?: Array<PokemonDetails>;
   previous: null | string;
   results: Array<Pokemon>;
   next: null | string;
   count: number;
 };
 
-export type TypesData = {
-  previous: null | string;
+export type BaseTypesData = {
+  currentPageResults?: Array<PokemonTypeDetails>;
   results: Array<PokemonType>;
+  previous: null | string;
   next: null | string;
   count: number;
 };
 
-export type MovesData = {
+export type BaseMovesData = {
+  currentPageResults?: Array<PokemonMoveDetails>;
   results: Array<PokemonMove>;
   previous: null | string;
   next: null | string;
@@ -274,8 +286,8 @@ export type Type = {
 };
 
 export type Sprites = {
-  back_default: string;
-  front_default: string;
+  back_default: string | null;
+  front_default: string | null;
 };
 
 export type CommonFieldType = {
