@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { AvailableCardDetails, PokemonDetails } from 'types';
+import { NO_IMAGE_PLACEHOLDER } from 'appConstants';
+import { useNavigate } from 'react-router-dom';
 import * as S from './styled';
 
 type Props = {
@@ -16,7 +17,7 @@ export const PokemonCard = ({ pokemon }: Props) => {
       <S.Card onClick={onClick} align="left" stretch>
         <S.ImageWrapper>
           <S.Image
-            src={pokemon.sprites.front_default}
+            src={pokemon.sprites.front_default || NO_IMAGE_PLACEHOLDER}
             data-testid="pokemon-card"
             alt={pokemon.name}
             height="85"

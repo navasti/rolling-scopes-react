@@ -3,7 +3,7 @@ import * as yup from 'yup';
 
 export enum Limits {
   pokemon = 20,
-  type = 10,
+  type = 15,
   move = 15,
 }
 
@@ -81,6 +81,9 @@ export const NO_IMAGE_PLACEHOLDER = 'https://via.placeholder.com/200';
 const BASE = 'https://pokeapi.co/api/v2';
 
 export const API = {
+  getPokemonsOffset: (page: number) => `offset=${page * Limits.pokemon - Limits.pokemon}`,
+  getMovesOffset: (page: number) => `offset=${page * Limits.move - Limits.move}`,
+  getTypesOffset: (page: number) => `offset=${page * Limits.type - Limits.type}`,
   POKEMON_LIMIT: `?limit=${Limits.pokemon}`,
   TYPE_LIMIT: `?limit=${Limits.type}`,
   MOVE_LIMIT: `?limit=${Limits.move}`,

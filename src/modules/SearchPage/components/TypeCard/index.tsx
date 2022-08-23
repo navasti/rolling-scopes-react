@@ -9,7 +9,7 @@ type Props = {
 export const TypeCard = ({ type }: Props) => {
   const navigation = useNavigate();
   const onClick = () => {
-    navigation(`details/${AvailableCardDetails.move}/${type.id}`, { replace: true });
+    navigation(`details/${AvailableCardDetails.type}/${type.id}`, { replace: true });
   };
   return (
     <S.Card onClick={onClick} data-testid="type-card" align="center">

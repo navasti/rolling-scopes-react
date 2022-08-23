@@ -1,52 +1,35 @@
 import { PokemonCard, MoveCard, TypeCard } from 'modules/SearchPage/components';
-import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
-import { useCallback, useState } from 'react';
 import { AvailableTabs } from 'appConstants';
 import { useSearchContext } from 'contexts';
-import { DetailsModal } from 'modules';
 import { Loader } from 'components';
 import * as S from './styled';
 
-type Props = {
-  activeTab: AvailableTabs;
-};
-
-export const Cards = ({ activeTab }: Props) => {
-  const [selectedPokemon, setSelectedPokemon] = useState<PokemonDetails | null>(null);
-  const [selectedType, setSelectedType] = useState<PokemonTypeDetails | null>(null);
-  const [selectedMove, setSelectedMove] = useState<PokemonMoveDetails | null>(null);
-  const [isModalOpened, setIsModalOpened] = useState(false);
-
+export const Cards = () => {
   const {
-    searchState: { pokemons, types, moves, isLoading },
+    searchState: { pokemons, types, moves, activeTab, isLoading },
   } = useSearchContext();
-
-  const handleCloseModal = useCallback(() => {
-    setSelectedPokemon(null);
-    setSelectedType(null);
-    setSelectedMove(null);
-    setIsModalOpened(false);
-  }, []);
 
   if (isLoading) return <Loader />;
 
-  const renderSwitch = (param: AvailableTabs) => {
+  const carsRenderSwitch = (param: AvailableTabs) => {
     switch (param) {
       case AvailableTabs.pokemons:
-        return !!pokemons.length ? (
-          pokemons.map((pokemon) => <PokemonCard pokemon={pokemon} key={pokemon.id} />)
+        return !!pokemons?.currentPageResults?.length ? (
+          pokemons.currentPageResults.map((pokemon) => (
+            <PokemonCard key={pokemon.id} pokemon={pokemon} />
+          ))
         ) : (
           <S.NoDataInfo>No pokemons were found</S.NoDataInfo>
         );
       case AvailableTabs.moves:
-        return !!moves.length ? (
-          moves.map((move) => <MoveCard key={move.id} move={move} />)
+        return !!moves?.currentPageResults?.length ? (
+          moves.currentPageResults.map((move) => <MoveCard key={move.id} move={move} />)
         ) : (
           <S.NoDataInfo>No moves were found</S.NoDataInfo>
         );
       case AvailableTabs.types:
-        return !!types.length ? (
-          types.map((type) => <TypeCard key={type.id} type={type} />)
+        return !!types?.currentPageResults?.length ? (
+          types.currentPageResults.map((type) => <TypeCard key={type.id} type={type} />)
         ) : (
           <S.NoDataInfo>No types were found</S.NoDataInfo>
         );
@@ -61,14 +44,7 @@ export const Cards = ({ activeTab }: Props) => {
       center={activeTab !== AvailableTabs.pokemons}
       isLoading={isLoading}
     >
-      <DetailsModal
-        handleCloseModal={handleCloseModal}
-        selectedPokemon={selectedPokemon}
-        isModalOpened={isModalOpened}
-        selectedMove={selectedMove}
-        selectedType={selectedType}
-      />
-      {renderSwitch(activeTab)}
+      {carsRenderSwitch(activeTab)}
     </S.CardsWrapper>
   );
 };

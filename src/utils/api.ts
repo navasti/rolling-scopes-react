@@ -3,12 +3,10 @@ import {
   PokemonMoveDetails,
   PokemonTypeDetails,
   PokemonDetails,
-  PokemonData,
-  PokemonMove,
-  PokemonType,
-  TypesData,
-  MovesData,
-  Pokemon,
+  CardDetails,
+  BasePokemonsData,
+  BaseTypesData,
+  BaseMovesData,
 } from 'types';
 
 export const isServerError = (status: number) => String(status).startsWith(ErrorStatuses.server);
@@ -19,49 +17,48 @@ const handleCatch = (error: unknown) => {
   error instanceof Error && console.error(error.message);
 };
 
-export const fetchByParameter = async <T>(url: string) => {
+export const genericFetch = async <T1>(url: string) => {
   try {
     const response = await fetch(url);
-    return (await response.json()) as T;
+    const data = await response.json();
+    return data ? (data as T1) : undefined;
   } catch (error) {
     handleCatch(error);
   }
 };
 
-export const fetchBase = async <T1 extends { results: Array<T2> }, T2>(url: string) => {
-  try {
-    const response = await fetch(url);
-    const data = (await response.json()) as T1;
-    return data ? (data.results as Array<T2>) : undefined;
-  } catch (error) {
-    handleCatch(error);
+const fetchAndMapResults = async <
+  T extends {
+    currentPageResults?: Array<CardDetails>;
+    results: Array<{
+      name: string;
+      url: string;
+    }>;
   }
+>(
+  url: string
+) => {
+  const data = (await genericFetch<T>(url)) || null;
+  if (data) {
+    data.currentPageResults = await Promise.all(
+      (data?.results || []).map(({ url }) =>
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => data)
+      )
+    );
+  }
+  return data;
 };
 
-export const fetchDetails = async <T1 extends { url: string }, T2>(arr: Array<T1>) => {
-  try {
-    const responses = await Promise.all(arr.map((item) => fetch(item.url)));
-    const data = await Promise.all(responses.map((res) => res.json()));
-    return data as Array<T2>;
-  } catch (error) {
-    handleCatch(error);
-  }
+export const fetchAndMap = {
+  pokemons: async (url: string) => await fetchAndMapResults<BasePokemonsData>(url),
+  types: async (url: string) => await fetchAndMapResults<BaseTypesData>(url),
+  moves: async (url: string) => await fetchAndMapResults<BaseMovesData>(url),
 };
 
-export const fetchPokemonBase = async (url: string) => await fetchBase<PokemonData, Pokemon>(url);
-export const fetchMoveBase = async (url: string) => await fetchBase<MovesData, PokemonMove>(url);
-export const fetchTypeBase = async (url: string) => await fetchBase<TypesData, PokemonType>(url);
-
-export const fetchPokemonDetails = async (pokemons: Array<Pokemon>) =>
-  await fetchDetails<Pokemon, PokemonDetails>(pokemons);
-export const fetchMoveDetails = async (moves: Array<PokemonMove>) =>
-  await fetchDetails<PokemonMove, PokemonMoveDetails>(moves);
-export const fetchTypeDetails = async (types: Array<PokemonType>) =>
-  await fetchDetails<PokemonType, PokemonTypeDetails>(types);
-
-export const fetchPokemonByParameter = async (url: string) =>
-  await fetchByParameter<PokemonDetails>(url);
-export const fetchMoveByParameter = async (url: string) =>
-  await fetchByParameter<PokemonMoveDetails>(url);
-export const fetchTypeByParameter = async (url: string) =>
-  await fetchByParameter<PokemonTypeDetails>(url);
+export const fetchByParam = {
+  pokemon: async (url: string) => await genericFetch<PokemonDetails>(url),
+  type: async (url: string) => await genericFetch<PokemonTypeDetails>(url),
+  move: async (url: string) => await genericFetch<PokemonMoveDetails>(url),
+};

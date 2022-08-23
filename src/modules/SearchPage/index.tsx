@@ -1,23 +1,11 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { API, INPUT_VALUE_KEY } from 'appConstants';
 import { SearchBar, Tabs, Cards, Pagination, SortingSelector } from './components';
+import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
+import { API, INPUT_VALUE_KEY } from 'appConstants';
+import { fetchAndMap, fetchByParam } from 'utils';
 import { useSearchContext } from 'contexts';
-import {
-  BaseMovesData,
-  BasePokemonsData,
-  BaseTypesData,
-  PokemonDetails,
-  PokemonMoveDetails,
-  PokemonTypeDetails,
-} from 'types';
 import { Layout } from 'modules';
 import * as S from './styled';
-import {
-  fetchPokemonByParameter,
-  fetchMoveByParameter,
-  fetchTypeByParameter,
-  fetchBase,
-} from 'utils';
 
 type Props = {
   componentName: string;
@@ -41,71 +29,40 @@ export const SearchPage = ({ componentName, location }: Props) => {
     [lengths]
   );
 
+  const prepareFoundByParamData = <T,>(details: T | undefined) => {
+    const result = details ? [details] : [];
+    return {
+      currentPageResults: result,
+      count: result.length,
+      previous: null,
+      results: [],
+      next: null,
+    };
+  };
+
   const fetchData = useCallback(async (allData: boolean, param?: string) => {
     if (!allData && param) {
-      const type = await fetchTypeByParameter(`${API.TYPE}/${param}`);
-      const move = await fetchMoveByParameter(`${API.MOVE}/${param}`);
-      const pokemon = await fetchPokemonByParameter(`${API.POKEMON}/${param}`);
+      const fetchedPokemon = await fetchByParam.pokemon(`${API.POKEMON}/${param}`);
+      const fetchedType = await fetchByParam.type(`${API.TYPE}/${param}`);
+      const fetchedMove = await fetchByParam.move(`${API.MOVE}/${param}`);
+      const pokemons = prepareFoundByParamData<PokemonDetails>(fetchedPokemon);
+      const moves = prepareFoundByParamData<PokemonMoveDetails>(fetchedMove);
+      const types = prepareFoundByParamData<PokemonTypeDetails>(fetchedType);
       return {
-        pokemons: {
-          currentPageResults: pokemon ? [pokemon] : [],
-          count: pokemon ? 1 : 0,
-          previous: null,
-          results: [],
-          next: null,
-        },
-        moves: {
-          currentPageResults: move ? [move] : [],
-          count: move ? 1 : 0,
-          previous: null,
-          results: [],
-          next: null,
-        },
-        types: {
-          currentPageResults: type ? [type] : [],
-          count: type ? 1 : 0,
-          previous: null,
-          results: [],
-          next: null,
-        },
+        pokemons,
+        moves,
+        types: prepareFoundByParamData<PokemonTypeDetails>(fetchedType),
         lengths: {
-          pokemons: pokemon ? 1 : 0,
-          moves: move ? 1 : 0,
-          types: type ? 1 : 0,
+          pokemons: pokemons.count,
+          moves: moves.count,
+          types: types.count,
         },
       };
     }
     if (allData) {
-      const pokemons = await fetchBase<BasePokemonsData>(API.POKEMON);
-      const moves = await fetchBase<BaseMovesData>(API.MOVE);
-      const types = await fetchBase<BaseTypesData>(API.TYPE);
-      if (pokemons) {
-        pokemons.currentPageResults = await Promise.all(
-          pokemons.results.map(({ url }) =>
-            fetch(url)
-              .then((data) => data.json())
-              .then((pokemon: PokemonDetails) => pokemon)
-          )
-        );
-      }
-      if (types) {
-        types.currentPageResults = await Promise.all(
-          types.results.map(({ url }) =>
-            fetch(url)
-              .then((data) => data.json())
-              .then((type: PokemonTypeDetails) => type)
-          )
-        );
-      }
-      if (moves) {
-        moves.currentPageResults = await Promise.all(
-          moves.results.map(({ url }) =>
-            fetch(url)
-              .then((data) => data.json())
-              .then((move: PokemonMoveDetails) => move)
-          )
-        );
-      }
+      const pokemons = await fetchAndMap.pokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`);
+      const moves = await fetchAndMap.moves(`${API.MOVE}${API.MOVE_LIMIT}`);
+      const types = await fetchAndMap.types(`${API.TYPE}${API.TYPE_LIMIT}`);
       return {
         pokemons,
         types,
@@ -120,10 +77,10 @@ export const SearchPage = ({ componentName, location }: Props) => {
   }, []);
 
   useEffect(() => {
+    const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
+    inputValue && setInputValue(inputValue);
     if (!shouldSkipFetching) {
       setIsLoading(true);
-      const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
-      inputValue && setInputValue(inputValue);
       const values =
         inputValue && inputValue.trim().length > 0
           ? fetchData(false, inputValue).then((values) => values)

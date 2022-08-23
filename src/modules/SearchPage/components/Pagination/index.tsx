@@ -1,25 +1,9 @@
+import { API, AvailableTabs, Limits } from 'appConstants';
 import { MouseEvent, useEffect, useState } from 'react';
 import { usePaginationRange, DOTS } from 'hooks';
 import { useSearchContext } from 'contexts';
+import { fetchAndMap } from 'utils';
 import * as S from './styled';
-import { BasePokemonsData, PokemonDetails } from 'types';
-import { API, AvailableTabs } from 'appConstants';
-import { fetchBase } from 'utils';
-
-const fPk = async (url: string) => {
-  console.log(url);
-  const data = (await fetchBase<BasePokemonsData>(url)) || null;
-  if (data) {
-    data.currentPageResults = await Promise.all(
-      (data?.results || []).map(({ url }) =>
-        fetch(url)
-          .then((data) => data.json())
-          .then((pokemon: PokemonDetails) => pokemon)
-      )
-    );
-  }
-  return data;
-};
 
 export const Pagination = () => {
   const [totalPageCount, setTotalPageCount] = useState(0);
@@ -36,33 +20,45 @@ export const Pagination = () => {
   });
 
   useEffect(() => {
-    console.log('useeffect');
-    activeTab === AvailableTabs.pokemons && setTotalPageCount(Math.ceil(pokemons.count / 20));
-    activeTab === AvailableTabs.moves && setTotalPageCount(Math.ceil(moves.count / 15));
-    activeTab === AvailableTabs.types && setTotalPageCount(Math.ceil(types.count / 10));
+    activeTab === AvailableTabs.pokemons &&
+      setTotalPageCount(Math.ceil(pokemons.count / Limits.pokemon));
+    activeTab === AvailableTabs.moves && setTotalPageCount(Math.ceil(moves.count / Limits.move));
+    activeTab === AvailableTabs.types && setTotalPageCount(Math.ceil(types.count / Limits.type));
   }, [activeTab, pokemons, moves, types]);
 
   const goToNextPage = async () => {
     setIsLoading(true);
     if (activeTab === AvailableTabs.pokemons && pokemons.next) {
-      const pokemonsData = await fPk(pokemons.next);
-      if (pokemonsData) {
-        setPokemons(pokemonsData);
-        setPage(page + 1);
-      }
+      const pokemonsData = await fetchAndMap.pokemons(pokemons.next);
+      pokemonsData && setPokemons(pokemonsData);
     }
+    if (activeTab === AvailableTabs.moves && moves.next) {
+      const movesData = await fetchAndMap.moves(moves.next);
+      movesData && setMoves(movesData);
+    }
+    if (activeTab === AvailableTabs.types && types.next) {
+      const typesData = await fetchAndMap.types(types.next);
+      typesData && setTypes(typesData);
+    }
+    setPage(page + 1);
     setIsLoading(false);
   };
 
   const gotToPreviousPage = async () => {
     setIsLoading(true);
     if (activeTab === AvailableTabs.pokemons && pokemons.previous) {
-      const pokemonsData = await fPk(pokemons.previous);
-      if (pokemonsData) {
-        setPokemons(pokemonsData);
-        setPage(page - 1);
-      }
+      const pokemonsData = await fetchAndMap.pokemons(pokemons.previous);
+      pokemonsData && setPokemons(pokemonsData);
     }
+    if (activeTab === AvailableTabs.moves && moves.previous) {
+      const movesData = await fetchAndMap.moves(moves.previous);
+      movesData && setMoves(movesData);
+    }
+    if (activeTab === AvailableTabs.types && types.previous) {
+      const typesData = await fetchAndMap.types(types.previous);
+      typesData && setTypes(typesData);
+    }
+    setPage(page - 1);
     setIsLoading(false);
   };
 
@@ -70,14 +66,21 @@ export const Pagination = () => {
     setIsLoading(true);
     const pageNumber = Number(event.currentTarget?.textContent);
     if (activeTab === AvailableTabs.pokemons) {
-      const pokemonsData = await fPk(
-        `${API.POKEMON}${API.POKEMON_LIMIT}&offset=${pageNumber * 20 - 20}`
-      );
-      if (pokemonsData) {
-        setPokemons(pokemonsData);
-        setPage(pageNumber);
-      }
+      const url = `${API.POKEMON}${API.POKEMON_LIMIT}&${API.getPokemonsOffset(pageNumber)}`;
+      const pokemonsData = await fetchAndMap.pokemons(url);
+      pokemonsData && setPokemons(pokemonsData);
     }
+    if (activeTab === AvailableTabs.moves) {
+      const url = `${API.MOVE}${API.MOVE_LIMIT}&${API.getMovesOffset(pageNumber)}`;
+      const movesData = await fetchAndMap.moves(url);
+      movesData && setMoves(movesData);
+    }
+    if (activeTab === AvailableTabs.types) {
+      const url = `${API.TYPE}${API.TYPE_LIMIT}&${API.getTypesOffset(pageNumber)}`;
+      const typesData = await fetchAndMap.types(url);
+      typesData && setTypes(typesData);
+    }
+    setPage(pageNumber);
     setIsLoading(false);
   };
 
