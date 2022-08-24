@@ -10,9 +10,12 @@ export type PrepareLengths<Arr extends typeof TABS> = {
 };
 
 export enum SearchActionType {
+  pokemonsSorting = 'pokemonSorting',
+  movesSorting = 'moveSorting',
+  typesSorting = 'typeSorting',
+  sortingData = 'sortingData',
   isLoading = 'isLoading',
   pokemons = 'pokemons',
-  sorting = 'sorting',
   lengths = 'lengths',
   types = 'types',
   moves = 'moves',
@@ -31,11 +34,27 @@ export enum AvailableCardDetails {
   type = 'type',
 }
 
-export enum Sorting {
-  type = 'type',
-  order = 'order',
-  power = 'power',
+export enum MovesSorting {
   alphabetical = 'alphabetical',
+  accuracy = 'accuracy',
+  power = 'power',
+  none = 'none',
+  pp = 'pp',
+}
+
+export enum TypesSorting {
+  pokemonsAmount = 'pokemons amount',
+  alphabetical = 'alphabetical',
+  movesAmount = 'moves amount',
+  none = 'none',
+}
+
+export enum PokemonsSorting {
+  baseExperience = 'base experience',
+  alphabetical = 'alphabetical',
+  height = 'height',
+  weight = 'weight',
+  none = 'none',
 }
 
 export type FormState = {
@@ -53,12 +72,15 @@ export type FormAction = {
 };
 
 export type SearchContextProps = {
+  setSortingData: (sortingData: BaseSortingData) => void;
+  setPokemonsSorting: (sorting: PokemonsSorting) => void;
+  setTypesSorting: (typesSorting: TypesSorting) => void;
   setPokemons: (pokemons: BasePokemonsData) => void;
   setActiveTab: (activeTab: AvailableTabs) => void;
+  setMovesSorting: (sorting: MovesSorting) => void;
+  setIsLoading: (isLoading: boolean) => void;
   setMoves: (moves: BaseMovesData) => void;
   setTypes: (types: BaseTypesData) => void;
-  setSorting: (sorting: Sorting) => void;
-  setIsLoading: (isLoading: boolean) => void;
   setLengths: (lengths: Lengths) => void;
   setPage: (page: number) => void;
   searchState: SearchState;
@@ -69,13 +91,16 @@ export enum FormActionType {
 }
 
 export type SearchState = {
+  sortingData: BaseSortingData | null;
   selectedDetails?: CardDetails;
+  pokemonsSorting: PokemonsSorting;
   pokemons: BasePokemonsData;
+  movesSorting: MovesSorting;
+  typesSorting: TypesSorting;
   activeTab: AvailableTabs;
   types: BaseTypesData;
   moves: BaseMovesData;
   isLoading: boolean;
-  sorting: Sorting;
   lengths: Lengths;
   page: number;
 };
@@ -156,6 +181,14 @@ export type PokemonDetails = {
   weight: number;
   name: string;
   id: number;
+};
+
+export type CardBase = BasePokemonsData | BaseTypesData | BaseMovesData;
+
+export type BaseSortingData = {
+  pokemons: BasePokemonsData;
+  moves: BaseMovesData;
+  types: BaseTypesData;
 };
 
 export type BasePokemonsData = {

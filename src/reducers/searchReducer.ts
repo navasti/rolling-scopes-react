@@ -1,33 +1,26 @@
-import { SearchAction, SearchActionType, SearchState, Sorting } from 'types';
 import { AvailableTabs } from 'appConstants';
+import { prepareBaseData } from 'utils';
+import {
+  SearchActionType,
+  PokemonsSorting,
+  SearchAction,
+  MovesSorting,
+  SearchState,
+  TypesSorting,
+} from 'types';
 
 export const initialSearchState: SearchState = {
   lengths: { moves: 0, pokemons: 0, types: 0 },
+  pokemonsSorting: PokemonsSorting.none,
   activeTab: AvailableTabs.pokemons,
-  sorting: Sorting.order,
+  movesSorting: MovesSorting.none,
+  typesSorting: TypesSorting.none,
+  pokemons: prepareBaseData(),
+  moves: prepareBaseData(),
+  types: prepareBaseData(),
+  sortingData: null,
   isLoading: false,
   page: 1,
-  pokemons: {
-    currentPageResults: [],
-    previous: null,
-    results: [],
-    next: null,
-    count: 0,
-  },
-  moves: {
-    currentPageResults: [],
-    previous: null,
-    results: [],
-    next: null,
-    count: 0,
-  },
-  types: {
-    currentPageResults: [],
-    previous: null,
-    results: [],
-    next: null,
-    count: 0,
-  },
 };
 
 export const searchReducer = (state: SearchState, action: SearchAction) => {
@@ -38,10 +31,25 @@ export const searchReducer = (state: SearchState, action: SearchAction) => {
         ...state,
         isLoading: !!payload.isLoading,
       };
-    case SearchActionType.sorting:
+    case SearchActionType.pokemonsSorting:
       return {
         ...state,
-        sorting: payload.sorting || state.sorting,
+        pokemonsSorting: payload.pokemonsSorting || state.pokemonsSorting,
+      };
+    case SearchActionType.movesSorting:
+      return {
+        ...state,
+        movesSorting: payload.movesSorting || state.movesSorting,
+      };
+    case SearchActionType.typesSorting:
+      return {
+        ...state,
+        typesSorting: payload.typesSorting || state.typesSorting,
+      };
+    case SearchActionType.sortingData:
+      return {
+        ...state,
+        sortingData: payload.sortingData || state.sortingData,
       };
     case SearchActionType.pokemons:
       return {

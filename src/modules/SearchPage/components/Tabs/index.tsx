@@ -1,12 +1,12 @@
-import { useSearchContext } from 'contexts';
 import { AvailableTabs, TABS } from 'appConstants';
+import { useSearchContext } from 'contexts';
 import * as S from './styled';
 
 export const Tabs = () => {
   const {
-    searchState: { isLoading, lengths, activeTab },
-    setActiveTab,
     setPage,
+    setActiveTab,
+    searchState: { isLoading, lengths, activeTab },
   } = useSearchContext();
 
   const onClick = (option: AvailableTabs) => {

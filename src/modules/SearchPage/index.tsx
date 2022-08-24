@@ -1,8 +1,8 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { SearchBar, Tabs, Cards, Pagination, SortingSelector } from './components';
 import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
+import { fetchAndMap, fetchByParam, prepareBaseData } from 'utils';
 import { API, INPUT_VALUE_KEY } from 'appConstants';
-import { fetchAndMap, fetchByParam } from 'utils';
 import { useSearchContext } from 'contexts';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -16,10 +16,10 @@ export const SearchPage = ({ componentName, location }: Props) => {
   const [inputValue, setInputValue] = useState('');
 
   const {
+    setTypes,
+    setMoves,
     setLengths,
     setPokemons,
-    setMoves,
-    setTypes,
     setIsLoading,
     searchState: { lengths },
   } = useSearchContext();
@@ -29,29 +29,18 @@ export const SearchPage = ({ componentName, location }: Props) => {
     [lengths]
   );
 
-  const prepareFoundByParamData = <T,>(details: T | undefined) => {
-    const result = details ? [details] : [];
-    return {
-      currentPageResults: result,
-      count: result.length,
-      previous: null,
-      results: [],
-      next: null,
-    };
-  };
-
   const fetchData = useCallback(async (allData: boolean, param?: string) => {
     if (!allData && param) {
       const fetchedPokemon = await fetchByParam.pokemon(`${API.POKEMON}/${param}`);
       const fetchedType = await fetchByParam.type(`${API.TYPE}/${param}`);
       const fetchedMove = await fetchByParam.move(`${API.MOVE}/${param}`);
-      const pokemons = prepareFoundByParamData<PokemonDetails>(fetchedPokemon);
-      const moves = prepareFoundByParamData<PokemonMoveDetails>(fetchedMove);
-      const types = prepareFoundByParamData<PokemonTypeDetails>(fetchedType);
+      const pokemons = prepareBaseData<PokemonDetails>(fetchedPokemon);
+      const moves = prepareBaseData<PokemonMoveDetails>(fetchedMove);
+      const types = prepareBaseData<PokemonTypeDetails>(fetchedType);
       return {
         pokemons,
         moves,
-        types: prepareFoundByParamData<PokemonTypeDetails>(fetchedType),
+        types: prepareBaseData<PokemonTypeDetails>(fetchedType),
         lengths: {
           pokemons: pokemons.count,
           moves: moves.count,
@@ -123,9 +112,9 @@ export const SearchPage = ({ componentName, location }: Props) => {
           onKeyDown={onKeyDown}
           onChange={onChange}
         />
+        <SortingSelector />
         <Tabs />
         <Pagination />
-        <SortingSelector />
         <Cards />
       </S.SearchPageView>
     </Layout>

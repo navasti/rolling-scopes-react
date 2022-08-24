@@ -1,14 +1,17 @@
-import { AvailableTabs } from 'appConstants';
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
 import { initialSearchState, searchReducer } from 'reducers';
+import { AvailableTabs } from 'appConstants';
 import {
   SearchContextProps,
   SearchActionType,
-  Lengths,
   BasePokemonsData,
-  BaseTypesData,
+  BaseSortingData,
+  PokemonsSorting,
   BaseMovesData,
-  Sorting,
+  BaseTypesData,
+  TypesSorting,
+  MovesSorting,
+  Lengths,
 } from 'types';
 
 export const SearchContext = createContext<SearchContextProps>({} as SearchContextProps);
@@ -19,9 +22,27 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
     () => ({ searchState, dispatch }),
     [searchState, dispatch]
   );
-  const setSorting = useCallback(
-    (sorting: Sorting) => {
-      dispatch({ type: SearchActionType.sorting, payload: { sorting } });
+  const setSortingData = useCallback(
+    (sortingData: BaseSortingData) => {
+      dispatch({ type: SearchActionType.sortingData, payload: { sortingData } });
+    },
+    [dispatch]
+  );
+  const setMovesSorting = useCallback(
+    (movesSorting: MovesSorting) => {
+      dispatch({ type: SearchActionType.movesSorting, payload: { movesSorting } });
+    },
+    [dispatch]
+  );
+  const setTypesSorting = useCallback(
+    (typesSorting: TypesSorting) => {
+      dispatch({ type: SearchActionType.typesSorting, payload: { typesSorting } });
+    },
+    [dispatch]
+  );
+  const setPokemonsSorting = useCallback(
+    (pokemonsSorting: PokemonsSorting) => {
+      dispatch({ type: SearchActionType.pokemonsSorting, payload: { pokemonsSorting } });
     },
     [dispatch]
   );
@@ -74,11 +95,14 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
         setPage,
         setTypes,
         setMoves,
-        setSorting,
         setLengths,
         setPokemons,
         setIsLoading,
         setActiveTab,
+        setSortingData,
+        setMovesSorting,
+        setTypesSorting,
+        setPokemonsSorting,
       }}
     >
       {children}

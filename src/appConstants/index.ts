@@ -2,6 +2,9 @@ import { FormFields } from 'types';
 import * as yup from 'yup';
 
 export enum Limits {
+  allPokemons = 1154,
+  allMoves = 844,
+  allTypes = 20,
   pokemon = 20,
   type = 15,
   move = 15,
@@ -84,9 +87,15 @@ export const API = {
   getPokemonsOffset: (page: number) => `offset=${page * Limits.pokemon - Limits.pokemon}`,
   getMovesOffset: (page: number) => `offset=${page * Limits.move - Limits.move}`,
   getTypesOffset: (page: number) => `offset=${page * Limits.type - Limits.type}`,
+
+  ALL_POKEMONS: `${BASE}/pokemon?limit=${Limits.allPokemons}`,
+  ALL_MOVES: `${BASE}/type?limit=${Limits.allMoves}`,
+  ALL_TYPES: `${BASE}/move?limit=${Limits.allTypes}`,
+
   POKEMON_LIMIT: `?limit=${Limits.pokemon}`,
   TYPE_LIMIT: `?limit=${Limits.type}`,
   MOVE_LIMIT: `?limit=${Limits.move}`,
+
   POKEMON: `${BASE}/pokemon`,
   TYPE: `${BASE}/type`,
   MOVE: `${BASE}/move`,
