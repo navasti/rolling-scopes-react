@@ -89,8 +89,8 @@ export const API = {
   getTypesOffset: (page: number) => `offset=${page * Limits.type - Limits.type}`,
 
   ALL_POKEMONS: `${BASE}/pokemon?limit=${Limits.allPokemons}`,
-  ALL_MOVES: `${BASE}/type?limit=${Limits.allMoves}`,
-  ALL_TYPES: `${BASE}/move?limit=${Limits.allTypes}`,
+  ALL_MOVES: `${BASE}/move?limit=${Limits.allMoves}`,
+  ALL_TYPES: `${BASE}/type?limit=${Limits.allTypes}`,
 
   POKEMON_LIMIT: `?limit=${Limits.pokemon}`,
   TYPE_LIMIT: `?limit=${Limits.type}`,

@@ -3,10 +3,13 @@ import { initialSearchState, searchReducer } from 'reducers';
 import { AvailableTabs } from 'appConstants';
 import {
   SearchContextProps,
+  PokemonTypeDetails,
+  PokemonMoveDetails,
   SearchActionType,
   BasePokemonsData,
   BaseSortingData,
   PokemonsSorting,
+  PokemonDetails,
   BaseMovesData,
   BaseTypesData,
   TypesSorting,
@@ -21,6 +24,33 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
   const { searchState: state } = useMemo(
     () => ({ searchState, dispatch }),
     [searchState, dispatch]
+  );
+  const setCurrentPokemonResults = useCallback(
+    (currentPokemonResults: Array<PokemonDetails>) => {
+      dispatch({
+        type: SearchActionType.currentPokemonResults,
+        payload: { currentPokemonResults },
+      });
+    },
+    [dispatch]
+  );
+  const setCurrentMoveResults = useCallback(
+    (currentMoveResults: Array<PokemonMoveDetails>) => {
+      dispatch({
+        type: SearchActionType.currentMoveResults,
+        payload: { currentMoveResults },
+      });
+    },
+    [dispatch]
+  );
+  const setCurrentTypeResults = useCallback(
+    (currentTypeResults: Array<PokemonTypeDetails>) => {
+      dispatch({
+        type: SearchActionType.currentTypeResults,
+        payload: { currentTypeResults },
+      });
+    },
+    [dispatch]
   );
   const setSortingData = useCallback(
     (sortingData: BaseSortingData) => {
@@ -103,6 +133,9 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
         setMovesSorting,
         setTypesSorting,
         setPokemonsSorting,
+        setCurrentTypeResults,
+        setCurrentMoveResults,
+        setCurrentPokemonResults,
       }}
     >
       {children}

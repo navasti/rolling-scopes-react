@@ -10,6 +10,9 @@ export type PrepareLengths<Arr extends typeof TABS> = {
 };
 
 export enum SearchActionType {
+  currentPokemonResults = 'currentPokemonResults',
+  currentMoveResults = 'currentMoveResults',
+  currentTypeResults = 'currentTypeResults',
   pokemonsSorting = 'pokemonSorting',
   movesSorting = 'moveSorting',
   typesSorting = 'typeSorting',
@@ -72,6 +75,9 @@ export type FormAction = {
 };
 
 export type SearchContextProps = {
+  setCurrentPokemonResults: (currentPokemonResults: Array<PokemonDetails>) => void;
+  setCurrentTypeResults: (currentTypeResults: Array<PokemonTypeDetails>) => void;
+  setCurrentMoveResults: (currentMoveResults: Array<PokemonMoveDetails>) => void;
   setSortingData: (sortingData: BaseSortingData) => void;
   setPokemonsSorting: (sorting: PokemonsSorting) => void;
   setTypesSorting: (typesSorting: TypesSorting) => void;
@@ -107,7 +113,11 @@ export type SearchState = {
 
 export type SearchAction = {
   type: SearchActionType;
-  payload: Partial<SearchState>;
+  payload: Partial<SearchState> & {
+    currentPokemonResults?: Array<PokemonDetails>;
+    currentMoveResults?: Array<PokemonMoveDetails>;
+    currentTypeResults?: Array<PokemonTypeDetails>;
+  };
 };
 
 export type MessageProps = {
@@ -185,10 +195,32 @@ export type PokemonDetails = {
 
 export type CardBase = BasePokemonsData | BaseTypesData | BaseMovesData;
 
+export type BaseSearchMovesData = {
+  currentPageResults?: Array<PokemonMoveDetails>;
+  results: Array<PokemonMoveDetails>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+export type BaseSearchPokemonsData = {
+  currentPageResults?: Array<PokemonDetails>;
+  results: Array<PokemonDetails>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+export type BaseSearchTypesData = {
+  currentPageResults?: Array<PokemonTypeDetails>;
+  results: Array<PokemonTypeDetails>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+
 export type BaseSortingData = {
-  pokemons: BasePokemonsData;
-  moves: BaseMovesData;
-  types: BaseTypesData;
+  pokemons: BaseSearchPokemonsData;
+  moves: BaseSearchMovesData;
+  types: BaseSearchTypesData;
 };
 
 export type BasePokemonsData = {

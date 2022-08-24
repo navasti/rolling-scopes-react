@@ -8,7 +8,6 @@ export const ReturnButton = styled.button`
   background-color: #222;
   border: 2px solid #222;
   border-radius: 5px;
-  padding: 5px 10px;
   cursor: pointer;
   margin: 0 5px;
   &:hover {
@@ -17,6 +16,8 @@ export const ReturnButton = styled.button`
   }
   a {
     text-decoration: none;
+    display: inline-block;
+    padding: 5px 10px;
     color: #ddd;
   }
 `;

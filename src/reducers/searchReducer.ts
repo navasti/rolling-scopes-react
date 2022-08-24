@@ -31,6 +31,51 @@ export const searchReducer = (state: SearchState, action: SearchAction) => {
         ...state,
         isLoading: !!payload.isLoading,
       };
+    case SearchActionType.currentPokemonResults:
+      const pokemons = state.sortingData?.pokemons && {
+        ...state.sortingData?.pokemons,
+        currentPageResults: payload.currentPokemonResults,
+      };
+      return {
+        ...state,
+        sortingData:
+          state.sortingData && pokemons
+            ? {
+                ...state.sortingData,
+                pokemons,
+              }
+            : state.sortingData,
+      };
+    case SearchActionType.currentMoveResults:
+      const moves = state.sortingData?.moves && {
+        ...state.sortingData?.moves,
+        currentPageResults: payload.currentMoveResults,
+      };
+      return {
+        ...state,
+        sortingData:
+          state.sortingData && moves
+            ? {
+                ...state.sortingData,
+                moves,
+              }
+            : state.sortingData,
+      };
+    case SearchActionType.currentTypeResults:
+      const types = state.sortingData?.types && {
+        ...state.sortingData?.types,
+        currentPageResults: payload.currentTypeResults,
+      };
+      return {
+        ...state,
+        sortingData:
+          state.sortingData && types
+            ? {
+                ...state.sortingData,
+                types,
+              }
+            : state.sortingData,
+      };
     case SearchActionType.pokemonsSorting:
       return {
         ...state,

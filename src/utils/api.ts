@@ -1,12 +1,15 @@
 import { ErrorStatuses } from 'appConstants';
 import {
+  BaseSearchPokemonsData,
+  BaseSearchTypesData,
+  BaseSearchMovesData,
   PokemonMoveDetails,
   PokemonTypeDetails,
-  PokemonDetails,
-  CardDetails,
   BasePokemonsData,
+  PokemonDetails,
   BaseTypesData,
   BaseMovesData,
+  CardDetails,
 } from 'types';
 
 export const isServerError = (status: number) => String(status).startsWith(ErrorStatuses.server);
@@ -27,6 +30,21 @@ export const genericFetch = async <T1>(url: string) => {
   }
 };
 
+export const mapResults = async (
+  results: Array<{
+    name: string;
+    url: string;
+  }>
+) => {
+  return await Promise.all(
+    results.map(({ url }) =>
+      fetch(url)
+        .then((res) => res.json())
+        .then((data) => data)
+    )
+  );
+};
+
 const fetchAndMapResults = async <
   T extends {
     currentPageResults?: Array<CardDetails>;
@@ -39,16 +57,44 @@ const fetchAndMapResults = async <
   url: string
 ) => {
   const data = (await genericFetch<T>(url)) || null;
-  if (data) {
-    data.currentPageResults = await Promise.all(
-      (data?.results || []).map(({ url }) =>
-        fetch(url)
-          .then((res) => res.json())
-          .then((data) => data)
-      )
-    );
-  }
+  if (data) data.currentPageResults = await mapResults(data?.results || []);
   return data;
+};
+
+export const fetchAndMapSortingData = {
+  pokemons: async (url: string) => {
+    const data = await genericFetch<BasePokemonsData>(url);
+    const mapped: PokemonDetails[] = await mapResults(data?.results || []);
+    if (data) {
+      const sortingData: BaseSearchPokemonsData = structuredClone(data);
+      sortingData.results = mapped;
+      return sortingData;
+    }
+  },
+  types: async (url: string) => {
+    const data = await genericFetch<BaseTypesData>(url);
+    const mapped: PokemonTypeDetails[] = await mapResults(data?.results || []);
+    if (data) {
+      const sortingData: BaseSearchTypesData = structuredClone(data);
+      sortingData.results = mapped;
+      return sortingData;
+    }
+  },
+  moves: async (url: string) => {
+    const data = await genericFetch<BaseMovesData>(url);
+    const mapped: PokemonMoveDetails[] = await mapResults(data?.results || []);
+    if (data) {
+      const sortingData: BaseSearchMovesData = structuredClone(data);
+      sortingData.results = mapped;
+      return sortingData;
+    }
+  },
+};
+
+export const fetchBase = {
+  pokemons: async (url: string) => await genericFetch<BasePokemonsData>(url),
+  types: async (url: string) => await genericFetch<BaseTypesData>(url),
+  moves: async (url: string) => await genericFetch<BaseMovesData>(url),
 };
 
 export const fetchAndMap = {

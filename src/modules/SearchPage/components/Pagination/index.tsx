@@ -1,16 +1,28 @@
+import { usePaginationRange, DOTS, useMemoizedData } from 'hooks';
 import { API, AvailableTabs, Limits } from 'appConstants';
 import { MouseEvent, useEffect, useState } from 'react';
-import { usePaginationRange, DOTS } from 'hooks';
 import { useSearchContext } from 'contexts';
+import { BaseSortingData } from 'types';
 import { fetchAndMap } from 'utils';
 import * as S from './styled';
 
 export const Pagination = () => {
   const [totalPageCount, setTotalPageCount] = useState(0);
 
-  const { setPage, setPokemons, setIsLoading, setMoves, setTypes, searchState } =
-    useSearchContext();
-  const { activeTab, isLoading, lengths, moves, page, pokemons, sorting, types } = searchState;
+  const {
+    setPage,
+    setMoves,
+    setTypes,
+    setPokemons,
+    searchState,
+    setIsLoading,
+    setCurrentTypeResults,
+    setCurrentMoveResults,
+    setCurrentPokemonResults,
+  } = useSearchContext();
+  const { activeTab, moves, page, pokemons, types, sortingData } = searchState;
+
+  const { movesData, pokemonData, typesData } = useMemoizedData();
 
   const paginationRange = usePaginationRange({
     currentPage: page,
@@ -21,24 +33,47 @@ export const Pagination = () => {
 
   useEffect(() => {
     activeTab === AvailableTabs.pokemons &&
-      setTotalPageCount(Math.ceil(pokemons.count / Limits.pokemon));
-    activeTab === AvailableTabs.moves && setTotalPageCount(Math.ceil(moves.count / Limits.move));
-    activeTab === AvailableTabs.types && setTotalPageCount(Math.ceil(types.count / Limits.type));
-  }, [activeTab, pokemons, moves, types]);
+      setTotalPageCount(Math.ceil(pokemonData.count / Limits.pokemon));
+    activeTab === AvailableTabs.moves &&
+      setTotalPageCount(Math.ceil(movesData.count / Limits.move));
+    activeTab === AvailableTabs.types &&
+      setTotalPageCount(Math.ceil(typesData.count / Limits.type));
+  }, [activeTab, pokemonData, movesData, typesData]);
 
   const goToNextPage = async () => {
     setIsLoading(true);
-    if (activeTab === AvailableTabs.pokemons && pokemons.next) {
-      const pokemonsData = await fetchAndMap.pokemons(pokemons.next);
-      pokemonsData && setPokemons(pokemonsData);
+    if (activeTab === AvailableTabs.pokemons) {
+      if (!sortingData) {
+        const pokemonsData = pokemons?.next && (await fetchAndMap.pokemons(pokemons.next));
+        pokemonsData && setPokemons(pokemonsData);
+      } else {
+        const copy: BaseSortingData = structuredClone(sortingData);
+        const index = page * Limits.pokemon;
+        const sliced = copy.pokemons.results.slice(index, index * 2);
+        setCurrentPokemonResults(sliced);
+      }
     }
-    if (activeTab === AvailableTabs.moves && moves.next) {
-      const movesData = await fetchAndMap.moves(moves.next);
-      movesData && setMoves(movesData);
+    if (activeTab === AvailableTabs.moves) {
+      if (!sortingData) {
+        const movesData = moves?.next && (await fetchAndMap.moves(moves.next));
+        movesData && setMoves(movesData);
+      } else {
+        const copy: BaseSortingData = structuredClone(sortingData);
+        const index = page * Limits.move;
+        const sliced = copy.moves.results.slice(index, index * 2);
+        setCurrentMoveResults(sliced);
+      }
     }
-    if (activeTab === AvailableTabs.types && types.next) {
-      const typesData = await fetchAndMap.types(types.next);
-      typesData && setTypes(typesData);
+    if (activeTab === AvailableTabs.types) {
+      if (!sortingData) {
+        const typesData = types?.next && (await fetchAndMap.types(types.next));
+        typesData && setTypes(typesData);
+      } else {
+        const copy: BaseSortingData = structuredClone(sortingData);
+        const index = page * Limits.type;
+        const sliced = copy.types.results.slice(index, index * 2);
+        setCurrentTypeResults(sliced);
+      }
     }
     setPage(page + 1);
     setIsLoading(false);

@@ -1,15 +1,8 @@
 import { useSearchContext } from 'contexts';
 import { Link } from 'react-router-dom';
+import { fetchAndMap } from 'utils';
 import { API } from 'appConstants';
 import * as S from './styled';
-import {
-  fetchPokemonDetails,
-  fetchMoveDetails,
-  fetchPokemonBase,
-  fetchTypeDetails,
-  fetchTypeBase,
-  fetchMoveBase,
-} from 'utils';
 
 type Props = {
   children: JSX.Element;
@@ -22,19 +15,16 @@ export const NoDataMessage = ({ children, fetchButton, returnButton }: Props) =>
 
   const fetchAllData = async () => {
     setIsLoading(true);
-    const pokemonBase = (await fetchPokemonBase(`${API.POKEMON}${API.POKEMON_LIMIT}`)) || [];
-    const moveBase = (await fetchMoveBase(`${API.MOVE}${API.MOVE_LIMIT}`)) || [];
-    const typeBase = (await fetchTypeBase(`${API.TYPE}${API.TYPE_LIMIT}`)) || [];
-    const pokemons = [...((await fetchPokemonDetails(pokemonBase)) || [])];
-    const types = [...((await fetchTypeDetails(typeBase)) || [])];
-    const moves = [...((await fetchMoveDetails(moveBase)) || [])];
-    setPokemons(pokemons);
-    setMoves(moves);
-    setTypes(types);
+    const pokemons = await fetchAndMap.pokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`);
+    const moves = await fetchAndMap.moves(`${API.MOVE}${API.MOVE_LIMIT}`);
+    const types = await fetchAndMap.types(`${API.TYPE}${API.TYPE_LIMIT}`);
+    pokemons && setPokemons(pokemons);
+    moves && setMoves(moves);
+    types && setTypes(types);
     setLengths({
-      pokemons: pokemons.length,
-      types: types.length,
-      moves: moves.length,
+      pokemons: pokemons?.count || 0,
+      moves: moves?.count || 0,
+      types: types?.count || 0,
     });
     setIsLoading(false);
   };

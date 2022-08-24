@@ -1,16 +1,10 @@
 import { MoveCardDetails, NoDataMessage, PokemonCardDetails, TypeCardDetails } from './components';
 import { useParams } from 'react-router-dom';
+import { AvailableCardDetails } from 'types';
 import { useEffect, useState } from 'react';
-import { useSearchContext } from 'contexts';
+import { useMemoizedData } from 'hooks';
 import { Layout } from 'modules';
 import * as S from './styled';
-import {
-  AvailableCardDetails,
-  PokemonTypeDetails,
-  PokemonMoveDetails,
-  PokemonDetails,
-  CardDetails,
-} from 'types';
 
 type Props = {
   componentName: string;
@@ -18,75 +12,51 @@ type Props = {
 };
 
 export const Details = ({ componentName, location }: Props) => {
-  const [searching, setSearching] = useState(true);
-  const [details, setDetails] = useState<null | {
-    data: CardDetails;
-    type: AvailableCardDetails;
-  }>(null);
+  const [dataType, setDataType] = useState<AvailableCardDetails>();
 
-  const { searchState } = useSearchContext();
   const { id, cardType } = useParams();
+  const { pokemonMatchingId, moveMatchingId, typeMatchingId, isDataFound } = useMemoizedData(
+    Number(id)
+  );
 
   useEffect(() => {
-    if (id && cardType === AvailableCardDetails.pokemon) {
-      const { currentPageResults } = searchState.pokemons;
-      const data = currentPageResults?.find((pokemon) => pokemon.id === Number(id));
-      data && setDetails({ data, type: AvailableCardDetails.pokemon });
-    }
-    if (id && cardType === AvailableCardDetails.move) {
-      const { currentPageResults } = searchState.moves;
-      const data = currentPageResults?.find((move) => move.id === Number(id));
-      data && setDetails({ data, type: AvailableCardDetails.move });
-    }
-    if (id && cardType === AvailableCardDetails.type) {
-      const { currentPageResults } = searchState.types;
-      const data = currentPageResults?.find((type) => type.id === Number(id));
-      data && setDetails({ data, type: AvailableCardDetails.type });
-    }
-
-    setSearching(false);
-  }, [id, cardType, searchState]);
-
-  const renderCardDetails = () => {
-    if (details?.type === AvailableCardDetails.pokemon) {
-      return <PokemonCardDetails pokemon={details.data as PokemonDetails} />;
-    }
-    if (details?.type === AvailableCardDetails.move) {
-      return <MoveCardDetails move={details.data as PokemonMoveDetails} />;
-    }
-    if (details?.type === AvailableCardDetails.type) {
-      return <TypeCardDetails type={details.data as PokemonTypeDetails} />;
-    }
-  };
-
-  if (searching) {
-    return (
-      <Layout location={location} componentName={componentName}>
-        <S.DetailsView></S.DetailsView>
-      </Layout>
-    );
-  }
+    const { move, pokemon, type } = AvailableCardDetails;
+    if (id && cardType === pokemon) setDataType(pokemon);
+    if (id && cardType === move) setDataType(move);
+    if (id && cardType === type) setDataType(type);
+  }, [cardType, id]);
 
   return (
     <Layout location={location} componentName={componentName}>
       <S.DetailsView>
-        {(!id || !cardType) && (
-          <NoDataMessage fetchButton={false} returnButton>
-            <S.DetailsInformation>
-              No enugh information provided. Get back to the search page in order to fetch data and
-              select specific pokemon to see its details.
-            </S.DetailsInformation>
-          </NoDataMessage>
+        {isDataFound && (
+          <>
+            {dataType === AvailableCardDetails.type && typeMatchingId && (
+              <TypeCardDetails type={typeMatchingId} />
+            )}
+            {dataType === AvailableCardDetails.pokemon && pokemonMatchingId && (
+              <PokemonCardDetails pokemon={pokemonMatchingId} />
+            )}
+            {dataType === AvailableCardDetails.move && moveMatchingId && (
+              <MoveCardDetails move={moveMatchingId} />
+            )}
+          </>
         )}
-        {details ? (
-          renderCardDetails()
-        ) : (
-          <NoDataMessage fetchButton returnButton>
-            <S.DetailsInformation>
-              Could not found detailed data for {cardType} with id {id}
-            </S.DetailsInformation>
-          </NoDataMessage>
-        )}
+
+        <NoDataMessage fetchButton={!!(dataType && !isDataFound)} returnButton>
+          <S.DetailsInformation>
+            {dataType && !isDataFound ? (
+              <>
+                Could not found detailed data for {cardType} with id {id}
+              </>
+            ) : (
+              <>
+                No enugh information provided. Get back to the search page in order to fetch data
+                and select specific pokemon to see its details.
+              </>
+            )}
+          </S.DetailsInformation>
+        </NoDataMessage>
       </S.DetailsView>
     </Layout>
   );

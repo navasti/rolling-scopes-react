@@ -17,6 +17,7 @@ export const CommonMessage = styled.p`
 export const Card = styled.div<{ stretch?: boolean; align: 'left' | 'center' }>`
   width: ${({ stretch }) => (stretch ? '' : '130px')};
   text-align: ${({ align }) => align};
+  justify-content: center;
   border: 2px solid #aaa;
   background-color: #fff;
   flex-direction: column;
