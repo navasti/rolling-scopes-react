@@ -7,6 +7,7 @@ type Props = {
 export const TabsWrapper = styled.div`
   background-color: #3c1361;
   justify-content: center;
+  align-self: center;
   border-radius: 10px;
   align-items: center;
   display: flex;

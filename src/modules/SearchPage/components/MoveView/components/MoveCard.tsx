@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { AvailableCardDetails, PokemonMoveDetails } from 'types';
-import * as S from './styled';
+import { useNavigate } from 'react-router-dom';
+import * as S from '../styled';
 
 type Props = {
   move: PokemonMoveDetails;

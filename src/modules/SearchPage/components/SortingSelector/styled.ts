@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const SelectorWrapper = styled.div`
   margin-bottom: 10px;
   align-items: center;
+  align-self: center;
   display: flex;
 `;
 

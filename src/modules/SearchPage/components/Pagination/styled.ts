@@ -5,6 +5,7 @@ type PaginationButtonProps = {
 };
 
 export const Pagination = styled.div`
+  align-self: center;
   margin: 15px 0;
 `;
 

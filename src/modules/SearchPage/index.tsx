@@ -1,9 +1,8 @@
-import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { SearchBar, Tabs, Cards, Pagination, SortingSelector } from './components';
-import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
-import { fetchAndMap, fetchByParam, prepareBaseData } from 'utils';
-import { API, INPUT_VALUE_KEY } from 'appConstants';
-import { useSearchContext } from 'contexts';
+import { useMoveContext, usePokemonContext, useSearchContext, useTypeContext } from 'contexts';
+import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
+import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';
 
@@ -16,85 +15,39 @@ export const SearchPage = ({ componentName, location }: Props) => {
   const [inputValue, setInputValue] = useState('');
 
   const {
-    setTypes,
-    setMoves,
-    setLengths,
-    setPokemons,
-    setIsLoading,
-    searchState: { lengths },
+    setSearchingResults,
+    searchState: { activeTab, isLoading },
   } = useSearchContext();
 
-  const shouldSkipFetching = useMemo(
-    () => Object.values(lengths).some((value) => value > 0),
-    [lengths]
-  );
+  const {
+    pokemonState: { allDataResults: allPokemons },
+  } = usePokemonContext();
 
-  const fetchData = useCallback(async (allData: boolean, param?: string) => {
-    if (!allData && param) {
-      const fetchedPokemon = await fetchByParam.pokemon(`${API.POKEMON}/${param}`);
-      const fetchedType = await fetchByParam.type(`${API.TYPE}/${param}`);
-      const fetchedMove = await fetchByParam.move(`${API.MOVE}/${param}`);
-      const pokemons = prepareBaseData<PokemonDetails>(fetchedPokemon);
-      const moves = prepareBaseData<PokemonMoveDetails>(fetchedMove);
-      const types = prepareBaseData<PokemonTypeDetails>(fetchedType);
-      return {
-        pokemons,
-        moves,
-        types: prepareBaseData<PokemonTypeDetails>(fetchedType),
-        lengths: {
-          pokemons: pokemons.count,
-          moves: moves.count,
-          types: types.count,
-        },
-      };
-    }
-    if (allData) {
-      const pokemons = await fetchAndMap.pokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`);
-      const moves = await fetchAndMap.moves(`${API.MOVE}${API.MOVE_LIMIT}`);
-      const types = await fetchAndMap.types(`${API.TYPE}${API.TYPE_LIMIT}`);
-      return {
-        pokemons,
-        types,
-        moves,
-        lengths: {
-          pokemons: pokemons?.count || 0,
-          moves: moves?.count || 0,
-          types: types?.count || 0,
-        },
-      };
-    }
-  }, []);
+  const {
+    typeState: { allDataResults: allTypes },
+  } = useTypeContext();
 
-  useEffect(() => {
-    const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
-    inputValue && setInputValue(inputValue);
-    if (!shouldSkipFetching) {
-      setIsLoading(true);
-      const values =
-        inputValue && inputValue.trim().length > 0
-          ? fetchData(false, inputValue).then((values) => values)
-          : fetchData(true).then((values) => values);
-      values.then((value) => {
-        value?.lengths && setLengths(value.lengths);
-        value?.pokemons && setPokemons(value.pokemons);
-        value?.moves && setMoves(value.moves);
-        value?.types && setTypes(value.types);
-        setIsLoading(false);
-      });
-    }
-  }, [fetchData, setPokemons, setTypes, setMoves, setLengths, setIsLoading, shouldSkipFetching]);
+  const {
+    moveState: { allDataResults: allMoves },
+  } = useMoveContext();
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
-      setIsLoading(true);
-      const values = !!inputValue.trim().length
-        ? await fetchData(false, inputValue)
-        : await fetchData(true);
-      values?.lengths && setLengths(values.lengths);
-      values?.moves && setMoves(values.moves);
-      values?.pokemons && setPokemons(values.pokemons);
-      values?.types && setTypes(values.types);
-      setIsLoading(false);
+      if (!!inputValue.trim().length) {
+        const moves = allMoves.filter((move) => move.name.includes(inputValue));
+        const types = allTypes.filter((type) => type.name.includes(inputValue));
+        const pokemons = allPokemons.filter((pokemon) => pokemon.name.includes(inputValue));
+        setSearchingResults({
+          moves,
+          types,
+          pokemons,
+          lengths: {
+            pokemons: pokemons.length,
+            moves: moves.length,
+            types: types.length,
+          },
+        });
+      } else setSearchingResults(null);
     }
   };
 
@@ -108,14 +61,21 @@ export const SearchPage = ({ componentName, location }: Props) => {
       <S.SearchPageView>
         <SearchBar
           label="Local Storage Input"
+          inputDisabled={isLoading}
           inputValue={inputValue}
           onKeyDown={onKeyDown}
           onChange={onChange}
         />
-        <SortingSelector />
         <Tabs />
-        <Pagination />
-        <Cards />
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {activeTab === AvailableTabs.pokemons && <PokemonView />}
+            {activeTab === AvailableTabs.moves && <MoveView />}
+            {activeTab === AvailableTabs.types && <TypeView />}
+          </>
+        )}
       </S.SearchPageView>
     </Layout>
   );

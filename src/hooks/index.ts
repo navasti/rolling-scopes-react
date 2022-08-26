@@ -1,2 +1,3 @@
 export * from './usePaginationRange';
-export * from './useMemoizedData';
+export * from './useMoveData';
+export * from './useTypeData';

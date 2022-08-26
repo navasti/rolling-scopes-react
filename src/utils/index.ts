@@ -1,12 +1,4 @@
 import { DateTime } from 'luxon';
-import {
-  PokemonMoveDetails,
-  PokemonTypeDetails,
-  PokemonsSorting,
-  PokemonDetails,
-  MovesSorting,
-  TypesSorting,
-} from 'types';
 export * from './api';
 
 export const getTodayDate = (): string => {
@@ -47,36 +39,4 @@ export const prepareBaseSortingData = <T>(details?: T | undefined) => {
     count: result.length,
     results: [],
   };
-};
-
-export const handlePokemonSorting = (sort: string, pokemons: Array<PokemonDetails>) => {
-  return pokemons.sort((a, b) => {
-    if (sort === PokemonsSorting.baseExperience) return b.base_experience - a.base_experience;
-    if (sort === PokemonsSorting.alphabetical) return a.name.localeCompare(b.name);
-    if (sort === PokemonsSorting.height) return b.height - a.height;
-    if (sort === PokemonsSorting.weight) return b.weight - a.weight;
-    if (sort === PokemonsSorting.none) return a.id - b.id;
-    return 0;
-  });
-};
-
-export const handleMovesSorting = (sort: string, moves: Array<PokemonMoveDetails>) => {
-  return moves.sort((a, b) => {
-    if (sort === MovesSorting.alphabetical) return a.name.localeCompare(b.name);
-    if (sort === MovesSorting.accuracy) return b.accuracy - a.accuracy;
-    if (sort === MovesSorting.power) return b.power - a.power;
-    if (sort === MovesSorting.pp) return b.pp - a.pp;
-    if (sort === MovesSorting.none) return a.id - b.id;
-    return 0;
-  });
-};
-
-export const handleTypesSorting = (sort: string, types: Array<PokemonTypeDetails>) => {
-  return types.sort((a, b) => {
-    if (sort === TypesSorting.pokemonsAmount) return b.pokemon.length - a.pokemon.length;
-    if (sort === TypesSorting.movesAmount) return b.moves.length - a.moves.length;
-    if (sort === TypesSorting.alphabetical) return a.name.localeCompare(b.name);
-    if (sort === TypesSorting.none) return a.id - b.id;
-    return 0;
-  });
 };

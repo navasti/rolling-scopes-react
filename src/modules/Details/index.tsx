@@ -1,53 +1,91 @@
-import { MoveCardDetails, NoDataMessage, PokemonCardDetails, TypeCardDetails } from './components';
-import { useParams } from 'react-router-dom';
-import { AvailableCardDetails } from 'types';
+import { MoveCardDetails, PokemonCardDetails, TypeCardDetails } from './components';
+import { useMoveContext, usePokemonContext, useTypeContext } from 'contexts';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useMemoizedData } from 'hooks';
 import { Layout } from 'modules';
 import * as S from './styled';
+import {
+  AvailableCardDetails,
+  PokemonMoveDetails,
+  PokemonTypeDetails,
+  PokemonDetails,
+} from 'types';
 
 type Props = {
   componentName: string;
   location: string;
 };
 
-export const Details = ({ componentName, location }: Props) => {
-  const [dataType, setDataType] = useState<AvailableCardDetails>();
+type MatchedPokemon = {
+  resourceType: AvailableCardDetails.pokemon;
+  data: PokemonDetails;
+};
 
-  const { id, cardType } = useParams();
-  const { pokemonMatchingId, moveMatchingId, typeMatchingId, isDataFound } = useMemoizedData(
-    Number(id)
-  );
+type MatchedMove = {
+  resourceType: AvailableCardDetails.move;
+  data: PokemonMoveDetails;
+};
+
+type MatchedType = {
+  resourceType: AvailableCardDetails.type;
+  data: PokemonTypeDetails;
+};
+
+type MatchedData = MatchedPokemon | MatchedMove | MatchedType;
+
+export const Details = ({ componentName, location }: Props) => {
+  const [matchedData, setMatchedData] = useState<MatchedData>();
+
+  const { id, resourceType } = useParams();
+
+  const {
+    moveState: { allDataResults: allMoves },
+  } = useMoveContext();
+
+  const {
+    pokemonState: { allDataResults: allPokemons },
+  } = usePokemonContext();
+
+  const {
+    typeState: { allDataResults: allTypes },
+  } = useTypeContext();
 
   useEffect(() => {
     const { move, pokemon, type } = AvailableCardDetails;
-    if (id && cardType === pokemon) setDataType(pokemon);
-    if (id && cardType === move) setDataType(move);
-    if (id && cardType === type) setDataType(type);
-  }, [cardType, id]);
+    if (id && resourceType === pokemon) {
+      const found = allPokemons.find((pokemon) => pokemon.id === Number(id));
+      found && setMatchedData({ resourceType, data: found });
+    }
+    if (id && resourceType === move) {
+      const found = allMoves.find((move) => move.id === Number(id));
+      found && setMatchedData({ resourceType, data: found });
+    }
+    if (id && resourceType === type) {
+      const found = allTypes.find((type) => type.id === Number(id));
+      found && setMatchedData({ resourceType, data: found });
+    }
+  }, [resourceType, id, allPokemons, allMoves, allTypes]);
 
   return (
     <Layout location={location} componentName={componentName}>
       <S.DetailsView>
-        {isDataFound && (
+        {matchedData ? (
           <>
-            {dataType === AvailableCardDetails.type && typeMatchingId && (
-              <TypeCardDetails type={typeMatchingId} />
+            {matchedData.resourceType === AvailableCardDetails.pokemon && (
+              <PokemonCardDetails pokemon={matchedData.data} />
             )}
-            {dataType === AvailableCardDetails.pokemon && pokemonMatchingId && (
-              <PokemonCardDetails pokemon={pokemonMatchingId} />
+            {matchedData.resourceType === AvailableCardDetails.move && (
+              <MoveCardDetails move={matchedData.data} />
             )}
-            {dataType === AvailableCardDetails.move && moveMatchingId && (
-              <MoveCardDetails move={moveMatchingId} />
+            {matchedData.resourceType === AvailableCardDetails.type && (
+              <TypeCardDetails type={matchedData.data} />
             )}
           </>
-        )}
-
-        <NoDataMessage fetchButton={!!(dataType && !isDataFound)} returnButton>
+        ) : (
           <S.DetailsInformation>
-            {dataType && !isDataFound ? (
+            {id && resourceType ? (
               <>
-                Could not found detailed data for {cardType} with id {id}
+                Could not found detailed data for {resourceType} with id {id}
               </>
             ) : (
               <>
@@ -56,7 +94,10 @@ export const Details = ({ componentName, location }: Props) => {
               </>
             )}
           </S.DetailsInformation>
-        </NoDataMessage>
+        )}
+        <S.ReturnButton>
+          <Link to="/">Go to search page</Link>
+        </S.ReturnButton>
       </S.DetailsView>
     </Layout>
   );

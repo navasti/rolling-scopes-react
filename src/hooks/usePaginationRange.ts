@@ -3,17 +3,17 @@ import { range } from 'utils';
 export const DOTS = '...';
 
 type Props = {
-  totalPageCount: number;
-  buttonConst: number;
-  siblingCount: number;
   currentPage: number;
+  totalPageCount: number;
+  siblingCount?: number;
+  buttonConst?: number;
 };
 
 export const usePaginationRange = ({
   totalPageCount,
-  buttonConst,
-  siblingCount,
   currentPage,
+  siblingCount = 3,
+  buttonConst = 3,
 }: Props) => {
   const paginationRange = useMemo(() => {
     const totalPageNumbers = buttonConst + 2 + siblingCount;
@@ -34,11 +34,13 @@ export const usePaginationRange = ({
       const leftRange = range(1, leftItemCount);
       return [...leftRange, DOTS, totalPageCount];
     }
+
     if (shouldShowLeftDots && !shouldShowRightDots) {
       const rightItemCount = 3 + 2 * siblingCount;
       const rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount);
       return [firstPageIndex, DOTS, ...rightRange];
     }
+
     if (shouldShowLeftDots && shouldShowRightDots) {
       const middleRange = range(leftSiblingIndex, rightSiblingIndex);
       return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];

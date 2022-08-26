@@ -4,14 +4,13 @@ import * as S from './styled';
 
 export const Tabs = () => {
   const {
-    setPage,
     setActiveTab,
     searchState: { isLoading, lengths, activeTab },
   } = useSearchContext();
 
   const onClick = (option: AvailableTabs) => {
     setActiveTab(option);
-    setPage(1);
+    // setPage(1);
   };
 
   return (

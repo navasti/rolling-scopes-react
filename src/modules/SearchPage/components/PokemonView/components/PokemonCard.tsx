@@ -1,7 +1,7 @@
 import { AvailableCardDetails, PokemonDetails } from 'types';
 import { NO_IMAGE_PLACEHOLDER } from 'appConstants';
 import { useNavigate } from 'react-router-dom';
-import * as S from './styled';
+import * as S from '../styled';
 
 type Props = {
   pokemon: PokemonDetails;
