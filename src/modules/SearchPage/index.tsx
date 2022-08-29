@@ -1,7 +1,7 @@
 import { useMoveContext, usePokemonContext, useSearchContext, useTypeContext } from 'contexts';
 import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
-import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { AvailableTabs, INPUT_VALUE_KEY, Limits } from 'appConstants';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -14,40 +14,59 @@ type Props = {
 export const SearchPage = ({ componentName, location }: Props) => {
   const [inputValue, setInputValue] = useState('');
 
+  useEffect(() => {
+    const value = window.localStorage.getItem(INPUT_VALUE_KEY);
+    value && setInputValue(value);
+  }, []);
+
   const {
-    setSearchingResults,
     searchState: { activeTab, isLoading },
   } = useSearchContext();
 
   const {
+    setCurrentPage: setPokemonPage,
+    setSearchResults: setFoundPokemons,
+    setCurrentPageResults: setCurrentPokemons,
     pokemonState: { allDataResults: allPokemons },
   } = usePokemonContext();
 
   const {
+    setCurrentPage: setTypePage,
+    setSearchResults: setFoundTypes,
+    setCurrentPageResults: setCurrentTypes,
     typeState: { allDataResults: allTypes },
   } = useTypeContext();
 
   const {
+    setCurrentPage: setMovePage,
+    setSearchResults: setFoundMoves,
+    setCurrentPageResults: setCurrentMoves,
     moveState: { allDataResults: allMoves },
   } = useMoveContext();
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
       if (!!inputValue.trim().length) {
-        const moves = allMoves.filter((move) => move.name.includes(inputValue));
-        const types = allTypes.filter((type) => type.name.includes(inputValue));
-        const pokemons = allPokemons.filter((pokemon) => pokemon.name.includes(inputValue));
-        setSearchingResults({
-          moves,
-          types,
-          pokemons,
-          lengths: {
-            pokemons: pokemons.length,
-            moves: moves.length,
-            types: types.length,
-          },
-        });
-      } else setSearchingResults(null);
+        const typeDetails = allTypes.filter((item) => item.name.includes(inputValue));
+        const moveDetails = allMoves.filter((item) => item.name.includes(inputValue));
+        const pokemonDetails = allPokemons.filter((item) => item.name.includes(inputValue));
+        setFoundTypes(typeDetails);
+        setFoundMoves(moveDetails);
+        setFoundPokemons(pokemonDetails);
+        setCurrentMoves(moveDetails.slice(0, Limits.move));
+        setCurrentTypes(typeDetails.slice(0, Limits.type));
+        setCurrentPokemons(pokemonDetails.slice(0, Limits.pokemon));
+      } else {
+        setTypePage(1);
+        setMovePage(1);
+        setPokemonPage(1);
+        setFoundTypes(null);
+        setFoundMoves(null);
+        setFoundPokemons(null);
+        setCurrentMoves(allMoves.slice(0, Limits.move));
+        setCurrentTypes(allTypes.slice(0, Limits.type));
+        setCurrentPokemons(allPokemons.slice(0, Limits.pokemon));
+      }
     }
   };
 

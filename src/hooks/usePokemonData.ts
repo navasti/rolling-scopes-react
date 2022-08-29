@@ -1,39 +1,50 @@
-import { Limits } from 'appConstants';
 import { usePokemonContext } from 'contexts';
 import { useCallback, useMemo } from 'react';
 import { PokemonSorting } from 'types';
+import { Limits } from 'appConstants';
 
 export const usePokemonData = () => {
   const {
-    pokemonState: { allDataResults, sorting },
+    pokemonState: { allDataResults, sorting, searchResults },
   } = usePokemonContext();
 
   const totalPageCount = useMemo(
-    () => Math.ceil(allDataResults.length / Limits.pokemon),
-    [allDataResults]
+    () =>
+      searchResults
+        ? Math.ceil(searchResults.length / Limits.pokemon)
+        : Math.ceil(allDataResults.length / Limits.pokemon),
+    [allDataResults, searchResults]
   );
 
-  const shouldFetchPagination = useMemo(() => sorting === PokemonSorting.none, [sorting]);
-
-  const sortByBaseExperience = useCallback(
-    () => allDataResults.sort((a, b) => b.base_experience - a.base_experience),
-    [allDataResults]
+  const totalResults = useMemo(
+    () => (searchResults ? searchResults.length : allDataResults.length),
+    [searchResults, allDataResults]
   );
 
-  const sortAlphabetically = useCallback(
-    () => allDataResults.sort((a, b) => a.name.localeCompare(b.name)),
-    [allDataResults]
+  const shouldFetchSearch = useMemo(
+    () => sorting === PokemonSorting.none && !searchResults,
+    [sorting, searchResults]
   );
 
-  const sortByHeight = useCallback(
-    () => allDataResults.sort((a, b) => b.height - a.height),
-    [allDataResults]
-  );
+  const sortByBaseExperience = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => b.base_experience - a.base_experience);
+  }, [allDataResults, searchResults]);
 
-  const sortByWeight = useCallback(
-    () => allDataResults.sort((a, b) => b.weight - a.weight),
-    [allDataResults]
-  );
+  const sortAlphabetically = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.name.localeCompare(b.name));
+  }, [allDataResults, searchResults]);
+
+  const sortByHeight = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => b.height - a.height);
+  }, [allDataResults, searchResults]);
+
+  const sortByWeight = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => b.weight - a.weight);
+  }, [allDataResults, searchResults]);
 
   const sortById = useCallback(() => allDataResults.sort((a, b) => a.id - b.id), [allDataResults]);
 
@@ -42,8 +53,9 @@ export const usePokemonData = () => {
     sortByWeight,
     sortByHeight,
     totalPageCount,
+    totalResults,
     sortAlphabetically,
     sortByBaseExperience,
-    shouldFetchPagination,
+    shouldFetchSearch,
   };
 };

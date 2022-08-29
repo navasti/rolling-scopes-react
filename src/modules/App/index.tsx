@@ -2,8 +2,8 @@ import { useMoveContext, usePokemonContext, useSearchContext, useTypeContext } f
 import { fetchAndMapMoves, fetchAndMapPokemons, fetchAndMapTypes } from 'utils';
 import { SearchPage, About, NotFound, Form, Details } from 'modules';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { useEffect } from 'react';
 import { API } from 'appConstants';
+import { useEffect } from 'react';
 
 const fetchInitialData = async () => {
   const allPokemons = await fetchAndMapPokemons(API.ALL_POKEMONS).then((pokemons) => pokemons);

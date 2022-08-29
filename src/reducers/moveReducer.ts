@@ -8,6 +8,7 @@ type MoveAction = {
 export const initialMoveState: MoveContextState = {
   sorting: MoveSorting.none,
   currentPageResults: [],
+  searchResults: null,
   allDataResults: [],
   currentPage: 1,
   baseData: {
@@ -21,6 +22,11 @@ export const initialMoveState: MoveContextState = {
 export const moveReducer = (state: MoveContextState, action: MoveAction) => {
   const { payload, type } = action;
   switch (type) {
+    case MoveActionType.setSearchResults:
+      return {
+        ...state,
+        searchResults: payload.searchResults ? [...payload.searchResults] : null,
+      };
     case MoveActionType.setCurrentPageResults:
       return {
         ...state,

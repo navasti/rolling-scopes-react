@@ -17,12 +17,19 @@ export const MoveView = () => {
     setCurrentPage,
     setAllDataResults,
     setCurrentPageResults,
-    moveState: { currentPageResults, currentPage, allDataResults, baseData, sorting },
+    moveState: {
+      sorting,
+      baseData,
+      currentPage,
+      searchResults,
+      allDataResults,
+      currentPageResults,
+    },
   } = useMoveContext();
 
   const {
     totalPageCount,
-    shouldFetchPagination,
+    shouldFetchSearch,
     sortById,
     sortByPP,
     sortByPower,
@@ -53,12 +60,12 @@ export const MoveView = () => {
   };
 
   const handleSorting = (sorting: string) => {
-    if (sorting === MoveSorting.none) {
+    if (shouldFetchSearch) {
       fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`).then((moves) => {
         const { base, mapped } = moves;
         if (base) {
           setBaseData(base);
-          setSorting(sorting);
+          setSorting(sorting as MoveSorting);
           setCurrentPageResults(mapped);
         }
         setCurrentPage(1);
@@ -76,7 +83,7 @@ export const MoveView = () => {
   };
 
   const nextPage = async () => {
-    if (shouldFetchPagination && baseData.next) {
+    if (shouldFetchSearch && baseData.next) {
       setIsLoading(true);
       fetchAndMapMoves(baseData.next).then((moves) => {
         const { base, mapped } = moves;
@@ -89,14 +96,14 @@ export const MoveView = () => {
       });
     } else {
       const index = currentPage * Limits.move;
-      const results = allDataResults.slice(index, index + Limits.move);
+      const results = (searchResults || allDataResults).slice(index, index + Limits.move);
       setCurrentPageResults(results);
       setCurrentPage(currentPage + 1);
     }
   };
 
   const previousPage = async () => {
-    if (shouldFetchPagination && baseData.previous) {
+    if (shouldFetchSearch && baseData.previous) {
       setIsLoading(true);
       fetchAndMapMoves(baseData.previous).then((moves) => {
         const { base, mapped } = moves;
@@ -109,7 +116,7 @@ export const MoveView = () => {
       });
     } else {
       const index = (currentPage - 1) * Limits.move;
-      const results = allDataResults.slice(index - Limits.move, index);
+      const results = (searchResults || allDataResults).slice(index - Limits.move, index);
       setCurrentPageResults(results);
       setCurrentPage(currentPage - 1);
     }
@@ -118,7 +125,7 @@ export const MoveView = () => {
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
-      if (shouldFetchPagination) {
+      if (shouldFetchSearch) {
         setIsLoading(true);
         fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}&${API.getMovesOffset(page)}`).then(
           (moves) => {
@@ -133,7 +140,7 @@ export const MoveView = () => {
         );
       } else {
         const index = page * Limits.move;
-        const results = allDataResults.slice(index - Limits.move, index);
+        const results = (searchResults || allDataResults).slice(index - Limits.move, index);
         setCurrentPageResults(results);
         setCurrentPage(page);
       }

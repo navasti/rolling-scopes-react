@@ -3,6 +3,7 @@ import { PokemonAction, PokemonActionType, PokemonContextState, PokemonSorting }
 export const initialPokemonState: PokemonContextState = {
   sorting: PokemonSorting.none,
   currentPageResults: [],
+  searchResults: null,
   allDataResults: [],
   currentPage: 1,
   baseData: {
@@ -16,6 +17,11 @@ export const initialPokemonState: PokemonContextState = {
 export const pokemonReducer = (state: PokemonContextState, action: PokemonAction) => {
   const { payload, type } = action;
   switch (type) {
+    case PokemonActionType.setSearchResults:
+      return {
+        ...state,
+        searchResults: payload.searchResults ? [...payload.searchResults] : null,
+      };
     case PokemonActionType.setCurrentPageResults:
       return {
         ...state,

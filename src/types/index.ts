@@ -12,6 +12,7 @@ export type PrepareLengths<Arr extends typeof TABS> = {
 export enum MoveActionType {
   setCurrentPageResults = 'setCurrentPageResults',
   setAllDataResults = 'setAllDataResults',
+  setSearchResults = 'setSearchResults',
   setCurrentPage = 'setCurrentPage',
   setBaseData = 'setBaseData',
   setSorting = 'setSorting',
@@ -59,15 +60,17 @@ export type PokemonBaseData = {
 };
 
 export type MoveContextState = {
+  searchResults: Array<PokemonMoveDetails> | null;
   currentPageResults: Array<PokemonMoveDetails>;
   allDataResults: Array<PokemonMoveDetails>;
+  baseData: MoveBaseData;
   sorting: MoveSorting;
   currentPage: number;
-  baseData: MoveBaseData;
 };
 
 export type MoveContextProps = {
   setCurrentPageResults: (currentPageResults: Array<PokemonMoveDetails>) => void;
+  setSearchResults: (searchResults: Array<PokemonMoveDetails> | null) => void;
   setAllDataResults: (allDataResults: Array<PokemonMoveDetails>) => void;
   setCurrentPage: (currentPage: number) => void;
   setSorting: (sorting: MoveSorting) => void;
@@ -102,14 +105,23 @@ export enum FormActionType {
 }
 
 export type SearchingResults = {
-  pokemons: Array<PokemonDetails>;
-  types: Array<PokemonTypeDetails>;
-  moves: Array<PokemonMoveDetails>;
+  pokemons: PokemonBaseData & {
+    currentPageResults: Array<PokemonDetails>;
+  };
+  types: TypeBaseData & {
+    currentPageResults: Array<PokemonTypeDetails>;
+  };
+  moves: MoveBaseData & {
+    currentPageResults: Array<PokemonMoveDetails>;
+  };
   lengths: Lengths;
 };
 
 export type SearchState = {
   searchingResults: SearchingResults | null;
+  // pokemonCurrentPage: number;
+  // moveCurrentPage: number;
+  // typeCurrentPage: number;
   activeTab: AvailableTabs;
   isLoading: boolean;
   lengths: Lengths;
@@ -194,19 +206,21 @@ export type PokemonDetails = {
 };
 
 export type PokemonContextState = {
+  searchResults: Array<PokemonDetails> | null;
   currentPageResults: Array<PokemonDetails>;
   allDataResults: Array<PokemonDetails>;
+  baseData: PokemonBaseData;
   sorting: PokemonSorting;
   currentPage: number;
-  baseData: PokemonBaseData;
 };
 
 export type PokemonContextProps = {
   setCurrentPageResults: (currentPageResults: Array<PokemonDetails>) => void;
+  setSearchResults: (searchResults: Array<PokemonDetails> | null) => void;
   setAllDataResults: (allDataResults: Array<PokemonDetails>) => void;
+  setBaseData: (baseData: PokemonBaseData) => void;
   setCurrentPage: (currentPage: number) => void;
   setSorting: (sorting: PokemonSorting) => void;
-  setBaseData: (baseData: PokemonBaseData) => void;
   pokemonState: PokemonContextState;
 };
 
@@ -218,6 +232,7 @@ export type PokemonAction = {
 export enum PokemonActionType {
   setCurrentPageResults = 'setCurrentPageResults',
   setAllDataResults = 'setAllDataResults',
+  setSearchResults = 'setSearchResults',
   setCurrentPage = 'setCurrentPage',
   setBaseData = 'setBaseData',
   setSorting = 'setSorting',
@@ -239,21 +254,24 @@ export type TypeBaseData = {
 export enum TypeActionType {
   setCurrentPageResults = 'setCurrentPageResults',
   setAllDataResults = 'setAllDataResults',
+  setSearchResults = 'setSearchResults',
   setCurrentPage = 'setCurrentPage',
   setBaseData = 'setBaseData',
   setSorting = 'setSorting',
 }
 
 export type TypeContextState = {
+  searchResults: Array<PokemonTypeDetails> | null;
   currentPageResults: Array<PokemonTypeDetails>;
   allDataResults: Array<PokemonTypeDetails>;
+  baseData: TypeBaseData;
   sorting: TypeSorting;
   currentPage: number;
-  baseData: TypeBaseData;
 };
 
 export type TypeContextProps = {
   setCurrentPageResults: (currentPageResults: Array<PokemonTypeDetails>) => void;
+  setSearchResults: (searchResults: Array<PokemonTypeDetails> | null) => void;
   setAllDataResults: (allDataResults: Array<PokemonTypeDetails>) => void;
   setCurrentPage: (currentPage: number) => void;
   setSorting: (sorting: TypeSorting) => void;

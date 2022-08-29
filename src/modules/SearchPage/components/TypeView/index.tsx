@@ -5,10 +5,10 @@ import { API, Limits } from 'appConstants';
 import { Pagination } from '../Pagination';
 import { fetchAndMapTypes } from 'utils';
 import { Loader } from 'components';
+import { TypeSorting } from 'types';
 import { useTypeData } from 'hooks';
 import { MouseEvent } from 'react';
 import * as S from './styled';
-import { TypeSorting } from 'types';
 
 export const TypeView = () => {
   const {
@@ -17,12 +17,19 @@ export const TypeView = () => {
     setCurrentPage,
     setAllDataResults,
     setCurrentPageResults,
-    typeState: { currentPage, baseData, currentPageResults, allDataResults, sorting },
+    typeState: {
+      sorting,
+      baseData,
+      currentPage,
+      searchResults,
+      allDataResults,
+      currentPageResults,
+    },
   } = useTypeContext();
 
   const {
     totalPageCount,
-    shouldFetchPagination,
+    shouldFetchSearch,
     sortById,
     sortByMovesAmount,
     sortAlphabetically,
@@ -50,12 +57,12 @@ export const TypeView = () => {
   };
 
   const handleSorting = (sorting: string) => {
-    if (sorting === TypeSorting.none) {
+    if (shouldFetchSearch) {
       fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`).then((types) => {
         const { base, mapped } = types;
         if (base) {
           setBaseData(base);
-          setSorting(sorting);
+          setSorting(sorting as TypeSorting);
           setCurrentPageResults(mapped);
         }
         setCurrentPage(1);
@@ -73,7 +80,7 @@ export const TypeView = () => {
   };
 
   const nextPage = async () => {
-    if (shouldFetchPagination && baseData.next) {
+    if (shouldFetchSearch && baseData.next) {
       fetchAndMapTypes(baseData.next).then((types) => {
         setIsLoading(true);
         const { base, mapped } = types;
@@ -86,14 +93,14 @@ export const TypeView = () => {
       });
     } else {
       const index = currentPage * Limits.type;
-      const results = allDataResults.slice(index, index + Limits.type);
+      const results = (searchResults || allDataResults).slice(index, index + Limits.type);
       setCurrentPageResults(results);
       setCurrentPage(currentPage + 1);
     }
   };
 
   const previousPage = async () => {
-    if (shouldFetchPagination && baseData.previous) {
+    if (shouldFetchSearch && baseData.previous) {
       fetchAndMapTypes(baseData.previous).then((types) => {
         setIsLoading(true);
         const { base, mapped } = types;
@@ -106,7 +113,7 @@ export const TypeView = () => {
       });
     } else {
       const index = (currentPage - 1) * Limits.type;
-      const results = allDataResults.slice(index - Limits.type, index);
+      const results = (searchResults || allDataResults).slice(index - Limits.type, index);
       setCurrentPageResults(results);
       setCurrentPage(currentPage - 1);
     }
@@ -115,7 +122,7 @@ export const TypeView = () => {
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
-      if (shouldFetchPagination) {
+      if (shouldFetchSearch) {
         setIsLoading(true);
         fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}&${API.getTypesOffset(page)}`).then(
           (types) => {
@@ -130,7 +137,7 @@ export const TypeView = () => {
         );
       } else {
         const index = page * Limits.type;
-        const results = allDataResults.slice(index - Limits.type, index);
+        const results = (searchResults || allDataResults).slice(index - Limits.type, index);
         setCurrentPageResults(results);
         setCurrentPage(page);
       }

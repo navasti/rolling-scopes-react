@@ -13,6 +13,16 @@ export const MoveContext = createContext<MoveContextProps>({} as MoveContextProp
 export const MoveContextProvider = ({ children }: { children: JSX.Element }) => {
   const [moveState, dispatch] = useReducer(moveReducer, initialMoveState);
   const { moveState: state } = useMemo(() => ({ moveState, dispatch }), [moveState, dispatch]);
+
+  const setSearchResults = useCallback(
+    (searchResults: Array<PokemonMoveDetails> | null) => {
+      dispatch({
+        type: MoveActionType.setSearchResults,
+        payload: { searchResults },
+      });
+    },
+    [dispatch]
+  );
   const setCurrentPageResults = useCallback(
     (currentPageResults: Array<PokemonMoveDetails>) => {
       dispatch({
@@ -64,6 +74,7 @@ export const MoveContextProvider = ({ children }: { children: JSX.Element }) => 
         moveState: state,
         setCurrentPageResults,
         setAllDataResults,
+        setSearchResults,
         setCurrentPage,
         setBaseData,
         setSorting,

@@ -3,6 +3,7 @@ import { TypeAction, TypeActionType, TypeContextState, TypeSorting } from 'types
 export const initialTypeState: TypeContextState = {
   sorting: TypeSorting.none,
   currentPageResults: [],
+  searchResults: null,
   allDataResults: [],
   currentPage: 1,
   baseData: {
@@ -16,6 +17,11 @@ export const initialTypeState: TypeContextState = {
 export const typeReducer = (state: TypeContextState, action: TypeAction) => {
   const { payload, type } = action;
   switch (type) {
+    case TypeActionType.setSearchResults:
+      return {
+        ...state,
+        searchResults: payload.searchResults ? [...payload.searchResults] : null,
+      };
     case TypeActionType.setCurrentPageResults:
       return {
         ...state,

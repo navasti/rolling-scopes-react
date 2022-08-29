@@ -5,45 +5,60 @@ import { MoveSorting } from 'types';
 
 export const useMoveData = () => {
   const {
-    moveState: { allDataResults, sorting },
+    moveState: { allDataResults, sorting, searchResults },
   } = useMoveContext();
 
   const totalPageCount = useMemo(
-    () => Math.ceil(allDataResults.length / Limits.move),
-    [allDataResults]
+    () =>
+      searchResults
+        ? Math.ceil(searchResults.length / Limits.move)
+        : Math.ceil(allDataResults.length / Limits.move),
+    [allDataResults, searchResults]
   );
 
-  const shouldFetchPagination = useMemo(() => sorting === MoveSorting.none, [sorting]);
-
-  const sortByAccuracy = useCallback(
-    () => allDataResults.sort((a, b) => a.id - b.id).sort((a, b) => b.accuracy - a.accuracy),
-    [allDataResults]
+  const shouldFetchSearch = useMemo(
+    () => sorting === MoveSorting.none && !searchResults,
+    [sorting, searchResults]
   );
 
-  const sortAplhabetically = useCallback(
-    () => allDataResults.sort((a, b) => a.id - b.id).sort((a, b) => a.name.localeCompare(b.name)),
-    [allDataResults]
+  const totalResults = useMemo(
+    () => (searchResults ? searchResults.length : allDataResults.length),
+    [searchResults, allDataResults]
   );
 
-  const sortByPP = useCallback(
-    () => allDataResults.sort((a, b) => a.id - b.id).sort((a, b) => b.pp - a.pp),
-    [allDataResults]
-  );
+  const sortByAccuracy = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => b.accuracy - a.accuracy);
+  }, [allDataResults, searchResults]);
 
-  const sortByPower = useCallback(
-    () => allDataResults.sort((a, b) => a.id - b.id).sort((a, b) => b.power - a.power),
-    [allDataResults]
-  );
+  const sortAplhabetically = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => a.name.localeCompare(b.name));
+  }, [allDataResults, searchResults]);
 
-  const sortById = useCallback(() => allDataResults.sort((a, b) => a.id - b.id), [allDataResults]);
+  const sortByPP = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => b.pp - a.pp);
+  }, [allDataResults, searchResults]);
+
+  const sortByPower = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => b.power - a.power);
+  }, [allDataResults, searchResults]);
+
+  const sortById = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id);
+  }, [allDataResults, searchResults]);
 
   return {
     sortById,
     sortByPP,
     sortByPower,
+    totalResults,
     totalPageCount,
     sortByAccuracy,
+    shouldFetchSearch,
     sortAplhabetically,
-    shouldFetchPagination,
   };
 };

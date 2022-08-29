@@ -5,40 +5,48 @@ import { TypeSorting } from 'types';
 
 export const useTypeData = () => {
   const {
-    typeState: { allDataResults, sorting },
+    typeState: { allDataResults, sorting, searchResults },
   } = useTypeContext();
 
   const totalPageCount = useMemo(
-    () => Math.ceil(allDataResults.length / Limits.type),
-    [allDataResults]
-  );
-
-  const shouldFetchPagination = useMemo(() => sorting === TypeSorting.none, [sorting]);
-
-  const sortByPokemonsAmount = useCallback(
     () =>
-      allDataResults
-        .sort((a, b) => a.id - b.id)
-        .sort((a, b) => b.pokemon.length - a.pokemon.length),
-    [allDataResults]
+      searchResults
+        ? Math.ceil(searchResults.length / Limits.type)
+        : Math.ceil(allDataResults.length / Limits.type),
+    [allDataResults, searchResults]
   );
 
-  const sortAlphabetically = useCallback(
-    () => allDataResults.sort((a, b) => a.id - b.id).sort((a, b) => a.name.localeCompare(b.name)),
-    [allDataResults]
+  const shouldFetchSearch = useMemo(
+    () => sorting === TypeSorting.none && !searchResults,
+    [sorting, searchResults]
   );
 
-  const sortByMovesAmount = useCallback(
-    () =>
-      allDataResults.sort((a, b) => a.id - b.id).sort((a, b) => b.moves.length - a.moves.length),
-    [allDataResults]
+  const totalResults = useMemo(
+    () => (searchResults ? searchResults.length : allDataResults.length),
+    [searchResults, allDataResults]
   );
+
+  const sortByPokemonsAmount = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => b.pokemon.length - a.pokemon.length);
+  }, [allDataResults, searchResults]);
+
+  const sortAlphabetically = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => a.name.localeCompare(b.name));
+  }, [allDataResults, searchResults]);
+
+  const sortByMovesAmount = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id).sort((a, b) => b.moves.length - a.moves.length);
+  }, [allDataResults, searchResults]);
 
   const sortById = useCallback(() => allDataResults.sort((a, b) => a.id - b.id), [allDataResults]);
 
   return {
+    totalResults,
     totalPageCount,
-    shouldFetchPagination,
+    shouldFetchSearch,
     sortById,
     sortByMovesAmount,
     sortAlphabetically,

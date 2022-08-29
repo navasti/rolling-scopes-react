@@ -16,6 +16,15 @@ export const PokemonContextProvider = ({ children }: { children: JSX.Element }) 
     () => ({ pokemonState, dispatch }),
     [pokemonState, dispatch]
   );
+  const setSearchResults = useCallback(
+    (searchResults: Array<PokemonDetails> | null) => {
+      dispatch({
+        type: PokemonActionType.setSearchResults,
+        payload: { searchResults },
+      });
+    },
+    [dispatch]
+  );
   const setCurrentPageResults = useCallback(
     (currentPageResults: Array<PokemonDetails>) => {
       dispatch({
@@ -67,6 +76,7 @@ export const PokemonContextProvider = ({ children }: { children: JSX.Element }) 
         pokemonState: state,
         setCurrentPageResults,
         setAllDataResults,
+        setSearchResults,
         setCurrentPage,
         setBaseData,
         setSorting,
