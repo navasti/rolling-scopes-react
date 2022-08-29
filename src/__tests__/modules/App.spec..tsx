@@ -15,7 +15,7 @@ jest.mock('modules', () => {
 });
 
 describe('App', () => {
-  it('SearchPage should be rendered initially but changing path should render specific component', () => {
+  it.skip('SearchPage should be rendered initially but changing path should render specific component', () => {
     const { container } = render(
       <>
         <div>

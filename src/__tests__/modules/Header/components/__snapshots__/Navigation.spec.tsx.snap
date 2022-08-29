@@ -28,6 +28,11 @@ exports[`Navigation navigation component should render links and match snapshot 
       >
         Invalid
       </a>
+      <a
+        href="/details"
+      >
+        Details
+      </a>
     </div>
   </nav>
 </div>
