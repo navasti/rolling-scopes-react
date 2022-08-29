@@ -1,6 +1,8 @@
+import { Limits } from 'appConstants';
 import { PokemonAction, PokemonActionType, PokemonContextState, PokemonSorting } from 'types';
 
 export const initialPokemonState: PokemonContextState = {
+  resultsAmount: Limits.pokemon,
   sorting: PokemonSorting.none,
   currentPageResults: [],
   searchResults: null,
@@ -17,6 +19,11 @@ export const initialPokemonState: PokemonContextState = {
 export const pokemonReducer = (state: PokemonContextState, action: PokemonAction) => {
   const { payload, type } = action;
   switch (type) {
+    case PokemonActionType.setResultsAmount:
+      return {
+        ...state,
+        resultsAmount: payload.resultsAmount || state.resultsAmount,
+      };
     case PokemonActionType.setSearchResults:
       return {
         ...state,

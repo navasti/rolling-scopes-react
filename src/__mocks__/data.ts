@@ -7,7 +7,6 @@ import {
   PokemonType,
   CardDetails,
   Pokemon,
-  Lengths,
 } from 'types';
 
 export const testingComponentName = 'Test';
@@ -29,8 +28,6 @@ export const customPokemon: CustomPokemon = {
   type: 'fire',
   shiny: true,
 };
-
-export const lengths: Lengths = { pokemons: 10, moves: 15, types: 20 };
 
 const samplePokemon = (): PokemonDetails => ({
   base_experience: 62,

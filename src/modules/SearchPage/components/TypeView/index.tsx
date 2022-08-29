@@ -1,7 +1,8 @@
 import { useSearchContext, useTypeContext } from 'contexts';
+import { ResultsSelector } from '../ResultsSelector';
 import { SortingSelector } from '../SortingSelector';
+import { API, RESULTS_AMOUNT } from 'appConstants';
 import { TypeCard } from './components/TypeCard';
-import { API, Limits } from 'appConstants';
 import { Pagination } from '../Pagination';
 import { fetchAndMapTypes } from 'utils';
 import { Loader } from 'components';
@@ -15,13 +16,15 @@ export const TypeView = () => {
     setSorting,
     setBaseData,
     setCurrentPage,
-    setAllDataResults,
+    setResultsAmount,
+    setSearchResults,
     setCurrentPageResults,
     typeState: {
       sorting,
       baseData,
       currentPage,
       searchResults,
+      resultsAmount,
       allDataResults,
       currentPageResults,
     },
@@ -57,26 +60,21 @@ export const TypeView = () => {
   };
 
   const handleSorting = (sorting: string) => {
-    if (shouldFetchSearch) {
-      fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`).then((types) => {
-        const { base, mapped } = types;
-        if (base) {
-          setBaseData(base);
-          setSorting(sorting as TypeSorting);
-          setCurrentPageResults(mapped);
-        }
-        setCurrentPage(1);
+    if (sorting === TypeSorting.none && !searchResults) {
+      fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`).then((types) => {
+        types.base && setBaseData(types.base);
+        setCurrentPageResults(types.mapped);
       });
     } else {
       const sorted = sort(sorting as TypeSorting);
-      const results = sorted?.slice(0, Limits.type);
+      const results = sorted?.slice(0, resultsAmount);
       if (sorted && results) {
-        setSorting(sorting as TypeSorting);
         setCurrentPageResults(results);
-        setAllDataResults(sorted);
-        setCurrentPage(1);
+        setSearchResults(sorted);
       }
     }
+    setSorting(sorting as TypeSorting);
+    setCurrentPage(1);
   };
 
   const nextPage = async () => {
@@ -92,8 +90,8 @@ export const TypeView = () => {
         setIsLoading(false);
       });
     } else {
-      const index = currentPage * Limits.type;
-      const results = (searchResults || allDataResults).slice(index, index + Limits.type);
+      const index = currentPage * resultsAmount;
+      const results = (searchResults || allDataResults).slice(index, index + resultsAmount);
       setCurrentPageResults(results);
       setCurrentPage(currentPage + 1);
     }
@@ -112,8 +110,8 @@ export const TypeView = () => {
         setIsLoading(false);
       });
     } else {
-      const index = (currentPage - 1) * Limits.type;
-      const results = (searchResults || allDataResults).slice(index - Limits.type, index);
+      const index = (currentPage - 1) * resultsAmount;
+      const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
       setCurrentPageResults(results);
       setCurrentPage(currentPage - 1);
     }
@@ -124,28 +122,56 @@ export const TypeView = () => {
     if (page !== NaN) {
       if (shouldFetchSearch) {
         setIsLoading(true);
-        fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}&${API.getTypesOffset(page)}`).then(
-          (types) => {
-            const { base, mapped } = types;
-            if (base) {
-              setBaseData(base);
-              setCurrentPageResults(mapped);
-            }
-            setCurrentPage(page);
-            setIsLoading(false);
+        fetchAndMapTypes(
+          `${API.TYPE}?limit=${resultsAmount}&offset=${page * resultsAmount - resultsAmount}`
+        ).then((types) => {
+          const { base, mapped } = types;
+          if (base) {
+            setBaseData(base);
+            setCurrentPageResults(mapped);
           }
-        );
+          setCurrentPage(page);
+          setIsLoading(false);
+        });
       } else {
-        const index = page * Limits.type;
-        const results = (searchResults || allDataResults).slice(index - Limits.type, index);
+        const index = page * resultsAmount;
+        const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
         setCurrentPageResults(results);
         setCurrentPage(page);
       }
     }
   };
 
+  const handleResultsAmount = (resultsAmount: number) => {
+    setResultsAmount(resultsAmount);
+    if (shouldFetchSearch) {
+      setIsLoading(true);
+      fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`).then((types) => {
+        const { base, mapped } = types;
+        if (base) {
+          setBaseData(base);
+          setCurrentPageResults(mapped);
+        }
+        setCurrentPage(1);
+        setIsLoading(false);
+      });
+    } else {
+      const results = (searchResults || allDataResults).slice(0, resultsAmount);
+      setCurrentPageResults(results);
+      setCurrentPage(1);
+    }
+  };
+
   return (
     <S.TypeView>
+      <S.SelectorsWrapper>
+        <SortingSelector name="type" onChange={handleSorting} options={options} value={sorting} />
+        <ResultsSelector
+          options={RESULTS_AMOUNT.TYPE}
+          onClick={handleResultsAmount}
+          value={resultsAmount}
+        />
+      </S.SelectorsWrapper>
       <Pagination
         totalPageCount={totalPageCount}
         previousPage={previousPage}
@@ -153,13 +179,12 @@ export const TypeView = () => {
         currentPage={currentPage}
         nextPage={nextPage}
       />
-      <SortingSelector name="type" onChange={handleSorting} options={options} value={sorting} />
-      <S.CardsWrapper>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          currentPageResults.map((type) => <TypeCard key={type.id} type={type} />)
-        )}
+      {!currentPageResults.length && <S.TextCenter>No types found</S.TextCenter>}
+      {isLoading && <Loader />}
+      <S.CardsWrapper visible={!isLoading}>
+        {currentPageResults.map((type) => (
+          <TypeCard key={type.id} type={type} />
+        ))}
       </S.CardsWrapper>
     </S.TypeView>
   );

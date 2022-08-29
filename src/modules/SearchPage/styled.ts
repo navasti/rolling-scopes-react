@@ -8,6 +8,35 @@ export const SearchPageView = styled.div`
   display: flex;
 `;
 
+export const SelectorsWrapper = styled.div`
+  display: flex;
+  align-self: center;
+  align-items: center;
+  margin-top: 15px;
+`;
+
+export const TextCenter = styled.p`
+  text-align: center;
+`;
+
+export const CardsWrapper = styled.div<{ visible: boolean }>`
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  transition: opacity 0.3s ease-in;
+  display: grid;
+  width: 100%;
+  gap: 10px;
+`;
+
+export const SmallerCardsWrapper = styled.div<{ visible: boolean }>`
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  transition: opacity 0.3s ease-in;
+  display: grid;
+  width: 100%;
+  gap: 10px;
+`;
+
 export const CommonMessage = styled.p`
   text-align: center;
   margin-top: 20px;

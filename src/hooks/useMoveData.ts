@@ -1,19 +1,18 @@
 import { useCallback, useMemo } from 'react';
 import { useMoveContext } from 'contexts';
-import { Limits } from 'appConstants';
 import { MoveSorting } from 'types';
 
 export const useMoveData = () => {
   const {
-    moveState: { allDataResults, sorting, searchResults },
+    moveState: { allDataResults, sorting, searchResults, resultsAmount },
   } = useMoveContext();
 
   const totalPageCount = useMemo(
     () =>
       searchResults
-        ? Math.ceil(searchResults.length / Limits.move)
-        : Math.ceil(allDataResults.length / Limits.move),
-    [allDataResults, searchResults]
+        ? Math.ceil(searchResults.length / resultsAmount)
+        : Math.ceil(allDataResults.length / resultsAmount),
+    [allDataResults, searchResults, resultsAmount]
   );
 
   const shouldFetchSearch = useMemo(

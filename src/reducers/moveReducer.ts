@@ -1,3 +1,4 @@
+import { Limits } from 'appConstants';
 import { MoveActionType, MoveContextState, MoveSorting } from 'types';
 
 type MoveAction = {
@@ -6,6 +7,7 @@ type MoveAction = {
 };
 
 export const initialMoveState: MoveContextState = {
+  resultsAmount: Limits.move,
   sorting: MoveSorting.none,
   currentPageResults: [],
   searchResults: null,
@@ -22,6 +24,11 @@ export const initialMoveState: MoveContextState = {
 export const moveReducer = (state: MoveContextState, action: MoveAction) => {
   const { payload, type } = action;
   switch (type) {
+    case MoveActionType.setResultsAmount:
+      return {
+        ...state,
+        resultsAmount: payload.resultsAmount || state.resultsAmount,
+      };
     case MoveActionType.setSearchResults:
       return {
         ...state,

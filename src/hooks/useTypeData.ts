@@ -1,19 +1,18 @@
-import { Limits } from 'appConstants';
-import { useTypeContext } from 'contexts';
 import { useCallback, useMemo } from 'react';
+import { useTypeContext } from 'contexts';
 import { TypeSorting } from 'types';
 
 export const useTypeData = () => {
   const {
-    typeState: { allDataResults, sorting, searchResults },
+    typeState: { allDataResults, sorting, searchResults, resultsAmount },
   } = useTypeContext();
 
   const totalPageCount = useMemo(
     () =>
       searchResults
-        ? Math.ceil(searchResults.length / Limits.type)
-        : Math.ceil(allDataResults.length / Limits.type),
-    [allDataResults, searchResults]
+        ? Math.ceil(searchResults.length / resultsAmount)
+        : Math.ceil(allDataResults.length / resultsAmount),
+    [allDataResults, searchResults, resultsAmount]
   );
 
   const shouldFetchSearch = useMemo(
@@ -41,7 +40,10 @@ export const useTypeData = () => {
     return results.sort((a, b) => a.id - b.id).sort((a, b) => b.moves.length - a.moves.length);
   }, [allDataResults, searchResults]);
 
-  const sortById = useCallback(() => allDataResults.sort((a, b) => a.id - b.id), [allDataResults]);
+  const sortById = useCallback(() => {
+    const results = searchResults || allDataResults;
+    return results.sort((a, b) => a.id - b.id);
+  }, [allDataResults, searchResults]);
 
   return {
     totalResults,

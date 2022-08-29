@@ -1,6 +1,8 @@
+import { Limits } from 'appConstants';
 import { TypeAction, TypeActionType, TypeContextState, TypeSorting } from 'types';
 
 export const initialTypeState: TypeContextState = {
+  resultsAmount: Limits.type,
   sorting: TypeSorting.none,
   currentPageResults: [],
   searchResults: null,
@@ -17,6 +19,11 @@ export const initialTypeState: TypeContextState = {
 export const typeReducer = (state: TypeContextState, action: TypeAction) => {
   const { payload, type } = action;
   switch (type) {
+    case TypeActionType.setResultsAmount:
+      return {
+        ...state,
+        resultsAmount: payload.resultsAmount || state.resultsAmount,
+      };
     case TypeActionType.setSearchResults:
       return {
         ...state,

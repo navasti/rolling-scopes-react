@@ -1,5 +1,5 @@
-import { SearchContextProps, SearchActionType, Lengths, SearchingResults } from 'types';
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
+import { SearchContextProps, SearchActionType } from 'types';
 import { initialSearchState, searchReducer } from 'reducers';
 import { AvailableTabs } from 'appConstants';
 
@@ -11,12 +11,6 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
     () => ({ searchState, dispatch }),
     [searchState, dispatch]
   );
-  const setSearchingResults = useCallback((searchingResults: SearchingResults | null) => {
-    dispatch({
-      type: SearchActionType.searchingResults,
-      payload: { searchingResults },
-    });
-  }, []);
   const setActiveTab = useCallback(
     (activeTab: AvailableTabs) => {
       dispatch({ type: SearchActionType.tab, payload: { activeTab } });
@@ -29,20 +23,13 @@ export const SearchContextProvider = ({ children }: { children: JSX.Element }) =
     },
     [dispatch]
   );
-  const setLengths = useCallback(
-    (lengths: Lengths) => {
-      dispatch({ type: SearchActionType.lengths, payload: { lengths } });
-    },
-    [dispatch]
-  );
+
   return (
     <SearchContext.Provider
       value={{
         searchState: state,
-        setSearchingResults,
         setIsLoading,
         setActiveTab,
-        setLengths,
       }}
     >
       {children}

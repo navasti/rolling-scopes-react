@@ -13,7 +13,15 @@ export const TypeContext = createContext<TypeContextProps>({} as TypeContextProp
 export const TypeContextProvider = ({ children }: { children: JSX.Element }) => {
   const [typeState, dispatch] = useReducer(typeReducer, initialTypeState);
   const { typeState: state } = useMemo(() => ({ typeState, dispatch }), [typeState, dispatch]);
-
+  const setResultsAmount = useCallback(
+    (resultsAmount: number) => {
+      dispatch({
+        type: TypeActionType.setResultsAmount,
+        payload: { resultsAmount },
+      });
+    },
+    [dispatch]
+  );
   const setSearchResults = useCallback(
     (searchResults: Array<PokemonTypeDetails> | null) => {
       dispatch({
@@ -76,6 +84,7 @@ export const TypeContextProvider = ({ children }: { children: JSX.Element }) => 
         setBaseData,
         setCurrentPage,
         setSearchResults,
+        setResultsAmount,
         setAllDataResults,
         setCurrentPageResults,
       }}

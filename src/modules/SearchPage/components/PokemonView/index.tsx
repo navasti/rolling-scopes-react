@@ -1,9 +1,9 @@
+import { SortingSelector, Pagination, ResultsSelector } from 'modules/SearchPage/components';
 import { usePokemonContext, useSearchContext } from 'contexts';
-import { SortingSelector, Pagination } from 'modules/SearchPage/components';
-import { usePokemonData } from 'hooks/usePokemonData';
 import { PokemonCard } from './components/PokemonCard';
+import { usePokemonData } from 'hooks/usePokemonData';
+import { API, RESULTS_AMOUNT } from 'appConstants';
 import { fetchAndMapPokemons } from 'utils';
-import { API, Limits } from 'appConstants';
 import { PokemonSorting } from 'types';
 import { Loader } from 'components';
 import { MouseEvent } from 'react';
@@ -14,13 +14,15 @@ export const PokemonView = () => {
     setSorting,
     setBaseData,
     setCurrentPage,
-    setAllDataResults,
+    setResultsAmount,
+    setSearchResults,
     setCurrentPageResults,
     pokemonState: {
       sorting,
       baseData,
       currentPage,
       searchResults,
+      resultsAmount,
       allDataResults,
       currentPageResults,
     },
@@ -59,26 +61,21 @@ export const PokemonView = () => {
   };
 
   const handleSorting = (sorting: string) => {
-    if (shouldFetchSearch) {
-      fetchAndMapPokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`).then((pokemons) => {
-        const { base, mapped } = pokemons;
-        if (base) {
-          setBaseData(base);
-          setSorting(sorting as PokemonSorting);
-          setCurrentPageResults(mapped);
-        }
-        setCurrentPage(1);
+    if (sorting === PokemonSorting.none && !searchResults) {
+      fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount}`).then((pokemons) => {
+        pokemons.base && setBaseData(pokemons.base);
+        setCurrentPageResults(pokemons.mapped);
       });
     } else {
       const sorted = sort(sorting as PokemonSorting);
-      const results = sorted?.slice(0, Limits.pokemon);
+      const results = sorted?.slice(0, resultsAmount);
       if (sorted && results) {
-        setSorting(sorting as PokemonSorting);
         setCurrentPageResults(results);
-        setAllDataResults(sorted);
-        setCurrentPage(1);
+        setSearchResults(sorted);
       }
     }
+    setSorting(sorting as PokemonSorting);
+    setCurrentPage(1);
   };
 
   const nextPage = async () => {
@@ -94,8 +91,8 @@ export const PokemonView = () => {
         setIsLoading(false);
       });
     } else {
-      const index = currentPage * Limits.pokemon;
-      const results = (searchResults || allDataResults).slice(index, index + Limits.pokemon);
+      const index = currentPage * resultsAmount;
+      const results = (searchResults || allDataResults).slice(index, index + resultsAmount);
       setCurrentPageResults(results);
       setCurrentPage(currentPage + 1);
     }
@@ -114,8 +111,8 @@ export const PokemonView = () => {
         setIsLoading(false);
       });
     } else {
-      const index = (currentPage - 1) * Limits.pokemon;
-      const results = (searchResults || allDataResults).slice(index - Limits.pokemon, index);
+      const index = (currentPage - 1) * resultsAmount;
+      const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
       setCurrentPageResults(results);
       setCurrentPage(currentPage - 1);
     }
@@ -127,7 +124,7 @@ export const PokemonView = () => {
       if (shouldFetchSearch) {
         setIsLoading(true);
         fetchAndMapPokemons(
-          `${API.POKEMON}${API.POKEMON_LIMIT}&${API.getPokemonsOffset(page)}`
+          `${API.POKEMON}?limit=${resultsAmount}&offset=${page * resultsAmount - resultsAmount}`
         ).then((pokemons) => {
           const { base, mapped } = pokemons;
           if (base) {
@@ -138,16 +135,49 @@ export const PokemonView = () => {
           setIsLoading(false);
         });
       } else {
-        const index = page * Limits.pokemon;
-        const results = (searchResults || allDataResults).slice(index - Limits.pokemon, index);
+        const index = page * resultsAmount;
+        const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
         setCurrentPageResults(results);
         setCurrentPage(page);
       }
     }
   };
 
+  const handleResultsAmount = (resultsAmount: number) => {
+    setResultsAmount(resultsAmount);
+    if (shouldFetchSearch) {
+      setIsLoading(true);
+      fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount}`).then((pokemons) => {
+        const { base, mapped } = pokemons;
+        if (base) {
+          setBaseData(base);
+          setCurrentPageResults(mapped);
+        }
+        setCurrentPage(1);
+        setIsLoading(false);
+      });
+    } else {
+      const results = (searchResults || allDataResults).slice(0, resultsAmount);
+      setCurrentPageResults(results);
+      setCurrentPage(1);
+    }
+  };
+
   return (
     <S.PokemonView>
+      <S.SelectorsWrapper>
+        <SortingSelector
+          name="pokemon"
+          onChange={handleSorting}
+          options={options}
+          value={sorting}
+        />
+        <ResultsSelector
+          options={RESULTS_AMOUNT.POKEMON}
+          onClick={handleResultsAmount}
+          value={resultsAmount}
+        />
+      </S.SelectorsWrapper>
       <Pagination
         totalPageCount={totalPageCount}
         previousPage={previousPage}
@@ -155,13 +185,12 @@ export const PokemonView = () => {
         currentPage={currentPage}
         nextPage={nextPage}
       />
-      <SortingSelector name="pokemon" onChange={handleSorting} options={options} value={sorting} />
-      <S.CardsWrapper>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          currentPageResults.map((pokemon) => <PokemonCard key={pokemon.id} pokemon={pokemon} />)
-        )}
+      {!currentPageResults.length && <S.TextCenter>No pokemons found</S.TextCenter>}
+      {isLoading && <Loader />}
+      <S.CardsWrapper visible={!isLoading}>
+        {currentPageResults.map((pokemon) => (
+          <PokemonCard key={pokemon.id} pokemon={pokemon} />
+        ))}
       </S.CardsWrapper>
     </S.PokemonView>
   );

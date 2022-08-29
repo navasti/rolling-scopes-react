@@ -54,13 +54,11 @@ export const ComponentMocks = {
       </div>
     </div>
   ),
-  Tabs: ({ isLoading, lengths }: TabsProps) => (
+  Tabs: ({ isLoading }: TabsProps) => (
     <div>
-      <span data-testid="pokemons-length-mock">
-        pokemons {isLoading ? null : `(${lengths.moves})`}
-      </span>
-      <span data-testid="moves-length-mock">moves {isLoading ? null : `(${lengths.moves})`}</span>
-      <span data-testid="types-length-mock">types {isLoading ? null : `(${lengths.types})`}</span>
+      <span data-testid="pokemons-length-mock">pokemons {isLoading ? null : `(1)`}</span>
+      <span data-testid="moves-length-mock">moves {isLoading ? null : `(1)`}</span>
+      <span data-testid="types-length-mock">types {isLoading ? null : `(1)`}</span>
     </div>
   ),
   Cards: (props: CardsProps) => (

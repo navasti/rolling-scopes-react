@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 
-export { Card } from 'modules/SearchPage/styled';
-
-export const CardsWrapper = styled.div`
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  display: grid;
-  width: 100%;
-  gap: 10px;
-`;
+export { Card, CardsWrapper, TextCenter, SelectorsWrapper } from 'modules/SearchPage/styled';
 
 export const ImageWrapper = styled.div`
   align-items: center;

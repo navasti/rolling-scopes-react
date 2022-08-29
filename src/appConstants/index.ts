@@ -6,7 +6,7 @@ export enum Limits {
   allMoves = 844,
   allTypes = 20,
   pokemon = 20,
-  type = 15,
+  type = 10,
   move = 15,
 }
 
@@ -105,6 +105,12 @@ export const API = {
 export const FIELDS_VALIDATION_BY_NAME = {
   TEXT: [Fields.name, Fields.birthday, Fields.type],
   CHECK: [Fields.consent, Fields.gender],
+};
+
+export const RESULTS_AMOUNT = {
+  POKEMON: [Limits.pokemon, Limits.pokemon * 2, Limits.pokemon * 4],
+  MOVE: [Limits.move, Limits.move * 2, Limits.move * 4],
+  TYPE: [Limits.type, Limits.type * 2, Limits.type * 4],
 };
 
 export const DEFAULT_VALUES: FormFields = {

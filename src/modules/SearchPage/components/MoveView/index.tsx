@@ -1,7 +1,8 @@
 import { useMoveContext, useSearchContext } from 'contexts';
 import { SortingSelector } from '../SortingSelector';
+import { ResultsSelector } from '../ResultsSelector';
+import { API, RESULTS_AMOUNT } from 'appConstants';
 import { MoveCard } from './components/MoveCard';
-import { API, Limits } from 'appConstants';
 import { Pagination } from '../Pagination';
 import { fetchAndMapMoves } from 'utils';
 import { Loader } from 'components';
@@ -15,13 +16,15 @@ export const MoveView = () => {
     setSorting,
     setBaseData,
     setCurrentPage,
-    setAllDataResults,
+    setResultsAmount,
+    setSearchResults,
     setCurrentPageResults,
     moveState: {
       sorting,
       baseData,
       currentPage,
       searchResults,
+      resultsAmount,
       allDataResults,
       currentPageResults,
     },
@@ -60,26 +63,21 @@ export const MoveView = () => {
   };
 
   const handleSorting = (sorting: string) => {
-    if (shouldFetchSearch) {
-      fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`).then((moves) => {
-        const { base, mapped } = moves;
-        if (base) {
-          setBaseData(base);
-          setSorting(sorting as MoveSorting);
-          setCurrentPageResults(mapped);
-        }
-        setCurrentPage(1);
+    if (sorting === MoveSorting.none && !searchResults) {
+      fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`).then((moves) => {
+        moves.base && setBaseData(moves.base);
+        setCurrentPageResults(moves.mapped);
       });
     } else {
       const sorted = sort(sorting as MoveSorting);
-      const results = sorted?.slice(0, Limits.move);
+      const results = sorted?.slice(0, resultsAmount);
       if (sorted && results) {
-        setSorting(sorting as MoveSorting);
         setCurrentPageResults(results);
-        setAllDataResults(sorted);
-        setCurrentPage(1);
+        setSearchResults(sorted);
       }
     }
+    setSorting(sorting as MoveSorting);
+    setCurrentPage(1);
   };
 
   const nextPage = async () => {
@@ -95,8 +93,8 @@ export const MoveView = () => {
         setIsLoading(false);
       });
     } else {
-      const index = currentPage * Limits.move;
-      const results = (searchResults || allDataResults).slice(index, index + Limits.move);
+      const index = currentPage * resultsAmount;
+      const results = (searchResults || allDataResults).slice(index, index + resultsAmount);
       setCurrentPageResults(results);
       setCurrentPage(currentPage + 1);
     }
@@ -115,8 +113,8 @@ export const MoveView = () => {
         setIsLoading(false);
       });
     } else {
-      const index = (currentPage - 1) * Limits.move;
-      const results = (searchResults || allDataResults).slice(index - Limits.move, index);
+      const index = (currentPage - 1) * resultsAmount;
+      const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
       setCurrentPageResults(results);
       setCurrentPage(currentPage - 1);
     }
@@ -127,28 +125,56 @@ export const MoveView = () => {
     if (page !== NaN) {
       if (shouldFetchSearch) {
         setIsLoading(true);
-        fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}&${API.getMovesOffset(page)}`).then(
-          (moves) => {
-            const { base, mapped } = moves;
-            if (base) {
-              setBaseData(base);
-              setCurrentPageResults(mapped);
-            }
-            setCurrentPage(page);
-            setIsLoading(false);
+        fetchAndMapMoves(
+          `${API.MOVE}?limit=${resultsAmount}&offset=${page * resultsAmount - resultsAmount}`
+        ).then((moves) => {
+          const { base, mapped } = moves;
+          if (base) {
+            setBaseData(base);
+            setCurrentPageResults(mapped);
           }
-        );
+          setCurrentPage(page);
+          setIsLoading(false);
+        });
       } else {
-        const index = page * Limits.move;
-        const results = (searchResults || allDataResults).slice(index - Limits.move, index);
+        const index = page * resultsAmount;
+        const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
         setCurrentPageResults(results);
         setCurrentPage(page);
       }
     }
   };
 
+  const handleResultsAmount = (resultsAmount: number) => {
+    setResultsAmount(resultsAmount);
+    if (shouldFetchSearch) {
+      setIsLoading(true);
+      fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`).then((moves) => {
+        const { base, mapped } = moves;
+        if (base) {
+          setBaseData(base);
+          setCurrentPageResults(mapped);
+        }
+        setCurrentPage(1);
+        setIsLoading(false);
+      });
+    } else {
+      const results = (searchResults || allDataResults).slice(0, resultsAmount);
+      setCurrentPageResults(results);
+      setCurrentPage(1);
+    }
+  };
+
   return (
     <S.MoveView>
+      <S.SelectorsWrapper>
+        <SortingSelector name="move" onChange={handleSorting} options={options} value={sorting} />
+        <ResultsSelector
+          options={RESULTS_AMOUNT.MOVE}
+          onClick={handleResultsAmount}
+          value={resultsAmount}
+        />
+      </S.SelectorsWrapper>
       <Pagination
         totalPageCount={totalPageCount}
         previousPage={previousPage}
@@ -156,13 +182,12 @@ export const MoveView = () => {
         currentPage={currentPage}
         nextPage={nextPage}
       />
-      <SortingSelector name="move" onChange={handleSorting} options={options} value={sorting} />
-      <S.CardsWrapper>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          currentPageResults.map((move) => <MoveCard key={move.id} move={move} />)
-        )}
+      {!currentPageResults.length && <S.TextCenter>No types found</S.TextCenter>}
+      {isLoading && <Loader />}
+      <S.CardsWrapper visible={!isLoading}>
+        {currentPageResults.map((move) => (
+          <MoveCard key={move.id} move={move} />
+        ))}
       </S.CardsWrapper>
     </S.MoveView>
   );

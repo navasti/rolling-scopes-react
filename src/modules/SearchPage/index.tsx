@@ -1,7 +1,8 @@
 import { useMoveContext, usePokemonContext, useSearchContext, useTypeContext } from 'contexts';
 import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
-import { AvailableTabs, INPUT_VALUE_KEY, Limits } from 'appConstants';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
+import { MoveSorting, PokemonSorting, TypeSorting } from 'types';
 import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -24,24 +25,27 @@ export const SearchPage = ({ componentName, location }: Props) => {
   } = useSearchContext();
 
   const {
+    setSorting: setPokemonSorting,
     setCurrentPage: setPokemonPage,
     setSearchResults: setFoundPokemons,
     setCurrentPageResults: setCurrentPokemons,
-    pokemonState: { allDataResults: allPokemons },
+    pokemonState: { allDataResults: allPokemons, resultsAmount: pokemonAmount },
   } = usePokemonContext();
 
   const {
+    setSorting: setTypeSorting,
     setCurrentPage: setTypePage,
     setSearchResults: setFoundTypes,
     setCurrentPageResults: setCurrentTypes,
-    typeState: { allDataResults: allTypes },
+    typeState: { allDataResults: allTypes, resultsAmount: typesAmount },
   } = useTypeContext();
 
   const {
+    setSorting: setMoveSorting,
     setCurrentPage: setMovePage,
     setSearchResults: setFoundMoves,
     setCurrentPageResults: setCurrentMoves,
-    moveState: { allDataResults: allMoves },
+    moveState: { allDataResults: allMoves, resultsAmount: moveAmount },
   } = useMoveContext();
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
@@ -53,20 +57,23 @@ export const SearchPage = ({ componentName, location }: Props) => {
         setFoundTypes(typeDetails);
         setFoundMoves(moveDetails);
         setFoundPokemons(pokemonDetails);
-        setCurrentMoves(moveDetails.slice(0, Limits.move));
-        setCurrentTypes(typeDetails.slice(0, Limits.type));
-        setCurrentPokemons(pokemonDetails.slice(0, Limits.pokemon));
+        setCurrentMoves(moveDetails.slice(0, moveAmount));
+        setCurrentTypes(typeDetails.slice(0, typesAmount));
+        setCurrentPokemons(pokemonDetails.slice(0, pokemonAmount));
       } else {
-        setTypePage(1);
-        setMovePage(1);
-        setPokemonPage(1);
         setFoundTypes(null);
         setFoundMoves(null);
         setFoundPokemons(null);
-        setCurrentMoves(allMoves.slice(0, Limits.move));
-        setCurrentTypes(allTypes.slice(0, Limits.type));
-        setCurrentPokemons(allPokemons.slice(0, Limits.pokemon));
+        setCurrentMoves(allMoves.slice(0, moveAmount));
+        setCurrentTypes(allTypes.slice(0, typesAmount));
+        setCurrentPokemons(allPokemons.slice(0, pokemonAmount));
       }
+      setTypePage(1);
+      setMovePage(1);
+      setPokemonPage(1);
+      setMoveSorting(MoveSorting.none);
+      setTypeSorting(TypeSorting.none);
+      setPokemonSorting(PokemonSorting.none);
     }
   };
 
@@ -86,15 +93,10 @@ export const SearchPage = ({ componentName, location }: Props) => {
           onChange={onChange}
         />
         <Tabs />
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {activeTab === AvailableTabs.pokemons && <PokemonView />}
-            {activeTab === AvailableTabs.moves && <MoveView />}
-            {activeTab === AvailableTabs.types && <TypeView />}
-          </>
-        )}
+        {isLoading && <Loader />}
+        {!isLoading && activeTab === AvailableTabs.pokemons && <PokemonView />}
+        {!isLoading && activeTab === AvailableTabs.moves && <MoveView />}
+        {!isLoading && activeTab === AvailableTabs.types && <TypeView />}
       </S.SearchPageView>
     </Layout>
   );
