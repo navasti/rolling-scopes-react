@@ -3,21 +3,23 @@ import reportWebVitals from './reportWebVitals';
 import { GlobalStyles } from 'commonStyles';
 import ReactDOM from 'react-dom/client';
 import { App } from 'modules';
-import React from 'react';
+
+import { GlobalContextProvider } from 'contexts/globalContext';
 import {
-  MoveContextProvider,
-  TypeContextProvider,
   FormContextProvider,
-  SearchContextProvider,
+  MoveContextProvider,
   PokemonContextProvider,
+  SearchContextProvider,
+  TypeContextProvider,
 } from 'contexts';
 
 const root = ReactDOM.createRoot(document.getElementById('app-root') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <GlobalStyles />
+  // <React.StrictMode>
+  <BrowserRouter>
+    <GlobalStyles />
+    <GlobalContextProvider>
       <SearchContextProvider>
         <MoveContextProvider>
           <PokemonContextProvider>
@@ -29,8 +31,9 @@ root.render(
           </PokemonContextProvider>
         </MoveContextProvider>
       </SearchContextProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+    </GlobalContextProvider>
+  </BrowserRouter>
+  // </React.StrictMode>
 );
 
 reportWebVitals();

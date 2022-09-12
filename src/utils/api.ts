@@ -1,4 +1,4 @@
-import { API, ErrorStatuses } from 'appConstants';
+import { API, ErrorStatuses, Limits } from 'appConstants';
 import {
   BaseSearchPokemonsData,
   BaseSearchTypesData,
@@ -136,4 +136,45 @@ export const fetchByParam = {
   pokemon: async (url: string) => await genericFetch<PokemonDetails>(url),
   type: async (url: string) => await genericFetch<PokemonTypeDetails>(url),
   move: async (url: string) => await genericFetch<PokemonMoveDetails>(url),
+};
+
+export const fetchAllData = async () => {
+  const allPokemons = await fetchAndMapPokemons(API.ALL_POKEMONS).then((pokemons) => pokemons);
+  const allMoves = await fetchAndMapMoves(API.ALL_MOVES).then((moves) => moves);
+  const allTypes = await fetchAndMapTypes(API.ALL_TYPES).then((types) => types);
+  return { allPokemons: allPokemons.mapped, allMoves: allMoves.mapped, allTypes: allTypes.mapped };
+};
+
+export const findCurrentData = async (value: string) => {
+  const { allMoves, allPokemons, allTypes } = await fetchAllData();
+  const currentTypes = allTypes.filter((item) => item.name.includes(value));
+  const currentMoves = allMoves.filter((item) => item.name.includes(value));
+  const currentPokemons = allPokemons.filter((item) => item.name.includes(value));
+  return { allMoves, allPokemons, allTypes, currentMoves, currentTypes, currentPokemons };
+};
+
+export const fetchCurrentData = async () => {
+  const { allMoves, allPokemons, allTypes } = await fetchAllData();
+  const movesData = await fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`).then((moves) => moves);
+  const typesData = await fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`).then((types) => types);
+  const pokemonsData = await fetchAndMapPokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`).then(
+    (pokemons) => pokemons
+  );
+  const currentPokemons = pokemonsData.mapped.slice(0, Limits.pokemon);
+  const basePokemons = pokemonsData.base;
+  const currentMoves = movesData.mapped.slice(0, Limits.move);
+  const baseMoves = movesData.base;
+  const currentTypes = typesData.mapped.slice(0, Limits.type);
+  const baseTypes = typesData.base;
+  return {
+    currentPokemons,
+    currentMoves,
+    currentTypes,
+    basePokemons,
+    allPokemons,
+    baseMoves,
+    baseTypes,
+    allMoves,
+    allTypes,
+  };
 };
