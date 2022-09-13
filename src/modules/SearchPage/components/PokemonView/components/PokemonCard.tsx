@@ -1,5 +1,5 @@
 import { AvailableCardDetails, PokemonDetails } from 'types';
-import { NO_IMAGE_PLACEHOLDER } from 'appConstants';
+import questionmark from 'assets/images/questionmark.png';
 import { useNavigate } from 'react-router-dom';
 import * as S from '../styled';
 
@@ -17,7 +17,7 @@ export const PokemonCard = ({ pokemon }: Props) => {
       <S.Card onClick={onClick} align="left" stretch>
         <S.ImageWrapper>
           <S.Image
-            src={pokemon.sprites.front_default || NO_IMAGE_PLACEHOLDER}
+            src={pokemon.sprites.front_default || questionmark}
             data-testid="pokemon-card"
             alt={pokemon.name}
             height="85"

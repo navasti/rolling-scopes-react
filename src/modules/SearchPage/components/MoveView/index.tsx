@@ -44,9 +44,11 @@ export const MoveView = () => {
   };
 
   const handleSorting = async (sorting: string) => {
+    setAllData({ isLoading: true });
     if (sorting === MoveSorting.none && !searchResults.moves?.length) {
       const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount.moves}`);
       setAllData({
+        isLoading: false,
         sorting: { moves: sorting },
         currentMoves: data.mapped,
         currentPage: { moves: 1 },
@@ -56,6 +58,7 @@ export const MoveView = () => {
       const sorted = sort(sorting as MoveSorting);
       const currentMoves = sorted?.slice(0, resultsAmount.moves);
       setAllData({
+        isLoading: false,
         sorting: { moves: sorting as MoveSorting },
         searchResults: { moves: sorted },
         currentPage: { moves: 1 },
@@ -65,9 +68,11 @@ export const MoveView = () => {
   };
 
   const nextPage = async () => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.pokemons && baseData.moves?.next) {
       const data = await fetchAndMapMoves(baseData.moves.next);
       setAllData({
+        isLoading: false,
         baseMoves: data.base,
         currentMoves: data.mapped,
         currentPage: {
@@ -79,6 +84,7 @@ export const MoveView = () => {
       const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
       const currentMoves = results.slice(index, index + resultsAmount.moves);
       setAllData({
+        isLoading: false,
         currentMoves,
         currentPage: {
           moves: currentPage.moves + 1,
@@ -88,9 +94,11 @@ export const MoveView = () => {
   };
 
   const previousPage = async () => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.moves && baseData.moves?.previous) {
       const data = await fetchAndMapMoves(baseData.moves.previous);
       setAllData({
+        isLoading: false,
         baseMoves: data.base,
         currentMoves: data.mapped,
         currentPage: {
@@ -102,6 +110,7 @@ export const MoveView = () => {
       const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
       const currentMoves = results.slice(index - resultsAmount.moves, index);
       setAllData({
+        isLoading: false,
         currentMoves,
         currentPage: {
           moves: currentPage.moves - 1,
@@ -111,6 +120,7 @@ export const MoveView = () => {
   };
 
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
+    setAllData({ isLoading: true });
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
       if (shouldFetchSearch.moves) {
@@ -120,6 +130,7 @@ export const MoveView = () => {
           }`
         );
         setAllData({
+          isLoading: false,
           baseMoves: data.base,
           currentMoves: data.mapped,
           currentPage: {
@@ -131,6 +142,7 @@ export const MoveView = () => {
         const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
         const currentMoves = results.slice(index - resultsAmount.moves, index);
         setAllData({
+          isLoading: false,
           currentMoves,
           currentPage: {
             moves: page,
@@ -141,9 +153,11 @@ export const MoveView = () => {
   };
 
   const handleResultsAmount = async (resultsAmount: number) => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.types) {
       const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`);
       setAllData({
+        isLoading: false,
         baseMoves: data.base,
         currentMoves: data.mapped,
         resultsAmount: {
@@ -158,6 +172,7 @@ export const MoveView = () => {
       const currentMoves = results.slice(0, resultsAmount);
       setAllData({
         currentMoves,
+        isLoading: false,
         resultsAmount: {
           moves: resultsAmount,
         },

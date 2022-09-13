@@ -46,6 +46,7 @@ export const PokemonView = () => {
   };
 
   const handleSorting = async (sorting: string) => {
+    setAllData({ isLoading: true });
     if (sorting === PokemonSorting.none && !searchResults.pokemons) {
       const data = await fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount.pokemons}`);
       setAllData({
@@ -53,6 +54,7 @@ export const PokemonView = () => {
         currentPokemons: data.mapped,
         currentPage: { pokemons: 1 },
         basePokemons: data.base,
+        isLoading: false,
       });
     } else {
       const sorted = sort(sorting as PokemonSorting);
@@ -61,15 +63,18 @@ export const PokemonView = () => {
         sorting: { pokemons: sorting as PokemonSorting },
         searchResults: { pokemons: sorted },
         currentPage: { pokemons: 1 },
+        isLoading: false,
         currentPokemons,
       });
     }
   };
 
   const nextPage = async () => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.pokemons && baseData.pokemons?.next) {
       const data = await fetchAndMapPokemons(baseData.pokemons.next);
       setAllData({
+        isLoading: false,
         basePokemons: data.base,
         currentPokemons: data.mapped,
         currentPage: {
@@ -84,6 +89,7 @@ export const PokemonView = () => {
       const currentPokemons = results.slice(index, index + resultsAmount.pokemons);
       setAllData({
         currentPokemons,
+        isLoading: false,
         currentPage: {
           pokemons: currentPage.pokemons + 1,
         },
@@ -92,9 +98,11 @@ export const PokemonView = () => {
   };
 
   const previousPage = async () => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.pokemons && baseData.pokemons?.previous) {
       const data = await fetchAndMapPokemons(baseData.pokemons.previous);
       setAllData({
+        isLoading: false,
         basePokemons: data.base,
         currentPokemons: data.mapped,
         currentPage: {
@@ -109,6 +117,7 @@ export const PokemonView = () => {
       const currentPokemons = results.slice(index - resultsAmount.pokemons, index);
       setAllData({
         currentPokemons,
+        isLoading: false,
         currentPage: {
           pokemons: currentPage.pokemons - 1,
         },
@@ -117,6 +126,7 @@ export const PokemonView = () => {
   };
 
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
+    setAllData({ isLoading: true });
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
       if (shouldFetchSearch.pokemons) {
@@ -126,6 +136,7 @@ export const PokemonView = () => {
           }`
         );
         setAllData({
+          isLoading: false,
           basePokemons: data.base,
           currentPokemons: data.mapped,
           currentPage: {
@@ -140,6 +151,7 @@ export const PokemonView = () => {
         const currentPokemons = results.slice(index - resultsAmount.pokemons, index);
         setAllData({
           currentPokemons,
+          isLoading: false,
           currentPage: {
             pokemons: page,
           },
@@ -149,9 +161,11 @@ export const PokemonView = () => {
   };
 
   const handleResultsAmount = async (resultsAmount: number) => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.pokemons) {
       const data = await fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount}`);
       setAllData({
+        isLoading: false,
         basePokemons: data.base,
         currentPokemons: data.mapped,
         resultsAmount: {
@@ -168,6 +182,7 @@ export const PokemonView = () => {
       const currentPokemons = results.slice(0, resultsAmount);
       setAllData({
         currentPokemons,
+        isLoading: false,
         resultsAmount: {
           pokemons: resultsAmount,
         },

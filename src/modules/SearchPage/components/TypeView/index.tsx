@@ -42,9 +42,11 @@ export const TypeView = () => {
   };
 
   const handleSorting = async (sorting: string) => {
+    setAllData({ isLoading: true });
     if (sorting === TypeSorting.none && !searchResults.types?.length) {
       const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount.types}`);
       setAllData({
+        isLoading: false,
         sorting: { types: sorting },
         currentTypes: data.mapped,
         currentPage: { types: 1 },
@@ -54,6 +56,7 @@ export const TypeView = () => {
       const sorted = sort(sorting as TypeSorting);
       const currentTypes = sorted?.slice(0, resultsAmount.types);
       setAllData({
+        isLoading: false,
         sorting: { types: sorting as TypeSorting },
         searchResults: { types: sorted },
         currentPage: { types: 1 },
@@ -63,9 +66,11 @@ export const TypeView = () => {
   };
 
   const nextPage = async () => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.types && baseData.types?.next) {
       const data = await fetchAndMapTypes(baseData.types.next);
       setAllData({
+        isLoading: false,
         baseTypes: data.base,
         currentTypes: data.mapped,
         currentPage: {
@@ -77,6 +82,7 @@ export const TypeView = () => {
       const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
       const currentTypes = results.slice(index, index + resultsAmount.types);
       setAllData({
+        isLoading: false,
         currentTypes,
         currentPage: {
           types: currentPage.types + 1,
@@ -86,9 +92,11 @@ export const TypeView = () => {
   };
 
   const previousPage = async () => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.types && baseData.types?.previous) {
       const data = await fetchAndMapTypes(baseData.types.previous);
       setAllData({
+        isLoading: false,
         baseTypes: data.base,
         currentTypes: data.mapped,
         currentPage: {
@@ -100,6 +108,7 @@ export const TypeView = () => {
       const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
       const currentTypes = results.slice(index - resultsAmount.types, index);
       setAllData({
+        isLoading: false,
         currentTypes,
         currentPage: {
           types: currentPage.types - 1,
@@ -109,6 +118,7 @@ export const TypeView = () => {
   };
 
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
+    setAllData({ isLoading: true });
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
       if (shouldFetchSearch.types) {
@@ -118,6 +128,7 @@ export const TypeView = () => {
           }`
         );
         setAllData({
+          isLoading: false,
           baseTypes: data.base,
           currentTypes: data.mapped,
           currentPage: {
@@ -129,6 +140,7 @@ export const TypeView = () => {
         const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
         const currentTypes = results.slice(index - resultsAmount.types, index);
         setAllData({
+          isLoading: false,
           currentTypes,
           currentPage: {
             types: page,
@@ -139,9 +151,11 @@ export const TypeView = () => {
   };
 
   const handleResultsAmount = async (resultsAmount: number) => {
+    setAllData({ isLoading: true });
     if (shouldFetchSearch.types) {
       const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`);
       setAllData({
+        isLoading: false,
         baseTypes: data.base,
         currentTypes: data.mapped,
         resultsAmount: {
@@ -155,6 +169,7 @@ export const TypeView = () => {
       const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
       const currentTypes = results.slice(0, resultsAmount);
       setAllData({
+        isLoading: false,
         currentTypes,
         resultsAmount: {
           types: resultsAmount,
