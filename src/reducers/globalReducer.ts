@@ -63,7 +63,7 @@ export const globalReducer = (state: GlobalState, action: GlobalAction) => {
       const { allData } = payload;
       return {
         ...state,
-        isLoading: false,
+        isLoading: allData?.isLoading != undefined ? allData.isLoading : state.isLoading,
         activeTab: allData?.activeTab || state.activeTab,
         sorting: {
           pokemons: allData?.sorting?.pokemons || state.sorting.pokemons,
@@ -96,9 +96,18 @@ export const globalReducer = (state: GlobalState, action: GlobalAction) => {
           types: allData?.currentPage?.types || state.currentPage.types,
         },
         searchResults: {
-          pokemons: allData?.searchResults?.pokemons || state.searchResults.pokemons,
-          moves: allData?.searchResults?.moves || state.searchResults.moves,
-          types: allData?.searchResults?.types || state.searchResults.types,
+          pokemons:
+            allData?.searchResults?.pokemons !== undefined
+              ? allData.searchResults.pokemons
+              : state.searchResults.pokemons,
+          moves:
+            allData?.searchResults?.moves !== undefined
+              ? allData.searchResults.moves
+              : state.searchResults.moves,
+          types:
+            allData?.searchResults?.types !== undefined
+              ? allData.searchResults.types
+              : state.searchResults.types,
         },
       };
     default:

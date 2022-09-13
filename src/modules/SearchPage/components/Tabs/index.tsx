@@ -4,14 +4,13 @@ import { useGlobalData } from 'hooks';
 import * as S from './styled';
 
 export const Tabs = () => {
+  const onClick = (option: AvailableTabs) => setAllData({ activeTab: option });
+  const { totalResults } = useGlobalData();
+
   const {
     setAllData,
     state: { isLoading, activeTab },
   } = useGlobalContext();
-
-  const { totalResults } = useGlobalData();
-
-  const onClick = (option: AvailableTabs) => setAllData({ activeTab: option });
 
   return (
     <S.TabsWrapper>

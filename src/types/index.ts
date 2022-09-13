@@ -25,11 +25,11 @@ export enum MoveSorting {
 }
 
 export enum PokemonSorting {
-  baseExperience = 'base experience',
+  none = 'none',
   alphabetical = 'alphabetical',
+  baseExperience = 'base experience',
   height = 'height',
   weight = 'weight',
-  none = 'none',
 }
 
 export enum TypeSorting {
@@ -90,6 +90,7 @@ export type AllData = Partial<{
   allPokemons: PokemonDetails[];
   sorting: Partial<Sorting>;
   activeTab: AvailableTabs;
+  isLoading: boolean;
 }>;
 
 export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;

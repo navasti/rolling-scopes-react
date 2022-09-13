@@ -145,12 +145,20 @@ export const fetchAllData = async () => {
   return { allPokemons: allPokemons.mapped, allMoves: allMoves.mapped, allTypes: allTypes.mapped };
 };
 
-export const findCurrentData = async (value: string) => {
+export const getCurrentDataByParam = async (value: string) => {
   const { allMoves, allPokemons, allTypes } = await fetchAllData();
-  const currentTypes = allTypes.filter((item) => item.name.includes(value));
-  const currentMoves = allMoves.filter((item) => item.name.includes(value));
-  const currentPokemons = allPokemons.filter((item) => item.name.includes(value));
-  return { allMoves, allPokemons, allTypes, currentMoves, currentTypes, currentPokemons };
+  const types = allTypes.filter((item) => item.name.includes(value));
+  const moves = allMoves.filter((item) => item.name.includes(value));
+  const pokemons = allPokemons.filter((item) => item.name.includes(value));
+  return {
+    searchResults: { pokemons, moves, types },
+    currentPokemons: pokemons.slice(0, Limits.pokemon),
+    currentTypes: types.slice(0, Limits.type),
+    currentMoves: moves.slice(0, Limits.move),
+    allPokemons,
+    allTypes,
+    allMoves,
+  };
 };
 
 export const fetchCurrentData = async () => {
@@ -160,20 +168,14 @@ export const fetchCurrentData = async () => {
   const pokemonsData = await fetchAndMapPokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`).then(
     (pokemons) => pokemons
   );
-  const currentPokemons = pokemonsData.mapped.slice(0, Limits.pokemon);
-  const basePokemons = pokemonsData.base;
-  const currentMoves = movesData.mapped.slice(0, Limits.move);
-  const baseMoves = movesData.base;
-  const currentTypes = typesData.mapped.slice(0, Limits.type);
-  const baseTypes = typesData.base;
   return {
-    currentPokemons,
-    currentMoves,
-    currentTypes,
-    basePokemons,
+    basePokemons: pokemonsData.base,
+    baseMoves: movesData.base,
+    baseTypes: typesData.base,
+    currentPokemons: pokemonsData.mapped,
+    currentMoves: movesData.mapped,
+    currentTypes: typesData.mapped,
     allPokemons,
-    baseMoves,
-    baseTypes,
     allMoves,
     allTypes,
   };

@@ -2,6 +2,7 @@ import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
 import { MoveSorting, PokemonSorting, SearchResults, TypeSorting } from 'types';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
+import { sortMove, sortPokemon, sortType } from 'utils';
 import { useGlobalContext } from 'contexts';
 import { Loader } from 'components';
 import { Layout } from 'modules';
@@ -34,11 +35,15 @@ export const SearchPage = ({ componentName, location }: Props) => {
         types: null,
       };
       if (isValueValid) {
-        searchResults.types = allDataResults.types.filter((item) => item.name.includes(inputValue));
-        searchResults.moves = allDataResults.moves.filter((item) => item.name.includes(inputValue));
-        searchResults.pokemons = allDataResults.pokemons.filter((item) =>
-          item.name.includes(inputValue)
-        );
+        searchResults.types = sortType(allDataResults.types)
+          .byId()
+          .filter((item) => item.name.includes(inputValue));
+        searchResults.moves = sortMove(allDataResults.moves)
+          .byId()
+          .filter((item) => item.name.includes(inputValue));
+        searchResults.pokemons = sortPokemon(allDataResults.pokemons)
+          .byId()
+          .filter((item) => item.name.includes(inputValue));
       }
       const { moves, pokemons, types } = searchResults;
       setAllData({
@@ -56,7 +61,7 @@ export const SearchPage = ({ componentName, location }: Props) => {
     }
   };
 
-  const onChange = async ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setInputValue(target.value);
     window.localStorage.setItem(INPUT_VALUE_KEY, target.value);
   };

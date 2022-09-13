@@ -9,8 +9,6 @@ import { Loader } from 'components';
 import { MouseEvent } from 'react';
 import * as S from './styled';
 
-// !todo add loader
-
 export const PokemonView = () => {
   const { totalPageCounts, shouldFetchSearch } = useGlobalData();
   const options = Object.values(PokemonSorting);
@@ -105,10 +103,10 @@ export const PokemonView = () => {
       });
     } else {
       const index = (currentPage.pokemons - 1) * resultsAmount.pokemons;
-      const currentPokemons = (searchResults.pokemons || allDataResults.pokemons).slice(
-        index - resultsAmount.pokemons,
-        index
-      );
+      const results = searchResults.pokemons?.length
+        ? searchResults.pokemons
+        : allDataResults.pokemons;
+      const currentPokemons = results.slice(index - resultsAmount.pokemons, index);
       setAllData({
         currentPokemons,
         currentPage: {
@@ -123,7 +121,7 @@ export const PokemonView = () => {
     if (page !== NaN) {
       if (shouldFetchSearch.pokemons) {
         const data = await fetchAndMapPokemons(
-          `${API.POKEMON}?limit=${resultsAmount}&offset=${
+          `${API.POKEMON}?limit=${resultsAmount.pokemons}&offset=${
             page * resultsAmount.pokemons - resultsAmount.pokemons
           }`
         );
@@ -136,10 +134,10 @@ export const PokemonView = () => {
         });
       } else {
         const index = page * resultsAmount.pokemons;
-        const currentPokemons = (searchResults.pokemons || allDataResults.pokemons).slice(
-          index - resultsAmount.pokemons,
-          index
-        );
+        const results = searchResults.pokemons?.length
+          ? searchResults.pokemons
+          : allDataResults.pokemons;
+        const currentPokemons = results.slice(index - resultsAmount.pokemons, index);
         setAllData({
           currentPokemons,
           currentPage: {
