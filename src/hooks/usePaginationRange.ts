@@ -1,6 +1,6 @@
+import { DOTS } from 'appConstants';
 import { useMemo } from 'react';
 import { range } from 'utils';
-export const DOTS = '...';
 
 type Props = {
   currentPage: number;

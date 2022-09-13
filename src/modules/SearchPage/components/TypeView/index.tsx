@@ -1,15 +1,13 @@
-import { ResultsSelector } from '../ResultsSelector';
-import { SortingSelector } from '../SortingSelector';
+import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage/components';
 import { API, RESULTS_AMOUNT } from 'appConstants';
-import { TypeCard } from './components/TypeCard';
-import { Pagination } from '../Pagination';
 import { fetchAndMapTypes, sortType } from 'utils';
-import { Loader } from 'components';
-import { TypeSorting } from 'types';
+import { TypeCard } from './components/TypeCard';
+import { useGlobalContext } from 'contexts';
 import { useGlobalData } from 'hooks';
+import { TypeSorting } from 'types';
+import { Loader } from 'components';
 import { MouseEvent } from 'react';
 import * as S from './styled';
-import { useGlobalContext } from 'contexts/globalContext';
 
 export const TypeView = () => {
   const { totalPageCounts, shouldFetchSearch } = useGlobalData();

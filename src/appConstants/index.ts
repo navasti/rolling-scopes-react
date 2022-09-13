@@ -50,7 +50,7 @@ export enum Types {
   water = 'water',
   ice = 'ice',
 }
-
+export const DOTS = '...';
 export const NONE = 'none';
 export const MALE = 'male';
 export const FEMALE = 'female';

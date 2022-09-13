@@ -1,8 +1,8 @@
 import { SortingSelector, Pagination, ResultsSelector } from 'modules/SearchPage/components';
-import { useGlobalContext } from 'contexts/globalContext';
 import { fetchAndMapPokemons, sortPokemon } from 'utils';
 import { PokemonCard } from './components/PokemonCard';
 import { API, RESULTS_AMOUNT } from 'appConstants';
+import { useGlobalContext } from 'contexts';
 import { PokemonSorting } from 'types';
 import { useGlobalData } from 'hooks';
 import { Loader } from 'components';

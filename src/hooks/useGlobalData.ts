@@ -1,5 +1,5 @@
-import { useGlobalContext } from 'contexts/globalContext';
 import { MoveSorting, PokemonSorting, TypeSorting } from 'types';
+import { useGlobalContext } from 'contexts';
 
 export const useGlobalData = () => {
   const {

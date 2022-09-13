@@ -1,5 +1,5 @@
-import { useGlobalContext } from 'contexts/globalContext';
 import { AvailableTabs, TABS } from 'appConstants';
+import { useGlobalContext } from 'contexts';
 import { useGlobalData } from 'hooks';
 import * as S from './styled';
 

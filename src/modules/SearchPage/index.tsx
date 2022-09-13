@@ -2,7 +2,7 @@ import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
 import { MoveSorting, PokemonSorting, SearchResults, TypeSorting } from 'types';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
-import { useGlobalContext } from 'contexts/globalContext';
+import { useGlobalContext } from 'contexts';
 import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';

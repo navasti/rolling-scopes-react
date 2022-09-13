@@ -1,15 +1,13 @@
-import { SortingSelector } from '../SortingSelector';
-import { ResultsSelector } from '../ResultsSelector';
+import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage/components';
 import { API, RESULTS_AMOUNT } from 'appConstants';
-import { MoveCard } from './components/MoveCard';
-import { Pagination } from '../Pagination';
 import { fetchAndMapMoves, sortMove } from 'utils';
-import { Loader } from 'components';
+import { MoveCard } from './components/MoveCard';
+import { useGlobalContext } from 'contexts';
 import { useGlobalData } from 'hooks';
-import { MouseEvent } from 'react';
 import { MoveSorting } from 'types';
+import { Loader } from 'components';
+import { MouseEvent } from 'react';
 import * as S from './styled';
-import { useGlobalContext } from 'contexts/globalContext';
 
 export const MoveView = () => {
   const { totalPageCounts, shouldFetchSearch } = useGlobalData();

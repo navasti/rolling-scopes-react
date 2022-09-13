@@ -1,4 +1,5 @@
-import { usePaginationRange, DOTS } from 'hooks';
+import { usePaginationRange } from 'hooks';
+import { DOTS } from 'appConstants';
 import { MouseEvent } from 'react';
 import * as S from './styled';
 

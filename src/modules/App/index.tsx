@@ -1,8 +1,8 @@
 import { SearchPage, About, NotFound, Form, Details } from 'modules';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { fetchCurrentData, findCurrentData } from 'utils';
-import { useGlobalContext } from 'contexts/globalContext';
 import { INPUT_VALUE_KEY } from 'appConstants';
+import { useGlobalContext } from 'contexts';
 import { useEffect } from 'react';
 
 export const App = () => {
