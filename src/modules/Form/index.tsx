@@ -1,7 +1,7 @@
 import { CustomPokemon, FormFields, MessageType } from 'types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useFormContext } from 'contexts';
+import { useGlobalContext } from 'contexts';
 import { useState } from 'react';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -36,9 +36,9 @@ export const Form = ({ componentName, location }: Props) => {
   const [initialEnter, setInitialEnter] = useState(true);
 
   const {
-    formState: { customPokemons },
-    addPokemon,
-  } = useFormContext();
+    addCustomPokemon,
+    state: { customPokemons },
+  } = useGlobalContext();
 
   const {
     formState: { errors },
@@ -64,8 +64,8 @@ export const Form = ({ componentName, location }: Props) => {
       type,
       name,
     };
-    addPokemon(customPokemon);
     setShowSuccessMessage(true);
+    addCustomPokemon(customPokemon);
     reset(DEFAULT_VALUES, { keepValues: false });
   };
 

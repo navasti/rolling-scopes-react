@@ -1,7 +1,7 @@
 import { MoveCardDetails, PokemonCardDetails, TypeCardDetails } from './components';
-import { useMoveContext, usePokemonContext, useTypeContext } from 'contexts';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useGlobalContext } from 'contexts';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {
@@ -39,32 +39,24 @@ export const Details = ({ componentName, location }: Props) => {
   const { id, resourceType } = useParams();
 
   const {
-    moveState: { allDataResults: allMoves },
-  } = useMoveContext();
-
-  const {
-    pokemonState: { allDataResults: allPokemons },
-  } = usePokemonContext();
-
-  const {
-    typeState: { allDataResults: allTypes },
-  } = useTypeContext();
+    state: { allDataResults },
+  } = useGlobalContext();
 
   useEffect(() => {
     const { move, pokemon, type } = AvailableCardDetails;
     if (id && resourceType === pokemon) {
-      const found = allPokemons.find((pokemon) => pokemon.id === Number(id));
+      const found = allDataResults.pokemons.find((pokemon) => pokemon.id === Number(id));
       found && setMatchedData({ resourceType, data: found });
     }
     if (id && resourceType === move) {
-      const found = allMoves.find((move) => move.id === Number(id));
+      const found = allDataResults.moves.find((move) => move.id === Number(id));
       found && setMatchedData({ resourceType, data: found });
     }
     if (id && resourceType === type) {
-      const found = allTypes.find((type) => type.id === Number(id));
+      const found = allDataResults.types.find((type) => type.id === Number(id));
       found && setMatchedData({ resourceType, data: found });
     }
-  }, [resourceType, id, allPokemons, allMoves, allTypes]);
+  }, [resourceType, id, allDataResults]);
 
   return (
     <Layout location={location} componentName={componentName}>
