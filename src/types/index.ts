@@ -48,6 +48,42 @@ export enum PokemonSorting {
   weight = 'weight',
 }
 
+export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+
+export type SearchResults = {
+  pokemons: Array<PokemonDetails> | null;
+  types: Array<PokemonTypeDetails> | null;
+  moves: Array<PokemonMoveDetails> | null;
+};
+
+export type AllDataResults = {
+  pokemons: Array<PokemonDetails>;
+  moves: Array<PokemonMoveDetails>;
+  types: Array<PokemonTypeDetails>;
+};
+
+export type CurrentPageResults = {
+  pokemons: Array<PokemonDetails>;
+  moves: Array<PokemonMoveDetails>;
+  types: Array<PokemonTypeDetails>;
+};
+
+export type BaseData = {
+  pokemons: PokemonBaseData | null;
+  moves: MoveBaseData | null;
+  types: TypeBaseData | null;
+};
+
+export type Sorting = {
+  pokemons: PokemonSorting;
+  moves: MoveSorting;
+  types: TypeSorting;
+};
+
+export type CurrentPage = { pokemons: number; moves: number; types: number };
+
+export type ResultsAmount = { pokemons: number; moves: number; types: number };
+
 export type PokemonBaseData = {
   previous: null | string;
   results: Array<Pokemon>;
@@ -116,8 +152,6 @@ export type MessageProps = {
   visible: boolean;
   center?: boolean;
 };
-
-export type CardDetails = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
 export type CardsProps = {
   types: Array<PokemonTypeDetails>;

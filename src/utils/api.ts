@@ -8,10 +8,10 @@ import {
   BasePokemonsData,
   PokemonDetails,
   BaseTypesData,
-  CardDetails,
   PokemonBaseData,
   MoveBaseData,
   TypeBaseData,
+  Details,
 } from 'types';
 
 export const isServerError = (status: number) => String(status).startsWith(ErrorStatuses.server);
@@ -76,7 +76,7 @@ export const fetchAndMapTypes = async <T extends TypeBaseData>(url: string) => {
 
 const fetchAndMapResults = async <
   T extends {
-    currentPageResults?: Array<CardDetails>;
+    currentPageResults?: Array<Details>;
     results: Array<{
       name: string;
       url: string;

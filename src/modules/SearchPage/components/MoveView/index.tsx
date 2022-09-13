@@ -1,191 +1,201 @@
-import { useMoveContext, useSearchContext } from 'contexts';
 import { SortingSelector } from '../SortingSelector';
 import { ResultsSelector } from '../ResultsSelector';
 import { API, RESULTS_AMOUNT } from 'appConstants';
 import { MoveCard } from './components/MoveCard';
 import { Pagination } from '../Pagination';
-import { fetchAndMapMoves } from 'utils';
+import { fetchAndMapMoves, sortMove } from 'utils';
 import { Loader } from 'components';
-import { useMoveData } from 'hooks';
+import { useGlobalData } from 'hooks';
 import { MouseEvent } from 'react';
 import { MoveSorting } from 'types';
 import * as S from './styled';
+import { useGlobalContext } from 'contexts/globalContext';
 
 export const MoveView = () => {
-  const {
-    setSorting,
-    setBaseData,
-    setCurrentPage,
-    setResultsAmount,
-    setSearchResults,
-    setCurrentPageResults,
-    moveState: {
-      sorting,
-      baseData,
-      currentPage,
-      searchResults,
-      resultsAmount,
-      allDataResults,
-      currentPageResults,
-    },
-  } = useMoveContext();
-
-  const {
-    totalPageCount,
-    shouldFetchSearch,
-    sortById,
-    sortByPP,
-    sortByPower,
-    sortByAccuracy,
-    sortAplhabetically,
-  } = useMoveData();
-
-  const {
-    setIsLoading,
-    searchState: { isLoading },
-  } = useSearchContext();
-
+  const { totalPageCounts, shouldFetchSearch } = useGlobalData();
   const options = Object.values(MoveSorting);
 
+  const {
+    setAllData,
+    state: {
+      allDataResults,
+      currentPageResults,
+      searchResults,
+      isLoading,
+      resultsAmount,
+      currentPage,
+      baseData,
+      sorting,
+    },
+  } = useGlobalContext();
+
   const sort = (sorting: MoveSorting) => {
+    const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
     switch (sorting) {
       case MoveSorting.accuracy:
-        return sortByAccuracy();
+        return sortMove(results).byAccuracy();
       case MoveSorting.alphabetical:
-        return sortAplhabetically();
+        return sortMove(results).alphabetical();
       case MoveSorting.power:
-        return sortByPower();
+        return sortMove(results).byPower();
       case MoveSorting.pp:
-        return sortByPP();
+        return sortMove(results).byPP();
       default:
-        return sortById();
+        return sortMove(results).byId();
     }
   };
 
-  const handleSorting = (sorting: string) => {
-    if (sorting === MoveSorting.none && !searchResults) {
-      fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`).then((moves) => {
-        moves.base && setBaseData(moves.base);
-        setCurrentPageResults(moves.mapped);
+  const handleSorting = async (sorting: string) => {
+    if (sorting === MoveSorting.none && !searchResults.moves?.length) {
+      const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount.moves}`);
+      setAllData({
+        sorting: { moves: sorting },
+        currentMoves: data.mapped,
+        currentPage: { moves: 1 },
+        baseMoves: data.base,
       });
     } else {
       const sorted = sort(sorting as MoveSorting);
-      const results = sorted?.slice(0, resultsAmount);
-      if (sorted && results) {
-        setCurrentPageResults(results);
-        setSearchResults(sorted);
-      }
+      const currentMoves = sorted?.slice(0, resultsAmount.moves);
+      setAllData({
+        sorting: { moves: sorting as MoveSorting },
+        searchResults: { moves: sorted },
+        currentPage: { moves: 1 },
+        currentMoves,
+      });
     }
-    setSorting(sorting as MoveSorting);
-    setCurrentPage(1);
   };
 
   const nextPage = async () => {
-    if (shouldFetchSearch && baseData.next) {
-      setIsLoading(true);
-      fetchAndMapMoves(baseData.next).then((moves) => {
-        const { base, mapped } = moves;
-        if (base) {
-          setBaseData(base);
-          setCurrentPageResults(mapped);
-          setCurrentPage(currentPage + 1);
-        }
-        setIsLoading(false);
+    if (shouldFetchSearch.pokemons && baseData.moves?.next) {
+      const data = await fetchAndMapMoves(baseData.moves.next);
+      setAllData({
+        baseMoves: data.base,
+        currentMoves: data.mapped,
+        currentPage: {
+          moves: currentPage.moves + 1,
+        },
       });
     } else {
-      const index = currentPage * resultsAmount;
-      const results = (searchResults || allDataResults).slice(index, index + resultsAmount);
-      setCurrentPageResults(results);
-      setCurrentPage(currentPage + 1);
+      const index = currentPage.moves * resultsAmount.moves;
+      const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
+      const currentMoves = results.slice(index, index + resultsAmount.moves);
+      setAllData({
+        currentMoves,
+        currentPage: {
+          moves: currentPage.moves + 1,
+        },
+      });
     }
   };
 
   const previousPage = async () => {
-    if (shouldFetchSearch && baseData.previous) {
-      setIsLoading(true);
-      fetchAndMapMoves(baseData.previous).then((moves) => {
-        const { base, mapped } = moves;
-        if (base) {
-          setBaseData(base);
-          setCurrentPageResults(mapped);
-          setCurrentPage(currentPage - 1);
-        }
-        setIsLoading(false);
+    if (shouldFetchSearch.moves && baseData.moves?.previous) {
+      const data = await fetchAndMapMoves(baseData.moves.previous);
+      setAllData({
+        baseMoves: data.base,
+        currentMoves: data.mapped,
+        currentPage: {
+          moves: currentPage.moves - 1,
+        },
       });
     } else {
-      const index = (currentPage - 1) * resultsAmount;
-      const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
-      setCurrentPageResults(results);
-      setCurrentPage(currentPage - 1);
+      const index = (currentPage.moves - 1) * resultsAmount.moves;
+      const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
+      const currentMoves = results.slice(index - resultsAmount.moves, index);
+      setAllData({
+        currentMoves,
+        currentPage: {
+          moves: currentPage.moves - 1,
+        },
+      });
     }
   };
 
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
-      if (shouldFetchSearch) {
-        setIsLoading(true);
-        fetchAndMapMoves(
-          `${API.MOVE}?limit=${resultsAmount}&offset=${page * resultsAmount - resultsAmount}`
-        ).then((moves) => {
-          const { base, mapped } = moves;
-          if (base) {
-            setBaseData(base);
-            setCurrentPageResults(mapped);
-          }
-          setCurrentPage(page);
-          setIsLoading(false);
+      if (shouldFetchSearch.moves) {
+        const data = await fetchAndMapMoves(
+          `${API.MOVE}?limit=${resultsAmount.moves}&offset=${
+            page * resultsAmount.moves - resultsAmount.moves
+          }`
+        );
+        setAllData({
+          baseMoves: data.base,
+          currentMoves: data.mapped,
+          currentPage: {
+            moves: page,
+          },
         });
       } else {
-        const index = page * resultsAmount;
-        const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
-        setCurrentPageResults(results);
-        setCurrentPage(page);
+        const index = page * resultsAmount.moves;
+        const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
+        const currentMoves = results.slice(index - resultsAmount.moves, index);
+        setAllData({
+          currentMoves,
+          currentPage: {
+            moves: page,
+          },
+        });
       }
     }
   };
 
-  const handleResultsAmount = (resultsAmount: number) => {
-    setResultsAmount(resultsAmount);
-    if (shouldFetchSearch) {
-      setIsLoading(true);
-      fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`).then((moves) => {
-        const { base, mapped } = moves;
-        if (base) {
-          setBaseData(base);
-          setCurrentPageResults(mapped);
-        }
-        setCurrentPage(1);
-        setIsLoading(false);
+  const handleResultsAmount = async (resultsAmount: number) => {
+    if (shouldFetchSearch.types) {
+      const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`);
+      setAllData({
+        baseMoves: data.base,
+        currentMoves: data.mapped,
+        resultsAmount: {
+          moves: resultsAmount,
+        },
+        currentPage: {
+          moves: 1,
+        },
       });
     } else {
-      const results = (searchResults || allDataResults).slice(0, resultsAmount);
-      setCurrentPageResults(results);
-      setCurrentPage(1);
+      const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
+      const currentMoves = results.slice(0, resultsAmount);
+      setAllData({
+        currentMoves,
+        resultsAmount: {
+          moves: resultsAmount,
+        },
+        currentPage: {
+          moves: 1,
+        },
+      });
     }
   };
 
   return (
     <S.MoveView>
       <S.SelectorsWrapper>
-        <SortingSelector name="move" onChange={handleSorting} options={options} value={sorting} />
+        <SortingSelector
+          onChange={handleSorting}
+          value={sorting.moves}
+          options={options}
+          name="move"
+        />
         <ResultsSelector
           options={RESULTS_AMOUNT.MOVE}
           onClick={handleResultsAmount}
-          value={resultsAmount}
+          value={resultsAmount.moves}
         />
       </S.SelectorsWrapper>
       <Pagination
-        totalPageCount={totalPageCount}
+        totalPageCount={totalPageCounts.moves}
+        currentPage={currentPage.moves}
         previousPage={previousPage}
         specificPage={specificPage}
-        currentPage={currentPage}
         nextPage={nextPage}
       />
-      {!currentPageResults.length && <S.TextCenter>No types found</S.TextCenter>}
+      {!currentPageResults.moves.length && <S.TextCenter>No types found</S.TextCenter>}
       {isLoading && <Loader />}
       <S.CardsWrapper visible={!isLoading}>
-        {currentPageResults.map((move) => (
+        {currentPageResults.moves.map((move) => (
           <MoveCard key={move.id} move={move} />
         ))}
       </S.CardsWrapper>

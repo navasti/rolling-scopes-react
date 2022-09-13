@@ -1,20 +1,17 @@
-import { usePokemonData } from 'hooks/usePokemonData';
+import { useGlobalContext } from 'contexts/globalContext';
 import { AvailableTabs, TABS } from 'appConstants';
-import { useMoveData, useTypeData } from 'hooks';
-import { useSearchContext } from 'contexts';
+import { useGlobalData } from 'hooks';
 import * as S from './styled';
 
 export const Tabs = () => {
   const {
-    setActiveTab,
-    searchState: { isLoading, activeTab },
-  } = useSearchContext();
+    setAllData,
+    state: { isLoading, activeTab },
+  } = useGlobalContext();
 
-  const { totalResults: totalPokemons } = usePokemonData();
-  const { totalResults: totalTypes } = useTypeData();
-  const { totalResults: totalMoves } = useMoveData();
+  const { totalResults } = useGlobalData();
 
-  const onClick = (option: AvailableTabs) => setActiveTab(option);
+  const onClick = (option: AvailableTabs) => setAllData({ activeTab: option });
 
   return (
     <S.TabsWrapper>
@@ -24,11 +21,11 @@ export const Tabs = () => {
           {!isLoading &&
             `(${
               option === AvailableTabs.pokemons
-                ? totalPokemons
+                ? totalResults.pokemons
                 : option === AvailableTabs.moves
-                ? totalMoves
+                ? totalResults.moves
                 : option === AvailableTabs.types
-                ? totalTypes
+                ? totalResults.types
                 : 0
             })`}
         </S.Tab>

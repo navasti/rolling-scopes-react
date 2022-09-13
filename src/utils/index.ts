@@ -1,3 +1,4 @@
+import { Details, PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { DateTime } from 'luxon';
 export * from './api';
 
@@ -40,3 +41,32 @@ export const prepareBaseSortingData = <T>(details?: T | undefined) => {
     results: [],
   };
 };
+
+export const sortCommon = <T extends Details[]>(array: T) => ({
+  byId: () => array.sort((a, b) => a.id - b.id),
+  alphabetical: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => a.name.localeCompare(b.name)),
+});
+
+export const sortPokemon = (array: Array<PokemonDetails>) => ({
+  ...sortCommon(array),
+  byWeight: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.weight - a.weight),
+  byHeight: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.height - a.height),
+  byBaseExperience: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => b.base_experience - a.base_experience),
+});
+
+export const sortMove = (array: Array<PokemonMoveDetails>) => ({
+  ...sortCommon(array),
+  byPP: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.pp - a.pp),
+  byPower: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.power - a.power),
+  byAccuracy: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.accuracy - a.accuracy),
+});
+
+export const sortType = (array: Array<PokemonTypeDetails>) => ({
+  ...sortCommon(array),
+  byMovesAmount: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => b.moves.length - a.moves.length),
+  byPokemonsAmount: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => b.pokemon.length - a.pokemon.length),
+});

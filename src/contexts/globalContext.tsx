@@ -1,23 +1,23 @@
-import { AvailableTabs, Limits } from 'appConstants';
 import { createContext, useCallback, useContext, useMemo, useReducer } from 'react';
+import { AvailableTabs, Limits } from 'appConstants';
 import {
   CurrentPageResults,
+  PokemonMoveDetails,
+  PokemonTypeDetails,
+  PokemonBaseData,
   AllDataResults,
+  PokemonSorting,
+  PokemonDetails,
   SearchResults,
   CustomPokemon,
   ResultsAmount,
+  MoveBaseData,
+  TypeBaseData,
+  TypeSorting,
+  MoveSorting,
   CurrentPage,
   BaseData,
   Sorting,
-  PokemonSorting,
-  MoveSorting,
-  TypeSorting,
-  MoveBaseData,
-  PokemonMoveDetails,
-  PokemonBaseData,
-  PokemonDetails,
-  TypeBaseData,
-  PokemonTypeDetails,
 } from 'types';
 
 export type State = {
@@ -37,8 +37,6 @@ export type GlobalContextProps = {
   setAllData: (allData: AllData) => void;
   state: State;
 };
-
-// ujednolicic obiekty przy mutacjach
 
 const initialState: State = {
   activeTab: AvailableTabs.pokemons,
@@ -97,18 +95,20 @@ export type GlobalAction = {
 };
 
 type AllData = Partial<{
+  searchResults: Partial<SearchResults>;
+  resultsAmount: Partial<ResultsAmount>;
   basePokemons: PokemonBaseData | null;
   currentMoves: PokemonMoveDetails[];
   currentTypes: PokemonTypeDetails[];
   currentPokemons: PokemonDetails[];
+  currentPage: Partial<CurrentPage>;
   baseMoves: MoveBaseData | null;
   baseTypes: TypeBaseData | null;
   allMoves: PokemonMoveDetails[];
   allTypes: PokemonTypeDetails[];
   allPokemons: PokemonDetails[];
-  searchResults: SearchResults;
-  currentPage: CurrentPage;
-  sorting: Sorting;
+  sorting: Partial<Sorting>;
+  activeTab: AvailableTabs;
 }>;
 
 export const globalReducer = (state: State, action: GlobalAction) => {
@@ -116,14 +116,14 @@ export const globalReducer = (state: State, action: GlobalAction) => {
   switch (type) {
     case GlobalActionType.setAllData:
       const { allData } = payload;
-      console.log('all data to set ', allData);
       return {
         ...state,
         isLoading: false,
+        activeTab: allData?.activeTab || state.activeTab,
         sorting: {
-          pokemons: allData?.sorting?.pokemons || PokemonSorting.none,
-          moves: allData?.sorting?.moves || MoveSorting.none,
-          types: allData?.sorting?.types || TypeSorting.none,
+          pokemons: allData?.sorting?.pokemons || state.sorting.pokemons,
+          moves: allData?.sorting?.moves || state.sorting.moves,
+          types: allData?.sorting?.types || state.sorting.types,
         },
         allDataResults: {
           pokemons: allData?.allPokemons || state.allDataResults.pokemons,
@@ -135,20 +135,25 @@ export const globalReducer = (state: State, action: GlobalAction) => {
           moves: allData?.currentMoves || state.currentPageResults.moves,
           types: allData?.currentTypes || state.currentPageResults.types,
         },
+        resultsAmount: {
+          pokemons: allData?.resultsAmount?.pokemons || state.resultsAmount.pokemons,
+          moves: allData?.resultsAmount?.moves || state.resultsAmount.moves,
+          types: allData?.resultsAmount?.types || state.resultsAmount.types,
+        },
         baseData: {
           pokemons: allData?.basePokemons || state.baseData.pokemons,
           moves: allData?.baseMoves || state.baseData.moves,
           types: allData?.baseTypes || state.baseData.types,
         },
         currentPage: {
-          pokemons: allData?.currentPage?.pokemons || 1,
-          moves: allData?.currentPage?.moves || 1,
-          types: allData?.currentPage?.types || 1,
+          pokemons: allData?.currentPage?.pokemons || state.currentPage.pokemons,
+          moves: allData?.currentPage?.moves || state.currentPage.moves,
+          types: allData?.currentPage?.types || state.currentPage.types,
         },
         searchResults: {
-          pokemons: allData?.searchResults?.pokemons || [],
-          moves: allData?.searchResults?.moves || [],
-          types: allData?.searchResults?.types || [],
+          pokemons: allData?.searchResults?.pokemons || state.searchResults.pokemons,
+          moves: allData?.searchResults?.moves || state.searchResults.moves,
+          types: allData?.searchResults?.types || state.searchResults.types,
         },
       };
     default:

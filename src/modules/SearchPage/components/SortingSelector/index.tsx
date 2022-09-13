@@ -6,6 +6,7 @@ type Props = {
   options: Array<string>;
   onChange: (sorting: string) => void;
 };
+
 export const SortingSelector = ({ name, options, value, onChange }: Props) => {
   return (
     <S.SelectorWrapper>

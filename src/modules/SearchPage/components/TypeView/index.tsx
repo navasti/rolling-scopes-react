@@ -1,188 +1,199 @@
-import { useSearchContext, useTypeContext } from 'contexts';
 import { ResultsSelector } from '../ResultsSelector';
 import { SortingSelector } from '../SortingSelector';
 import { API, RESULTS_AMOUNT } from 'appConstants';
 import { TypeCard } from './components/TypeCard';
 import { Pagination } from '../Pagination';
-import { fetchAndMapTypes } from 'utils';
+import { fetchAndMapTypes, sortType } from 'utils';
 import { Loader } from 'components';
 import { TypeSorting } from 'types';
-import { useTypeData } from 'hooks';
+import { useGlobalData } from 'hooks';
 import { MouseEvent } from 'react';
 import * as S from './styled';
+import { useGlobalContext } from 'contexts/globalContext';
 
 export const TypeView = () => {
-  const {
-    setSorting,
-    setBaseData,
-    setCurrentPage,
-    setResultsAmount,
-    setSearchResults,
-    setCurrentPageResults,
-    typeState: {
-      sorting,
-      baseData,
-      currentPage,
-      searchResults,
-      resultsAmount,
-      allDataResults,
-      currentPageResults,
-    },
-  } = useTypeContext();
-
-  const {
-    totalPageCount,
-    shouldFetchSearch,
-    sortById,
-    sortByMovesAmount,
-    sortAlphabetically,
-    sortByPokemonsAmount,
-  } = useTypeData();
-
-  const {
-    setIsLoading,
-    searchState: { isLoading },
-  } = useSearchContext();
-
+  const { totalPageCounts, shouldFetchSearch } = useGlobalData();
   const options = Object.values(TypeSorting);
 
+  const {
+    setAllData,
+    state: {
+      allDataResults,
+      currentPageResults,
+      searchResults,
+      isLoading,
+      resultsAmount,
+      currentPage,
+      baseData,
+      sorting,
+    },
+  } = useGlobalContext();
+
   const sort = (sorting: TypeSorting) => {
+    const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
     switch (sorting) {
       case TypeSorting.alphabetical:
-        return sortAlphabetically();
+        return sortType(results).alphabetical();
       case TypeSorting.movesAmount:
-        return sortByMovesAmount();
+        return sortType(results).byMovesAmount();
       case TypeSorting.pokemonsAmount:
-        return sortByPokemonsAmount();
+        return sortType(results).byPokemonsAmount();
       default:
-        return sortById();
+        return sortType(results).byId();
     }
   };
 
-  const handleSorting = (sorting: string) => {
-    if (sorting === TypeSorting.none && !searchResults) {
-      fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`).then((types) => {
-        types.base && setBaseData(types.base);
-        setCurrentPageResults(types.mapped);
+  const handleSorting = async (sorting: string) => {
+    if (sorting === TypeSorting.none && !searchResults.types?.length) {
+      const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount.types}`);
+      setAllData({
+        sorting: { types: sorting },
+        currentTypes: data.mapped,
+        currentPage: { types: 1 },
+        baseTypes: data.base,
       });
     } else {
       const sorted = sort(sorting as TypeSorting);
-      const results = sorted?.slice(0, resultsAmount);
-      if (sorted && results) {
-        setCurrentPageResults(results);
-        setSearchResults(sorted);
-      }
+      const currentTypes = sorted?.slice(0, resultsAmount.types);
+      setAllData({
+        sorting: { types: sorting as TypeSorting },
+        searchResults: { types: sorted },
+        currentPage: { types: 1 },
+        currentTypes,
+      });
     }
-    setSorting(sorting as TypeSorting);
-    setCurrentPage(1);
   };
 
   const nextPage = async () => {
-    if (shouldFetchSearch && baseData.next) {
-      fetchAndMapTypes(baseData.next).then((types) => {
-        setIsLoading(true);
-        const { base, mapped } = types;
-        if (base) {
-          setBaseData(base);
-          setCurrentPageResults(mapped);
-          setCurrentPage(currentPage + 1);
-        }
-        setIsLoading(false);
+    if (shouldFetchSearch.types && baseData.types?.next) {
+      const data = await fetchAndMapTypes(baseData.types.next);
+      setAllData({
+        baseTypes: data.base,
+        currentTypes: data.mapped,
+        currentPage: {
+          types: currentPage.types + 1,
+        },
       });
     } else {
-      const index = currentPage * resultsAmount;
-      const results = (searchResults || allDataResults).slice(index, index + resultsAmount);
-      setCurrentPageResults(results);
-      setCurrentPage(currentPage + 1);
+      const index = currentPage.types * resultsAmount.types;
+      const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
+      const currentTypes = results.slice(index, index + resultsAmount.types);
+      setAllData({
+        currentTypes,
+        currentPage: {
+          types: currentPage.types + 1,
+        },
+      });
     }
   };
 
   const previousPage = async () => {
-    if (shouldFetchSearch && baseData.previous) {
-      fetchAndMapTypes(baseData.previous).then((types) => {
-        setIsLoading(true);
-        const { base, mapped } = types;
-        if (base) {
-          setBaseData(base);
-          setCurrentPageResults(mapped);
-          setCurrentPage(currentPage - 1);
-        }
-        setIsLoading(false);
+    if (shouldFetchSearch.types && baseData.types?.previous) {
+      const data = await fetchAndMapTypes(baseData.types.previous);
+      setAllData({
+        baseTypes: data.base,
+        currentTypes: data.mapped,
+        currentPage: {
+          types: currentPage.types - 1,
+        },
       });
     } else {
-      const index = (currentPage - 1) * resultsAmount;
-      const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
-      setCurrentPageResults(results);
-      setCurrentPage(currentPage - 1);
+      const index = (currentPage.types - 1) * resultsAmount.types;
+      const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
+      const currentTypes = results.slice(index - resultsAmount.types, index);
+      setAllData({
+        currentTypes,
+        currentPage: {
+          types: currentPage.types - 1,
+        },
+      });
     }
   };
 
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
-      if (shouldFetchSearch) {
-        setIsLoading(true);
-        fetchAndMapTypes(
-          `${API.TYPE}?limit=${resultsAmount}&offset=${page * resultsAmount - resultsAmount}`
-        ).then((types) => {
-          const { base, mapped } = types;
-          if (base) {
-            setBaseData(base);
-            setCurrentPageResults(mapped);
-          }
-          setCurrentPage(page);
-          setIsLoading(false);
+      if (shouldFetchSearch.types) {
+        const data = await fetchAndMapTypes(
+          `${API.TYPE}?limit=${resultsAmount.types}&offset=${
+            page * resultsAmount.types - resultsAmount.types
+          }`
+        );
+        setAllData({
+          baseTypes: data.base,
+          currentTypes: data.mapped,
+          currentPage: {
+            types: page,
+          },
         });
       } else {
-        const index = page * resultsAmount;
-        const results = (searchResults || allDataResults).slice(index - resultsAmount, index);
-        setCurrentPageResults(results);
-        setCurrentPage(page);
+        const index = page * resultsAmount.types;
+        const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
+        const currentTypes = results.slice(index - resultsAmount.types, index);
+        setAllData({
+          currentTypes,
+          currentPage: {
+            types: page,
+          },
+        });
       }
     }
   };
 
-  const handleResultsAmount = (resultsAmount: number) => {
-    setResultsAmount(resultsAmount);
-    if (shouldFetchSearch) {
-      setIsLoading(true);
-      fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`).then((types) => {
-        const { base, mapped } = types;
-        if (base) {
-          setBaseData(base);
-          setCurrentPageResults(mapped);
-        }
-        setCurrentPage(1);
-        setIsLoading(false);
+  const handleResultsAmount = async (resultsAmount: number) => {
+    if (shouldFetchSearch.types) {
+      const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`);
+      setAllData({
+        baseTypes: data.base,
+        currentTypes: data.mapped,
+        resultsAmount: {
+          types: resultsAmount,
+        },
+        currentPage: {
+          types: 1,
+        },
       });
     } else {
-      const results = (searchResults || allDataResults).slice(0, resultsAmount);
-      setCurrentPageResults(results);
-      setCurrentPage(1);
+      const results = searchResults.types?.length ? searchResults.types : allDataResults.types;
+      const currentTypes = results.slice(0, resultsAmount);
+      setAllData({
+        currentTypes,
+        resultsAmount: {
+          types: resultsAmount,
+        },
+        currentPage: {
+          types: 1,
+        },
+      });
     }
   };
 
   return (
     <S.TypeView>
       <S.SelectorsWrapper>
-        <SortingSelector name="type" onChange={handleSorting} options={options} value={sorting} />
+        <SortingSelector
+          name="type"
+          options={options}
+          value={sorting.types}
+          onChange={handleSorting}
+        />
         <ResultsSelector
           options={RESULTS_AMOUNT.TYPE}
           onClick={handleResultsAmount}
-          value={resultsAmount}
+          value={resultsAmount.types}
         />
       </S.SelectorsWrapper>
       <Pagination
-        totalPageCount={totalPageCount}
+        totalPageCount={totalPageCounts.types}
+        currentPage={currentPage.types}
         previousPage={previousPage}
         specificPage={specificPage}
-        currentPage={currentPage}
         nextPage={nextPage}
       />
-      {!currentPageResults.length && <S.TextCenter>No types found</S.TextCenter>}
+      {!currentPageResults.types?.length && <S.TextCenter>No types found</S.TextCenter>}
       {isLoading && <Loader />}
       <S.CardsWrapper visible={!isLoading}>
-        {currentPageResults.map((type) => (
+        {currentPageResults.types.map((type) => (
           <TypeCard key={type.id} type={type} />
         ))}
       </S.CardsWrapper>
