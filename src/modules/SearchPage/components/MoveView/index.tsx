@@ -1,6 +1,6 @@
 import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage/components';
+import { fetchAndMapMoves, handleCatch, sortMove } from 'utils';
 import { API, RESULTS_AMOUNT } from 'appConstants';
-import { fetchAndMapMoves, sortMove } from 'utils';
 import { MoveCard } from './components/MoveCard';
 import { useGlobalContext } from 'contexts';
 import { useGlobalData } from 'hooks';
@@ -43,17 +43,20 @@ export const MoveView = () => {
     }
   };
 
-  const handleSorting = async (sorting: string) => {
+  const handleSorting = (sorting: string) => {
     setAllData({ isLoading: true });
     if (sorting === MoveSorting.none && !searchResults.moves?.length) {
-      const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount.moves}`);
-      setAllData({
-        isLoading: false,
-        sorting: { moves: sorting },
-        currentMoves: data.mapped,
-        currentPage: { moves: 1 },
-        baseMoves: data.base,
-      });
+      fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount.moves}`)
+        .then((data) =>
+          setAllData({
+            isLoading: false,
+            sorting: { moves: sorting },
+            currentMoves: data?.mapped,
+            currentPage: { moves: 1 },
+            baseMoves: data?.base,
+          })
+        )
+        .catch((error) => handleCatch(error));
     } else {
       const sorted = sort(sorting as MoveSorting);
       const currentMoves = sorted?.slice(0, resultsAmount.moves);
@@ -67,18 +70,21 @@ export const MoveView = () => {
     }
   };
 
-  const nextPage = async () => {
+  const nextPage = () => {
     setAllData({ isLoading: true });
-    if (shouldFetchSearch.pokemons && baseData.moves?.next) {
-      const data = await fetchAndMapMoves(baseData.moves.next);
-      setAllData({
-        isLoading: false,
-        baseMoves: data.base,
-        currentMoves: data.mapped,
-        currentPage: {
-          moves: currentPage.moves + 1,
-        },
-      });
+    if (shouldFetchSearch.moves && baseData.moves?.next) {
+      fetchAndMapMoves(baseData.moves.next)
+        .then((data) =>
+          setAllData({
+            isLoading: false,
+            baseMoves: data?.base,
+            currentMoves: data?.mapped,
+            currentPage: {
+              moves: currentPage.moves + 1,
+            },
+          })
+        )
+        .catch((error) => handleCatch(error));
     } else {
       const index = currentPage.moves * resultsAmount.moves;
       const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
@@ -93,18 +99,21 @@ export const MoveView = () => {
     }
   };
 
-  const previousPage = async () => {
+  const previousPage = () => {
     setAllData({ isLoading: true });
     if (shouldFetchSearch.moves && baseData.moves?.previous) {
-      const data = await fetchAndMapMoves(baseData.moves.previous);
-      setAllData({
-        isLoading: false,
-        baseMoves: data.base,
-        currentMoves: data.mapped,
-        currentPage: {
-          moves: currentPage.moves - 1,
-        },
-      });
+      fetchAndMapMoves(baseData.moves.previous)
+        .then((data) =>
+          setAllData({
+            isLoading: false,
+            baseMoves: data?.base,
+            currentMoves: data?.mapped,
+            currentPage: {
+              moves: currentPage.moves - 1,
+            },
+          })
+        )
+        .catch((error) => handleCatch(error));
     } else {
       const index = (currentPage.moves - 1) * resultsAmount.moves;
       const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
@@ -119,24 +128,27 @@ export const MoveView = () => {
     }
   };
 
-  const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
+  const specificPage = (event: MouseEvent<HTMLButtonElement>) => {
     setAllData({ isLoading: true });
     const page = Number(event.currentTarget.textContent);
     if (page !== NaN) {
       if (shouldFetchSearch.moves) {
-        const data = await fetchAndMapMoves(
+        fetchAndMapMoves(
           `${API.MOVE}?limit=${resultsAmount.moves}&offset=${
             page * resultsAmount.moves - resultsAmount.moves
           }`
-        );
-        setAllData({
-          isLoading: false,
-          baseMoves: data.base,
-          currentMoves: data.mapped,
-          currentPage: {
-            moves: page,
-          },
-        });
+        )
+          .then((data) =>
+            setAllData({
+              isLoading: false,
+              baseMoves: data?.base,
+              currentMoves: data?.mapped,
+              currentPage: {
+                moves: page,
+              },
+            })
+          )
+          .catch((error) => handleCatch(error));
       } else {
         const index = page * resultsAmount.moves;
         const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
@@ -152,21 +164,24 @@ export const MoveView = () => {
     }
   };
 
-  const handleResultsAmount = async (resultsAmount: number) => {
+  const handleResultsAmount = (resultsAmount: number) => {
     setAllData({ isLoading: true });
-    if (shouldFetchSearch.types) {
-      const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`);
-      setAllData({
-        isLoading: false,
-        baseMoves: data.base,
-        currentMoves: data.mapped,
-        resultsAmount: {
-          moves: resultsAmount,
-        },
-        currentPage: {
-          moves: 1,
-        },
-      });
+    if (shouldFetchSearch.moves) {
+      fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`)
+        .then((data) =>
+          setAllData({
+            isLoading: false,
+            baseMoves: data?.base,
+            currentMoves: data?.mapped,
+            resultsAmount: {
+              moves: resultsAmount,
+            },
+            currentPage: {
+              moves: 1,
+            },
+          })
+        )
+        .catch((error) => handleCatch(error));
     } else {
       const results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
       const currentMoves = results.slice(0, resultsAmount);
@@ -205,7 +220,7 @@ export const MoveView = () => {
         specificPage={specificPage}
         nextPage={nextPage}
       />
-      {!currentPageResults.moves.length && <S.TextCenter>No types found</S.TextCenter>}
+      {!currentPageResults.moves.length && <S.TextCenter>No moves found</S.TextCenter>}
       {isLoading && <Loader />}
       <S.CardsWrapper visible={!isLoading}>
         {currentPageResults.moves.map((move) => (

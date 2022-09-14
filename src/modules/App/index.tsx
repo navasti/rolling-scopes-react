@@ -1,5 +1,5 @@
 import { SearchPage, About, NotFound, Form, Details } from 'modules';
-import { fetchCurrentData, getCurrentDataByParam } from 'utils';
+import { fetchCurrentData, getCurrentDataByParam, handleCatch } from 'utils';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { INPUT_VALUE_KEY } from 'appConstants';
 import { useGlobalContext } from 'contexts';
@@ -11,8 +11,13 @@ export const App = () => {
   useEffect(() => {
     const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
     if (inputValue)
-      getCurrentDataByParam(inputValue).then((data) => setAllData({ ...data, isLoading: false }));
-    else fetchCurrentData().then((data) => setAllData({ ...data, isLoading: false }));
+      getCurrentDataByParam(inputValue)
+        .then((data) => setAllData({ ...data, isLoading: false }))
+        .catch((error) => handleCatch(error));
+    else
+      fetchCurrentData()
+        .then((data) => setAllData({ ...data, isLoading: false }))
+        .catch((error) => handleCatch(error));
   }, [setAllData]);
 
   return (

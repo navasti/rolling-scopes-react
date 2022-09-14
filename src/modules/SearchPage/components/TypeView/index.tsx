@@ -48,9 +48,9 @@ export const TypeView = () => {
       setAllData({
         isLoading: false,
         sorting: { types: sorting },
-        currentTypes: data.mapped,
+        currentTypes: data?.mapped,
         currentPage: { types: 1 },
-        baseTypes: data.base,
+        baseTypes: data?.base,
       });
     } else {
       const sorted = sort(sorting as TypeSorting);
@@ -71,8 +71,8 @@ export const TypeView = () => {
       const data = await fetchAndMapTypes(baseData.types.next);
       setAllData({
         isLoading: false,
-        baseTypes: data.base,
-        currentTypes: data.mapped,
+        baseTypes: data?.base,
+        currentTypes: data?.mapped,
         currentPage: {
           types: currentPage.types + 1,
         },
@@ -97,8 +97,8 @@ export const TypeView = () => {
       const data = await fetchAndMapTypes(baseData.types.previous);
       setAllData({
         isLoading: false,
-        baseTypes: data.base,
-        currentTypes: data.mapped,
+        baseTypes: data?.base,
+        currentTypes: data?.mapped,
         currentPage: {
           types: currentPage.types - 1,
         },
@@ -129,8 +129,8 @@ export const TypeView = () => {
         );
         setAllData({
           isLoading: false,
-          baseTypes: data.base,
-          currentTypes: data.mapped,
+          baseTypes: data?.base,
+          currentTypes: data?.mapped,
           currentPage: {
             types: page,
           },
@@ -156,8 +156,8 @@ export const TypeView = () => {
       const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`);
       setAllData({
         isLoading: false,
-        baseTypes: data.base,
-        currentTypes: data.mapped,
+        baseTypes: data?.base,
+        currentTypes: data?.mapped,
         resultsAmount: {
           types: resultsAmount,
         },

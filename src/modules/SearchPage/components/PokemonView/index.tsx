@@ -51,9 +51,9 @@ export const PokemonView = () => {
       const data = await fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount.pokemons}`);
       setAllData({
         sorting: { pokemons: sorting },
-        currentPokemons: data.mapped,
+        currentPokemons: data?.mapped,
         currentPage: { pokemons: 1 },
-        basePokemons: data.base,
+        basePokemons: data?.base,
         isLoading: false,
       });
     } else {
@@ -75,8 +75,8 @@ export const PokemonView = () => {
       const data = await fetchAndMapPokemons(baseData.pokemons.next);
       setAllData({
         isLoading: false,
-        basePokemons: data.base,
-        currentPokemons: data.mapped,
+        basePokemons: data?.base,
+        currentPokemons: data?.mapped,
         currentPage: {
           pokemons: currentPage.pokemons + 1,
         },
@@ -103,8 +103,8 @@ export const PokemonView = () => {
       const data = await fetchAndMapPokemons(baseData.pokemons.previous);
       setAllData({
         isLoading: false,
-        basePokemons: data.base,
-        currentPokemons: data.mapped,
+        basePokemons: data?.base,
+        currentPokemons: data?.mapped,
         currentPage: {
           pokemons: currentPage.pokemons - 1,
         },
@@ -137,8 +137,8 @@ export const PokemonView = () => {
         );
         setAllData({
           isLoading: false,
-          basePokemons: data.base,
-          currentPokemons: data.mapped,
+          basePokemons: data?.base,
+          currentPokemons: data?.mapped,
           currentPage: {
             pokemons: page,
           },
@@ -166,8 +166,8 @@ export const PokemonView = () => {
       const data = await fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount}`);
       setAllData({
         isLoading: false,
-        basePokemons: data.base,
-        currentPokemons: data.mapped,
+        basePokemons: data?.base,
+        currentPokemons: data?.mapped,
         resultsAmount: {
           pokemons: resultsAmount,
         },
