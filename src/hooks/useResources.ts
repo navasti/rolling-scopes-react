@@ -31,57 +31,36 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
   const isMove = resourceType === 'moves';
   const isType = resourceType === 'types';
 
-  let results: PokemonMoveDetails[] | PokemonTypeDetails[] | PokemonDetails[];
-  if (isPokemon)
-    results = searchResults.pokemons?.length ? searchResults.pokemons : allDataResults.pokemons;
-  else if (isMove)
-    results = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
-  else results = searchResults.types?.length ? searchResults.types : allDataResults.types;
+  const moves = searchResults.moves?.length ? searchResults.moves : allDataResults.moves;
+  const types = searchResults.types?.length ? searchResults.types : allDataResults.types;
+  const pokemons = searchResults.pokemons?.length
+    ? searchResults.pokemons
+    : allDataResults.pokemons;
 
-  const sort = (sorting: PokemonSorting | MoveSorting | TypeSorting) => {
-    if (isPokemon) {
-      const pokemons = results as PokemonDetails[];
-      switch (sorting) {
-        case PokemonSorting.alphabetical:
-          return sortPokemon(pokemons).alphabetical();
-        case PokemonSorting.baseExperience:
-          return sortPokemon(pokemons).byBaseExperience();
-        case PokemonSorting.height:
-          return sortPokemon(pokemons).byHeight();
-        case PokemonSorting.weight:
-          return sortPokemon(pokemons).byWeight();
-        case PokemonSorting.none:
-          return sortPokemon(pokemons).byId();
-      }
-    }
-    if (isMove) {
-      const moves = results as PokemonMoveDetails[];
-      switch (sorting) {
-        case MoveSorting.accuracy:
-          return sortMove(moves).byAccuracy();
-        case MoveSorting.alphabetical:
-          return sortMove(moves).alphabetical();
-        case MoveSorting.power:
-          return sortMove(moves).byPower();
-        case MoveSorting.pp:
-          return sortMove(moves).byPP();
-        case MoveSorting.none:
-          return sortMove(moves).byId();
-      }
-    }
-    if (isType) {
-      const types = results as PokemonTypeDetails[];
-      switch (sorting) {
-        case TypeSorting.alphabetical:
-          return sortType(types).alphabetical();
-        case TypeSorting.movesAmount:
-          return sortType(types).byMovesAmount();
-        case TypeSorting.pokemonsAmount:
-          return sortType(types).byPokemonsAmount();
-        case TypeSorting.none:
-          return sortType(types).byId();
-      }
-    }
+  const sort = (sorting: MoveSorting | PokemonSorting | TypeSorting) => {
+    const moveSortObject = {
+      [MoveSorting.alphabetical]: sortMove(moves).alphabetical,
+      [MoveSorting.accuracy]: sortMove(moves).byAccuracy,
+      [MoveSorting.power]: sortMove(moves).byPower,
+      [MoveSorting.none]: sortMove(moves).byId,
+      [MoveSorting.pp]: sortMove(moves).byPP,
+    };
+    const pokemonSortObject = {
+      [PokemonSorting.baseExperience]: sortPokemon(pokemons).byBaseExperience,
+      [PokemonSorting.alphabetical]: sortPokemon(pokemons).alphabetical,
+      [PokemonSorting.weight]: sortPokemon(pokemons).byWeight,
+      [PokemonSorting.height]: sortPokemon(pokemons).byHeight,
+      [PokemonSorting.none]: sortPokemon(pokemons).byId,
+    };
+    const typeSortObject = {
+      [TypeSorting.pokemonsAmount]: sortType(types).byPokemonsAmount,
+      [TypeSorting.alphabetical]: sortType(types).alphabetical,
+      [TypeSorting.movesAmount]: sortType(types).byMovesAmount,
+      [TypeSorting.none]: sortType(types).byId,
+    };
+    if (isPokemon) return pokemonSortObject[sorting as PokemonSorting]();
+    if (isMove) return moveSortObject[sorting as MoveSorting]();
+    if (isType) return typeSortObject[sorting as TypeSorting]();
   };
 
   const handleSorting = async (sorting: PokemonSorting | MoveSorting | TypeSorting) => {
@@ -97,7 +76,7 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           isLoading: false,
         });
       } else {
-        const sorted = sort(sorting as PokemonSorting) as PokemonDetails[];
+        const sorted = sort(sorting) as PokemonDetails[];
         const currentPokemons = sorted?.slice(0, resultsAmount.pokemons);
         setAllData({
           sorting: { pokemons: sorting as PokemonSorting },
@@ -174,7 +153,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           handleCatch(error);
         }
       } else {
-        const pokemons = results as PokemonDetails[];
         setAllData({
           currentPage: { pokemons: 1 },
           resultsAmount: { pokemons: resultsAmount },
@@ -198,7 +176,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           handleCatch(error);
         }
       } else {
-        const moves = results as PokemonMoveDetails[];
         setAllData({
           currentPage: { moves: 1 },
           resultsAmount: { moves: resultsAmount },
@@ -223,7 +200,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           setAllData({ isLoading: false });
         }
       } else {
-        const types = results as PokemonTypeDetails[];
         setAllData({
           currentPage: { types: 1 },
           resultsAmount: { types: resultsAmount },
@@ -251,7 +227,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
         }
       } else {
         const index = currentPage.pokemons * resultsAmount.pokemons;
-        const pokemons = results as PokemonDetails[];
         setAllData({
           currentPokemons: pokemons.slice(index, index + resultsAmount.pokemons),
           currentPage: { pokemons: currentPage.pokemons + 1 },
@@ -275,7 +250,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
         }
       } else {
         const index = currentPage.moves * resultsAmount.moves;
-        const moves = results as PokemonMoveDetails[];
         setAllData({
           currentMoves: moves.slice(index, index + resultsAmount.moves),
           currentPage: { moves: currentPage.moves + 1 },
@@ -299,7 +273,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
         }
       } else {
         const index = currentPage.types * resultsAmount.types;
-        const types = results as PokemonTypeDetails[];
         setAllData({
           currentTypes: types.slice(index, index + resultsAmount.types),
           currentPage: { types: currentPage.types + 1 },
@@ -326,7 +299,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
         }
       } else {
         const index = (currentPage.pokemons - 1) * resultsAmount.pokemons;
-        const pokemons = results as PokemonDetails[];
         setAllData({
           currentPokemons: pokemons.slice(index - resultsAmount.pokemons, index),
           currentPage: { pokemons: currentPage.pokemons - 1 },
@@ -350,7 +322,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
         }
       } else {
         const index = (currentPage.moves - 1) * resultsAmount.moves;
-        const moves = results as PokemonMoveDetails[];
         setAllData({
           currentMoves: moves.slice(index - resultsAmount.moves, index),
           currentPage: { moves: currentPage.moves - 1 },
@@ -374,7 +345,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
         }
       } else {
         const index = (currentPage.types - 1) * resultsAmount.types;
-        const types = results as PokemonTypeDetails[];
         setAllData({
           currentTypes: types.slice(index - resultsAmount.types, index),
           currentPage: { types: currentPage.types - 1 },
@@ -407,7 +377,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           }
         } else {
           const index = page * resultsAmount.pokemons;
-          const pokemons = results as PokemonDetails[];
           setAllData({
             currentPokemons: pokemons.slice(index - resultsAmount.pokemons, index),
             currentPage: { pokemons: page },
@@ -435,7 +404,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           }
         } else {
           const index = page * resultsAmount.moves;
-          const moves = results as PokemonMoveDetails[];
           setAllData({
             currentMoves: moves.slice(index - resultsAmount.moves, index),
             currentPage: { moves: page },
@@ -463,7 +431,6 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
           }
         } else {
           const index = page * resultsAmount.types;
-          const types = results as PokemonTypeDetails[];
           setAllData({
             currentTypes: types.slice(index - resultsAmount.types, index),
             currentPage: { types: page },
