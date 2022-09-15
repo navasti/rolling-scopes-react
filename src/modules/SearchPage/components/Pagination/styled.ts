@@ -10,7 +10,7 @@ export const Pagination = styled.div`
 `;
 
 export const PaginationButton = styled.button<PaginationButtonProps>`
-  background-color: ${(props) => (props?.active ? '#ffc83d' : '#fff')};
+  background-color: ${({ active }) => (active ? '#ffc83d' : '#fff')};
   transition: all 0.3s;
   border-radius: 5px;
   padding: 4px 6px;

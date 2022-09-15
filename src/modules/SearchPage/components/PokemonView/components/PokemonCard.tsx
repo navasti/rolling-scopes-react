@@ -9,12 +9,12 @@ type Props = {
 
 export const PokemonCard = ({ pokemon }: Props) => {
   const navigation = useNavigate();
-  const onClick = () => {
+  const handleCardClick = () => {
     navigation(`details/${AvailableCardDetails.pokemon}/${pokemon.id}`, { replace: true });
   };
   return (
     <>
-      <S.Card onClick={onClick} align="left" stretch>
+      <S.Card onClick={handleCardClick} align="left" stretch>
         <S.ImageWrapper>
           <S.Image
             src={pokemon.sprites.front_default || questionmark}

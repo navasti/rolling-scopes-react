@@ -81,7 +81,7 @@ export const Details = ({ componentName, location }: Props) => {
               </>
             ) : (
               <>
-                No enugh information provided. Get back to the search page in order to fetch data
+                No enough information provided. Get back to the search page in order to fetch data
                 and select specific pokemon to see its details.
               </>
             )}

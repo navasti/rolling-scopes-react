@@ -8,11 +8,11 @@ type Props = {
 
 export const TypeCard = ({ type }: Props) => {
   const navigation = useNavigate();
-  const onClick = () => {
+  const handleCardClick = () => {
     navigation(`details/${AvailableCardDetails.type}/${type.id}`, { replace: true });
   };
   return (
-    <S.Card onClick={onClick} data-testid="type-card" align="center">
+    <S.Card onClick={handleCardClick} data-testid="type-card" align="center">
       <p>{type.name}</p>
     </S.Card>
   );

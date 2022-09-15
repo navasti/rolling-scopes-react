@@ -14,7 +14,7 @@ export const TabsWrapper = styled.div`
 `;
 
 export const Tab = styled.span<Props>`
-  color: ${(props) => (props.active ? '#ffc83d' : '#ddd')};
+  color: ${({ active }) => (active ? '#ffc83d' : '#ddd')};
   border-radius: 10px;
   font-size: 1.15rem;
   padding: 6px 10px;
