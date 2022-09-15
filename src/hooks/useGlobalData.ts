@@ -5,7 +5,6 @@ export const useGlobalData = () => {
   const {
     state: { searchResults, resultsAmount, allDataResults, sorting },
   } = useGlobalContext();
-
   const totalPageCounts = {
     moves: Math.ceil(
       (searchResults.moves?.length || allDataResults.moves.length) / resultsAmount.moves
@@ -19,9 +18,11 @@ export const useGlobalData = () => {
   };
 
   const totalResults = {
-    moves: searchResults.moves?.length || allDataResults.moves.length,
-    types: searchResults.types?.length || allDataResults.types.length,
-    pokemons: searchResults.pokemons?.length || allDataResults.pokemons.length,
+    moves: searchResults.moves ? searchResults.moves.length : allDataResults.moves.length,
+    types: searchResults.types ? searchResults.types.length : allDataResults.types.length,
+    pokemons: searchResults.pokemons
+      ? searchResults.pokemons.length
+      : allDataResults.pokemons.length,
   };
 
   const shouldFetchSearch = {

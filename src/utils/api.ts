@@ -2,8 +2,9 @@ import { API, ErrorStatuses, Limits } from 'appConstants';
 import {
   PokemonMoveDetails,
   PokemonTypeDetails,
-  PokemonDetails,
   PokemonBaseData,
+  PokemonDetails,
+  AllMappedData,
   MoveBaseData,
   TypeBaseData,
 } from 'types';
@@ -32,19 +33,25 @@ export const mapResults = async <T>(
     url: string;
   }>
 ) => {
-  const data: Array<T> = [];
-  const urls = results.map((res) => res.url);
-  for (const url of urls) {
-    try {
-      const fetchedData = await fetch(url).then((data) =>
-        data.json().then((data) => (data ? (data as T) : null))
-      );
-      fetchedData && data.push(fetchedData);
-    } catch (error) {
-      handleCatch(error);
-    }
+  try {
+    const urls = results.map((res) => res.url);
+    // In strict mode some request fail using Promise.all/allSettled. The more total requests the more fail \/
+    const fetchedData = await Promise.all(urls.map((url) => fetch(url)));
+    const data: Array<T> = await Promise.all(fetchedData.map((data) => data.json()));
+    // When using for..of loop everything works properly but much slower and CPU fan spins faster.
+    // try {
+    //   for (const url of urls) {
+    //     const res = await fetch(url);
+    //     const fetchedData = await res.json();
+    //     fetchedData && data.push(fetchedData as T);
+    //   }
+    // } catch (error) {
+    //   handleCatch(error);
+    // }
+    return data;
+  } catch (error) {
+    handleCatch(error);
   }
-  return data;
 };
 
 export const fetchAndMapPokemons = async <T extends PokemonBaseData>(url: string) => {
@@ -86,49 +93,41 @@ export const fetchAndMapTypes = async <T extends TypeBaseData>(url: string) => {
   }
 };
 
-export const fetchAllData = async () => {
+export const fetchAllData = async (): Promise<Partial<AllMappedData> | undefined> => {
   try {
-    const allPokemons = await fetchAndMapPokemons(API.ALL_POKEMONS).then((pokemons) => pokemons);
-    const allMoves = await fetchAndMapMoves(API.ALL_MOVES).then((moves) => moves);
-    const allTypes = await fetchAndMapTypes(API.ALL_TYPES).then((types) => types);
-    return {
-      allPokemons: allPokemons?.mapped,
-      allMoves: allMoves?.mapped,
-      allTypes: allTypes?.mapped,
-    };
+    const pokemons = await fetchAndMapPokemons(API.ALL_POKEMONS);
+    const moves = await fetchAndMapMoves(API.ALL_MOVES);
+    const types = await fetchAndMapTypes(API.ALL_TYPES);
+    return { pokemons, moves, types };
   } catch (error) {
     handleCatch(error);
   }
 };
 
-export const getCurrentDataByParam = async (value: string) => {
+export const getCurrentDataByParam = async (value: string, allData?: Partial<AllMappedData>) => {
   try {
-    const data = await fetchAllData();
-    const types = (data?.allTypes || []).filter((item) => item.name.includes(value));
-    const moves = (data?.allMoves || []).filter((item) => item.name.includes(value));
-    const pokemons = (data?.allPokemons || []).filter((item) => item.name.includes(value));
+    const types = (allData?.types?.mapped || []).filter((item) => item.name.includes(value));
+    const moves = (allData?.moves?.mapped || []).filter((item) => item.name.includes(value));
+    const pokemons = (allData?.pokemons?.mapped || []).filter((item) => item.name.includes(value));
     return {
       searchResults: { pokemons, moves, types },
       currentPokemons: pokemons.slice(0, Limits.pokemon),
       currentTypes: types.slice(0, Limits.type),
       currentMoves: moves.slice(0, Limits.move),
-      allPokemons: data?.allPokemons,
-      allTypes: data?.allTypes,
-      allMoves: data?.allMoves,
+      allPokemons: allData?.pokemons?.mapped,
+      allTypes: allData?.types?.mapped,
+      allMoves: allData?.moves?.mapped,
     };
   } catch (error) {
     handleCatch(error);
   }
 };
 
-export const fetchCurrentData = async () => {
+export const fetchCurrentData = async (allData?: Partial<AllMappedData>) => {
   try {
-    const data = await fetchAllData();
-    const movesData = await fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`).then((moves) => moves);
-    const typesData = await fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`).then((types) => types);
-    const pokemonsData = await fetchAndMapPokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`).then(
-      (pokemons) => pokemons
-    );
+    const pokemonsData = await fetchAndMapPokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`);
+    const movesData = await fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`);
+    const typesData = await fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`);
     return {
       basePokemons: pokemonsData?.base,
       baseMoves: movesData?.base,
@@ -136,9 +135,9 @@ export const fetchCurrentData = async () => {
       currentPokemons: pokemonsData?.mapped,
       currentMoves: movesData?.mapped,
       currentTypes: typesData?.mapped,
-      allPokemons: data?.allPokemons,
-      allMoves: data?.allMoves,
-      allTypes: data?.allTypes,
+      allPokemons: allData?.pokemons?.mapped,
+      allTypes: allData?.types?.mapped,
+      allMoves: allData?.moves?.mapped,
     };
   } catch (error) {
     handleCatch(error);

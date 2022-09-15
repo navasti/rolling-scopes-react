@@ -28,9 +28,9 @@ export const initialState: GlobalState = {
     types: [],
   },
   searchResults: {
-    pokemons: [],
-    moves: [],
-    types: [],
+    pokemons: null,
+    moves: null,
+    types: null,
   },
   allDataResults: {
     pokemons: [],

@@ -75,6 +75,27 @@ export type GlobalAction = {
   };
 };
 
+export type MappedTypes = {
+  base: TypeBaseData | null;
+  mapped: PokemonTypeDetails[];
+};
+
+export type MappedPokemons = {
+  base: PokemonBaseData | null;
+  mapped: PokemonDetails[];
+};
+
+export type MappedMoves = {
+  base: MoveBaseData | null;
+  mapped: PokemonMoveDetails[];
+};
+
+export type AllMappedData = {
+  pokemons: MappedPokemons;
+  moves: MappedMoves;
+  types: MappedTypes;
+};
+
 export type AllData = Partial<{
   searchResults: Partial<SearchResults>;
   resultsAmount: Partial<ResultsAmount>;
