@@ -1,1 +1,1 @@
-export * from './GContext';
+export * from './GlobalContext';
