@@ -1,16 +1,18 @@
 import { AvailableTabs, TABS } from 'appConstants';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 import { useGlobalData } from 'hooks';
+import { PayloadTypes } from 'types';
 import * as S from './styled';
 
 export const Tabs = () => {
-  const onClick = (option: AvailableTabs) => setAllData({ activeTab: option });
+  const onClick = (option: AvailableTabs) =>
+    dispatch({ type: PayloadTypes.activeTab, payload: option });
   const { totalResults } = useGlobalData();
 
   const {
-    setAllData,
+    dispatch,
     state: { isLoading, activeTab },
-  } = useGlobalContext();
+  } = useAppContext();
 
   return (
     <S.TabsWrapper>

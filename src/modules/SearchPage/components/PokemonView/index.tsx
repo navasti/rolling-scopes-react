@@ -2,7 +2,7 @@ import { SortingSelector, Pagination, ResultsSelector } from 'modules/SearchPage
 import { PokemonCard } from './components/PokemonCard';
 import { useGlobalData, useResources } from 'hooks';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 import { PokemonSorting } from 'types';
 import { Loader } from 'components';
 import * as S from './styled';
@@ -12,7 +12,7 @@ export const PokemonView = () => {
     useResources('pokemons');
   const options = Object.values(PokemonSorting);
   const { totalPageCounts } = useGlobalData();
-  const { state } = useGlobalContext();
+  const { state } = useAppContext();
 
   return (
     <S.PokemonView>

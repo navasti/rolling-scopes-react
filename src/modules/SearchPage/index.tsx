@@ -1,9 +1,9 @@
+import { MoveSorting, PokemonSorting, SearchResults, TypeSorting, PayloadTypes } from 'types';
 import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
-import { MoveSorting, PokemonSorting, SearchResults, TypeSorting } from 'types';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
 import { sortMove, sortPokemon, sortType } from 'utils';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -21,10 +21,8 @@ export const SearchPage = ({ componentName, location }: Props) => {
     value && setInputValue(value);
   }, []);
 
-  const {
-    setAllData,
-    state: { allDataResults, resultsAmount, isLoading, activeTab },
-  } = useGlobalContext();
+  const { allDataResults, resultsAmount, isLoading, activeTab } = useAppContext().state;
+  const { dispatch } = useAppContext();
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
@@ -46,16 +44,21 @@ export const SearchPage = ({ componentName, location }: Props) => {
           .filter((item) => item.name.includes(inputValue));
       }
       const { moves, pokemons, types } = searchResults;
-      setAllData({
-        currentPokemons: (pokemons || allDataResults.pokemons).slice(0, resultsAmount.pokemons),
-        currentMoves: (moves || allDataResults.moves).slice(0, resultsAmount.moves),
-        currentTypes: (types || allDataResults.types).slice(0, resultsAmount.types),
-        currentPage: { moves: 1, pokemons: 1, types: 1 },
-        searchResults,
-        sorting: {
-          pokemons: PokemonSorting.none,
-          moves: MoveSorting.none,
-          types: TypeSorting.none,
+      dispatch({
+        type: PayloadTypes.searchData,
+        payload: {
+          searchResults,
+          currentPageResults: {
+            pokemons: (pokemons || allDataResults.pokemons).slice(0, resultsAmount.pokemons),
+            types: (types || allDataResults.types).slice(0, resultsAmount.types),
+            moves: (moves || allDataResults.moves).slice(0, resultsAmount.moves),
+          },
+          currentPage: { moves: 1, pokemons: 1, types: 1 },
+          sorting: {
+            pokemons: PokemonSorting.none,
+            moves: MoveSorting.none,
+            types: TypeSorting.none,
+          },
         },
       });
     }

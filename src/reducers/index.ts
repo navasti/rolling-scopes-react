@@ -1,1 +1,1 @@
-export * from './globalReducer';
+export * from './appReducer';

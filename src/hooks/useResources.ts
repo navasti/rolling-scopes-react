@@ -1,12 +1,13 @@
 import { useGlobalData } from './useGlobalData';
-import { useGlobalContext } from 'contexts';
-import { MouseEvent } from 'react';
+import { useAppContext } from 'contexts';
 import { API } from 'appConstants';
+import { MouseEvent } from 'react';
 import {
   PokemonMoveDetails,
   PokemonTypeDetails,
   PokemonDetails,
   PokemonSorting,
+  PayloadTypes,
   TypeSorting,
   MoveSorting,
 } from 'types';
@@ -22,9 +23,11 @@ import {
 
 export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
   const {
-    setAllData,
-    state: { allDataResults, searchResults, resultsAmount, baseData, currentPage },
-  } = useGlobalContext();
+    state: { allDataResults, resultsAmount, searchResults, baseData, currentPage },
+    setIsLoading,
+    dispatch,
+  } = useAppContext();
+
   const { shouldFetchSearch } = useGlobalData();
 
   const isPokemon = resourceType === 'pokemons';
@@ -64,39 +67,45 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
   };
 
   const handleSorting = async (sorting: PokemonSorting | MoveSorting | TypeSorting) => {
+    setIsLoading(true);
     if (isPokemon) {
       if (sorting === PokemonSorting.none && !searchResults.pokemons) {
-        setAllData({ isLoading: true });
         const data = await fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount.pokemons}`);
-        setAllData({
-          sorting: { pokemons: sorting },
-          currentPokemons: data?.mapped,
-          currentPage: { pokemons: 1 },
-          basePokemons: data?.base,
-          isLoading: false,
+        dispatch({
+          type: PayloadTypes.sortingPokemon,
+          payload: {
+            currentPokemons: data?.mapped || [],
+            basePokemons: data?.base,
+            currentPage: 1,
+            sorting,
+          },
         });
       } else {
         const sorted = sort(sorting) as PokemonDetails[];
         const currentPokemons = sorted?.slice(0, resultsAmount.pokemons);
-        setAllData({
-          sorting: { pokemons: sorting as PokemonSorting },
-          searchResults: { pokemons: sorted },
-          currentPage: { pokemons: 1 },
-          currentPokemons,
+        dispatch({
+          type: PayloadTypes.sortingPokemon,
+          payload: {
+            sorting: sorting as PokemonSorting,
+            searchResults: sorted,
+            currentPokemons,
+            currentPage: 1,
+          },
         });
       }
     }
     if (isMove) {
       if (sorting === MoveSorting.none && !searchResults.moves?.length) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount.moves}`);
-          setAllData({
-            isLoading: false,
-            sorting: { moves: sorting as MoveSorting },
-            currentMoves: data?.mapped,
-            currentPage: { moves: 1 },
-            baseMoves: data?.base,
+          dispatch({
+            type: PayloadTypes.sortingMove,
+            payload: {
+              currentMoves: data?.mapped || [],
+              baseMoves: data?.base,
+              currentPage: 1,
+              sorting,
+            },
           });
         } catch (error) {
           handleCatch(error);
@@ -104,59 +113,72 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
       } else {
         const sorted = sort(sorting as MoveSorting) as PokemonMoveDetails[];
         const currentMoves = sorted?.slice(0, resultsAmount.moves);
-        setAllData({
-          sorting: { moves: sorting as MoveSorting },
-          searchResults: { moves: sorted },
-          currentPage: { moves: 1 },
-          currentMoves,
+        dispatch({
+          type: PayloadTypes.sortingMove,
+          payload: {
+            sorting: sorting as MoveSorting,
+            searchResults: sorted,
+            currentPage: 1,
+            currentMoves,
+          },
         });
       }
     }
     if (isType) {
       if (sorting === TypeSorting.none && !searchResults.types?.length) {
-        setAllData({ isLoading: true });
         const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount.types}`);
-        setAllData({
-          isLoading: false,
-          sorting: { types: sorting },
-          currentTypes: data?.mapped,
-          currentPage: { types: 1 },
-          baseTypes: data?.base,
+        dispatch({
+          type: PayloadTypes.sortingType,
+          payload: {
+            currentTypes: data?.mapped || [],
+            baseTypes: data?.base,
+            currentPage: 1,
+            sorting,
+          },
         });
       } else {
         const sorted = sort(sorting as TypeSorting) as PokemonTypeDetails[];
         const currentTypes = sorted?.slice(0, resultsAmount.types);
-        setAllData({
-          sorting: { types: sorting as TypeSorting },
-          searchResults: { types: sorted },
-          currentPage: { types: 1 },
-          currentTypes,
+        dispatch({
+          type: PayloadTypes.sortingType,
+          payload: {
+            sorting: sorting as TypeSorting,
+            searchResults: sorted,
+            currentPage: 1,
+            currentTypes,
+          },
         });
       }
     }
+    setIsLoading(false);
   };
 
   const handleResultsAmount = async (resultsAmount: number) => {
+    setIsLoading(true);
     if (isPokemon) {
       if (shouldFetchSearch.pokemons) {
         try {
           const data = await fetchAndMapPokemons(`${API.POKEMON}?limit=${resultsAmount}`);
-          setAllData({
-            isLoading: false,
-            basePokemons: data?.base,
-            currentPokemons: data?.mapped,
-            resultsAmount: { pokemons: resultsAmount },
-            currentPage: { pokemons: 1 },
+          dispatch({
+            type: PayloadTypes.pokemonResults,
+            payload: {
+              currentPokemons: data?.mapped || [],
+              basePokemons: data?.base,
+              currentPage: 1,
+              resultsAmount,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
-        setAllData({
-          currentPage: { pokemons: 1 },
-          resultsAmount: { pokemons: resultsAmount },
-          currentPokemons: pokemons.slice(0, resultsAmount),
+        dispatch({
+          type: PayloadTypes.pokemonResults,
+          payload: {
+            currentPokemons: pokemons.slice(0, resultsAmount),
+            resultsAmount,
+            currentPage: 1,
+          },
         });
       }
     }
@@ -164,280 +186,321 @@ export const useResources = (resourceType: 'pokemons' | 'moves' | 'types') => {
       if (shouldFetchSearch.moves) {
         try {
           const data = await fetchAndMapMoves(`${API.MOVE}?limit=${resultsAmount}`);
-          setAllData({
-            isLoading: false,
-            baseMoves: data?.base,
-            currentPage: { moves: 1 },
-            currentMoves: data?.mapped,
-            resultsAmount: { moves: resultsAmount },
+          dispatch({
+            type: PayloadTypes.moveResults,
+            payload: {
+              baseMoves: data?.base,
+              currentPage: 1,
+              currentMoves: data?.mapped || [],
+              resultsAmount,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
-        setAllData({
-          currentPage: { moves: 1 },
-          resultsAmount: { moves: resultsAmount },
-          currentMoves: moves.slice(0, resultsAmount),
+        dispatch({
+          type: PayloadTypes.moveResults,
+          payload: {
+            resultsAmount,
+            currentPage: 1,
+            currentMoves: moves.slice(0, resultsAmount),
+          },
         });
       }
     }
     if (isType) {
       if (shouldFetchSearch.types) {
-        setAllData({ isLoading: true });
         try {
           const data = await fetchAndMapTypes(`${API.TYPE}?limit=${resultsAmount}`);
-          setAllData({
-            isLoading: false,
-            baseTypes: data?.base,
-            currentPage: { types: 1 },
-            currentTypes: data?.mapped,
-            resultsAmount: { types: resultsAmount },
+          dispatch({
+            type: PayloadTypes.typeResults,
+            payload: {
+              currentTypes: data?.mapped || [],
+              baseTypes: data?.base,
+              currentPage: 1,
+              resultsAmount,
+            },
           });
         } catch (error) {
           handleCatch(error);
-          setAllData({ isLoading: false });
         }
       } else {
-        setAllData({
-          currentPage: { types: 1 },
-          resultsAmount: { types: resultsAmount },
-          currentTypes: types.slice(0, resultsAmount),
+        dispatch({
+          type: PayloadTypes.typeResults,
+          payload: {
+            currentTypes: types.slice(0, resultsAmount),
+            currentPage: 1,
+            resultsAmount,
+          },
         });
       }
     }
+    setIsLoading(false);
   };
 
   const nextPage = async () => {
+    setIsLoading(true);
     if (isPokemon) {
       if (shouldFetchSearch.pokemons && baseData.pokemons?.next) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapPokemons(baseData.pokemons.next);
-          setAllData({
-            isLoading: false,
-            basePokemons: data?.base,
-            currentPokemons: data?.mapped,
-            currentPage: { pokemons: currentPage.pokemons + 1 },
+          dispatch({
+            type: PayloadTypes.pokemonsPagination,
+            payload: {
+              basePokemons: data?.base,
+              currentPokemons: data?.mapped || [],
+              currentPage: currentPage.pokemons + 1,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
         const index = currentPage.pokemons * resultsAmount.pokemons;
-        setAllData({
-          currentPokemons: pokemons.slice(index, index + resultsAmount.pokemons),
-          currentPage: { pokemons: currentPage.pokemons + 1 },
+        dispatch({
+          type: PayloadTypes.pokemonsPagination,
+          payload: {
+            currentPokemons: pokemons.slice(index, index + resultsAmount.pokemons),
+            currentPage: currentPage.pokemons + 1,
+          },
         });
       }
     }
     if (isMove) {
       if (shouldFetchSearch.moves && baseData.moves?.next) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapMoves(baseData.moves.next);
-          setAllData({
-            isLoading: false,
-            baseMoves: data?.base,
-            currentMoves: data?.mapped,
-            currentPage: { moves: currentPage.moves + 1 },
+          dispatch({
+            type: PayloadTypes.movesPagination,
+            payload: {
+              baseMoves: data?.base,
+              currentMoves: data?.mapped || [],
+              currentPage: currentPage.moves + 1,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
         const index = currentPage.moves * resultsAmount.moves;
-        setAllData({
-          currentMoves: moves.slice(index, index + resultsAmount.moves),
-          currentPage: { moves: currentPage.moves + 1 },
+        dispatch({
+          type: PayloadTypes.movesPagination,
+          payload: {
+            currentMoves: moves.slice(index, index + resultsAmount.moves),
+            currentPage: currentPage.moves + 1,
+          },
         });
       }
     }
     if (isType) {
       if (shouldFetchSearch.types && baseData.types?.next) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapTypes(baseData.types.next);
-          setAllData({
-            isLoading: false,
-            baseTypes: data?.base,
-            currentTypes: data?.mapped,
-            currentPage: { types: currentPage.types + 1 },
+          dispatch({
+            type: PayloadTypes.typesPagination,
+            payload: {
+              currentTypes: data?.mapped || [],
+              currentPage: currentPage.types,
+              baseTypes: data?.base,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
         const index = currentPage.types * resultsAmount.types;
-        setAllData({
-          currentTypes: types.slice(index, index + resultsAmount.types),
-          currentPage: { types: currentPage.types + 1 },
+        dispatch({
+          type: PayloadTypes.typesPagination,
+          payload: {
+            currentTypes: types.slice(index, index + resultsAmount.types),
+            currentPage: currentPage.types + 1,
+          },
         });
       }
     }
+    setIsLoading(false);
   };
 
   const previousPage = async () => {
+    setIsLoading(true);
     if (isPokemon) {
       if (shouldFetchSearch.pokemons && baseData.pokemons?.previous) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapPokemons(baseData.pokemons.previous);
-          setAllData({
-            isLoading: false,
-            basePokemons: data?.base,
-            currentPokemons: data?.mapped,
-            currentPage: { pokemons: currentPage.pokemons - 1 },
+          dispatch({
+            type: PayloadTypes.pokemonsPagination,
+            payload: {
+              basePokemons: data?.base,
+              currentPokemons: data?.mapped || [],
+              currentPage: currentPage.pokemons - 1,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
         const index = (currentPage.pokemons - 1) * resultsAmount.pokemons;
-        setAllData({
-          currentPokemons: pokemons.slice(index - resultsAmount.pokemons, index),
-          currentPage: { pokemons: currentPage.pokemons - 1 },
+        dispatch({
+          type: PayloadTypes.pokemonsPagination,
+          payload: {
+            currentPokemons: pokemons.slice(index - resultsAmount.pokemons, index),
+            currentPage: currentPage.pokemons - 1,
+          },
         });
       }
     }
     if (isMove) {
       if (shouldFetchSearch.moves && baseData.moves?.previous) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapMoves(baseData.moves.previous);
-          setAllData({
-            isLoading: false,
-            baseMoves: data?.base,
-            currentMoves: data?.mapped,
-            currentPage: { moves: currentPage.moves - 1 },
+          dispatch({
+            type: PayloadTypes.movesPagination,
+            payload: {
+              baseMoves: data?.base,
+              currentMoves: data?.mapped || [],
+              currentPage: currentPage.moves - 1,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
         const index = (currentPage.moves - 1) * resultsAmount.moves;
-        setAllData({
-          currentMoves: moves.slice(index - resultsAmount.moves, index),
-          currentPage: { moves: currentPage.moves - 1 },
+        dispatch({
+          type: PayloadTypes.movesPagination,
+          payload: {
+            currentMoves: moves.slice(index - resultsAmount.moves, index),
+            currentPage: currentPage.moves - 1,
+          },
         });
       }
     }
     if (isType) {
       if (shouldFetchSearch.types && baseData.types?.previous) {
         try {
-          setAllData({ isLoading: true });
           const data = await fetchAndMapTypes(baseData.types.previous);
-          setAllData({
-            isLoading: false,
-            baseTypes: data?.base,
-            currentTypes: data?.mapped,
-            currentPage: { types: currentPage.types - 1 },
+          dispatch({
+            type: PayloadTypes.typesPagination,
+            payload: {
+              baseTypes: data?.base,
+              currentTypes: data?.mapped || [],
+              currentPage: currentPage.types - 1,
+            },
           });
         } catch (error) {
-          setAllData({ isLoading: false });
           handleCatch(error);
         }
       } else {
         const index = (currentPage.types - 1) * resultsAmount.types;
-        setAllData({
-          currentTypes: types.slice(index - resultsAmount.types, index),
-          currentPage: { types: currentPage.types - 1 },
+        dispatch({
+          type: PayloadTypes.typesPagination,
+          payload: {
+            currentTypes: types.slice(index - resultsAmount.types, index),
+            currentPage: currentPage.types - 1,
+          },
         });
       }
     }
+    setIsLoading(false);
   };
 
   const specificPage = async (event: MouseEvent<HTMLButtonElement>) => {
+    setIsLoading(true);
     const page = Number(event.currentTarget.textContent);
     if (page != NaN) {
       if (isPokemon) {
         if (shouldFetchSearch.pokemons) {
-          setAllData({ isLoading: true });
           try {
             const data = await fetchAndMapPokemons(
               `${API.POKEMON}?limit=${resultsAmount.pokemons}&offset=${
                 page * resultsAmount.pokemons - resultsAmount.pokemons
               }`
             );
-            setAllData({
-              isLoading: false,
-              basePokemons: data?.base,
-              currentPokemons: data?.mapped,
-              currentPage: { pokemons: page },
+            dispatch({
+              type: PayloadTypes.pokemonsPagination,
+              payload: {
+                currentPokemons: data?.mapped || [],
+                basePokemons: data?.base,
+                currentPage: page,
+              },
             });
           } catch (error) {
-            setAllData({ isLoading: false });
             handleCatch(error);
           }
         } else {
           const index = page * resultsAmount.pokemons;
-          setAllData({
-            currentPokemons: pokemons.slice(index - resultsAmount.pokemons, index),
-            currentPage: { pokemons: page },
+          dispatch({
+            type: PayloadTypes.pokemonsPagination,
+            payload: {
+              currentPokemons: pokemons.slice(index - resultsAmount.pokemons, index),
+              currentPage: page,
+            },
           });
         }
       }
       if (isMove) {
         if (shouldFetchSearch.moves) {
           try {
-            setAllData({ isLoading: true });
             const data = await fetchAndMapMoves(
               `${API.MOVE}?limit=${resultsAmount.moves}&offset=${
                 page * resultsAmount.moves - resultsAmount.moves
               }`
             );
-            setAllData({
-              isLoading: false,
-              baseMoves: data?.base,
-              currentMoves: data?.mapped,
-              currentPage: { moves: page },
+            dispatch({
+              type: PayloadTypes.movesPagination,
+              payload: {
+                baseMoves: data?.base,
+                currentMoves: data?.mapped || [],
+                currentPage: page,
+              },
             });
           } catch (error) {
-            setAllData({ isLoading: false });
             handleCatch(error);
           }
         } else {
           const index = page * resultsAmount.moves;
-          setAllData({
-            currentMoves: moves.slice(index - resultsAmount.moves, index),
-            currentPage: { moves: page },
+          dispatch({
+            type: PayloadTypes.movesPagination,
+            payload: {
+              currentMoves: moves.slice(index - resultsAmount.moves, index),
+              currentPage: page,
+            },
           });
         }
       }
       if (isType) {
         if (shouldFetchSearch.types) {
           try {
-            setAllData({ isLoading: true });
             const data = await fetchAndMapTypes(
               `${API.TYPE}?limit=${resultsAmount.types}&offset=${
                 page * resultsAmount.types - resultsAmount.types
               }`
             );
-            setAllData({
-              isLoading: false,
-              baseTypes: data?.base,
-              currentTypes: data?.mapped,
-              currentPage: { types: page },
+            dispatch({
+              type: PayloadTypes.typesPagination,
+              payload: {
+                baseTypes: data?.base,
+                currentTypes: data?.mapped || [],
+                currentPage: page,
+              },
             });
           } catch (error) {
-            setAllData({ isLoading: false });
             handleCatch(error);
           }
         } else {
           const index = page * resultsAmount.types;
-          setAllData({
-            currentTypes: types.slice(index - resultsAmount.types, index),
-            currentPage: { types: page },
+          dispatch({
+            type: PayloadTypes.typesPagination,
+            payload: {
+              currentTypes: types.slice(index - resultsAmount.types, index),
+              currentPage: page,
+            },
           });
         }
       }
     }
+    setIsLoading(false);
   };
 
   return {

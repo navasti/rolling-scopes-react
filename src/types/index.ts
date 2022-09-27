@@ -2,6 +2,8 @@ import { AvailableTabs, FEMALE, Fields, Limits, MALE, TABS } from 'appConstants'
 import { ChangeEvent, KeyboardEvent, RefObject } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
+export * from './appReducer';
+
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;
 
@@ -39,40 +41,8 @@ export enum TypeSorting {
   movesAmount = 'moves amount',
 }
 
-export enum GlobalActionType {
-  setAllData = 'allData',
-  customPokemonForm = 'customPokemonForm',
-}
-
-export type GlobalState = {
-  customPokemons: Array<CustomPokemon & { id: string }>;
-  currentPageResults: CurrentPageResults;
-  allDataResults: AllDataResults;
-  searchResults: SearchResults;
-  resultsAmount: ResultsAmount;
-  currentPage: CurrentPage;
-  activeTab: AvailableTabs;
-  baseData: BaseData;
-  isLoading: boolean;
-  sorting: Sorting;
-};
-
-export type GlobalContextProps = {
-  addCustomPokemon: (customPokemon: CustomPokemon & { id: string }) => void;
-  setAllData: (allData: AllData) => void;
-  state: GlobalState;
-};
-
 export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
-};
-
-export type GlobalAction = {
-  type: GlobalActionType;
-  payload: RecursivePartial<GlobalState> & {
-    allData?: AllData;
-    customPokemons?: Array<CustomPokemon & { id: string }>;
-  };
 };
 
 export type MappedTypes = {
@@ -95,24 +65,6 @@ export type AllMappedData = {
   moves: MappedMoves;
   types: MappedTypes;
 };
-
-export type AllData = Partial<{
-  searchResults: Partial<SearchResults>;
-  resultsAmount: Partial<ResultsAmount>;
-  basePokemons: PokemonBaseData | null;
-  currentMoves: PokemonMoveDetails[];
-  currentTypes: PokemonTypeDetails[];
-  currentPokemons: PokemonDetails[];
-  currentPage: Partial<CurrentPage>;
-  baseMoves: MoveBaseData | null;
-  baseTypes: TypeBaseData | null;
-  allMoves: PokemonMoveDetails[];
-  allTypes: PokemonTypeDetails[];
-  allPokemons: PokemonDetails[];
-  sorting: Partial<Sorting>;
-  activeTab: AvailableTabs;
-  isLoading: boolean;
-}>;
 
 export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
@@ -217,12 +169,12 @@ export type LimitParams = {
 
 export type PokemonDetails = {
   abilities: Array<Ability>;
-  base_experience: number;
+  base_experience: number | null;
   types: Array<Type>;
   stats: Array<Stat>;
   sprites: Sprites;
-  height: number;
-  weight: number;
+  height: number | null;
+  weight: number | null;
   name: string;
   id: number;
 };
@@ -322,11 +274,11 @@ export type PokemonMove = {
 export type PokemonMoveDetails = {
   learned_by_pokemon: Array<Pokemon>;
   type: PokemonType;
-  accuracy: number;
-  priority: number;
-  power: number;
+  accuracy: number | null;
+  priority: number | null;
+  power: number | null;
   name: string;
-  pp: number;
+  pp: number | null;
   id: number;
 };
 

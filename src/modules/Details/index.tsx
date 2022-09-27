@@ -1,7 +1,7 @@
 import { MoveCardDetails, PokemonCardDetails, TypeCardDetails } from './components';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {
@@ -35,12 +35,8 @@ type MatchedData = MatchedPokemon | MatchedMove | MatchedType;
 
 export const Details = ({ componentName, location }: Props) => {
   const [matchedData, setMatchedData] = useState<MatchedData>();
-
+  const { allDataResults } = useAppContext().state;
   const { id, resourceType } = useParams();
-
-  const {
-    state: { allDataResults },
-  } = useGlobalContext();
 
   useEffect(() => {
     const { move, pokemon, type } = AvailableCardDetails;

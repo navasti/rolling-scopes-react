@@ -2,7 +2,7 @@ import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage
 import { useGlobalData, useResources } from 'hooks';
 import { TypeCard } from './components/TypeCard';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 import { Loader } from 'components';
 import { TypeSorting } from 'types';
 import * as S from './styled';
@@ -12,7 +12,7 @@ export const TypeView = () => {
     useResources('types');
   const { totalPageCounts } = useGlobalData();
   const options = Object.values(TypeSorting);
-  const { state } = useGlobalContext();
+  const { state } = useAppContext();
 
   return (
     <S.TypeView>

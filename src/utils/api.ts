@@ -111,12 +111,16 @@ export const getCurrentDataByParam = async (value: string, allData?: Partial<All
     const pokemons = (allData?.pokemons?.mapped || []).filter((item) => item.name.includes(value));
     return {
       searchResults: { pokemons, moves, types },
-      currentPokemons: pokemons.slice(0, Limits.pokemon),
-      currentTypes: types.slice(0, Limits.type),
-      currentMoves: moves.slice(0, Limits.move),
-      allPokemons: allData?.pokemons?.mapped,
-      allTypes: allData?.types?.mapped,
-      allMoves: allData?.moves?.mapped,
+      currentPageResults: {
+        pokemons: pokemons.slice(0, Limits.pokemon),
+        moves: moves.slice(0, Limits.move),
+        types: types.slice(0, Limits.type),
+      },
+      allDataResults: {
+        pokemons: allData?.pokemons?.mapped || [],
+        moves: allData?.moves?.mapped || [],
+        types: allData?.types?.mapped || [],
+      },
     };
   } catch (error) {
     handleCatch(error);
@@ -129,15 +133,21 @@ export const fetchCurrentData = async (allData?: Partial<AllMappedData>) => {
     const movesData = await fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`);
     const typesData = await fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`);
     return {
-      basePokemons: pokemonsData?.base,
-      baseMoves: movesData?.base,
-      baseTypes: typesData?.base,
-      currentPokemons: pokemonsData?.mapped,
-      currentMoves: movesData?.mapped,
-      currentTypes: typesData?.mapped,
-      allPokemons: allData?.pokemons?.mapped,
-      allTypes: allData?.types?.mapped,
-      allMoves: allData?.moves?.mapped,
+      baseData: {
+        pokemons: pokemonsData?.base || null,
+        moves: movesData?.base || null,
+        types: typesData?.base || null,
+      },
+      currentPageResults: {
+        pokemons: pokemonsData?.mapped || [],
+        moves: movesData?.mapped || [],
+        types: typesData?.mapped || [],
+      },
+      allDataResults: {
+        pokemons: allData?.pokemons?.mapped || [],
+        types: allData?.types?.mapped || [],
+        moves: allData?.moves?.mapped || [],
+      },
     };
   } catch (error) {
     handleCatch(error);

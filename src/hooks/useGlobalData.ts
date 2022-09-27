@@ -1,10 +1,9 @@
 import { MoveSorting, PokemonSorting, TypeSorting } from 'types';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 
 export const useGlobalData = () => {
-  const {
-    state: { searchResults, resultsAmount, allDataResults, sorting },
-  } = useGlobalContext();
+  const { allDataResults, resultsAmount, searchResults, sorting } = useAppContext().state;
+
   const totalPageCounts = {
     moves: Math.ceil(
       (searchResults.moves?.length || allDataResults.moves.length) / resultsAmount.moves

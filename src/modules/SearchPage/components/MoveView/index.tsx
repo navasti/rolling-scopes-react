@@ -2,7 +2,7 @@ import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage
 import { useGlobalData, useResources } from 'hooks';
 import { MoveCard } from './components/MoveCard';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useGlobalContext } from 'contexts';
+import { useAppContext } from 'contexts';
 import { MoveSorting } from 'types';
 import { Loader } from 'components';
 import * as S from './styled';
@@ -12,7 +12,7 @@ export const MoveView = () => {
     useResources('moves');
   const { totalPageCounts } = useGlobalData();
   const options = Object.values(MoveSorting);
-  const { state } = useGlobalContext();
+  const { state } = useAppContext();
 
   return (
     <S.MoveView>
