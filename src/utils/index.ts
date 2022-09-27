@@ -1,6 +1,14 @@
-import { Details, PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
-import { DateTime } from 'luxon';
 export * from './api';
+import { DateTime } from 'luxon';
+import {
+  Details,
+  MoveBaseData,
+  TypeBaseData,
+  PokemonDetails,
+  PokemonBaseData,
+  PokemonMoveDetails,
+  PokemonTypeDetails,
+} from 'types';
 
 export const getTodayDate = (): string => {
   const { day, month, year } = DateTime.now();
@@ -16,6 +24,10 @@ export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.
 export const appendComma = (length: number, index: number, label: string) => {
   return `${label}${length === index + 1 ? '' : ', '}`;
 };
+
+type BaseDataToCheck = PokemonBaseData | TypeBaseData | MoveBaseData | null;
+export const baseDataChecker = (stateData: BaseDataToCheck, payloadData?: BaseDataToCheck) =>
+  payloadData !== undefined ? payloadData : stateData;
 
 export const range = (start: number, end: number) => {
   const length = end - start + 1;

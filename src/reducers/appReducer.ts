@@ -1,4 +1,5 @@
 import { AvailableTabs, Limits } from 'appConstants';
+import { baseDataChecker } from 'utils';
 import {
   Actions,
   GlobalState,
@@ -97,10 +98,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          types:
-            action.payload.basePokemons !== undefined
-              ? action.payload.basePokemons
-              : state.baseData.types,
+          pokemons: baseDataChecker(state.baseData.pokemons, action.payload.basePokemons),
         },
       };
     case PayloadTypes.typesPagination:
@@ -115,10 +113,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          types:
-            action.payload.baseTypes !== undefined
-              ? action.payload.baseTypes
-              : state.baseData.types,
+          types: baseDataChecker(state.baseData.types, action.payload.baseTypes),
         },
       };
     case PayloadTypes.movesPagination:
@@ -133,10 +128,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          moves:
-            action.payload.baseMoves !== undefined
-              ? action.payload.baseMoves
-              : state.baseData.moves,
+          moves: baseDataChecker(state.baseData.moves, action.payload.baseMoves),
         },
       };
     case PayloadTypes.pokemonResults:
@@ -155,10 +147,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          pokemons:
-            action.payload.basePokemons !== undefined
-              ? action.payload.basePokemons
-              : state.baseData.pokemons,
+          pokemons: baseDataChecker(state.baseData.pokemons, action.payload.basePokemons),
         },
       };
     case PayloadTypes.moveResults:
@@ -177,10 +166,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          moves:
-            action.payload.baseMoves !== undefined
-              ? action.payload.baseMoves
-              : state.baseData.moves,
+          moves: baseDataChecker(state.baseData.moves, action.payload.baseMoves),
         },
       };
     case PayloadTypes.typeResults:
@@ -199,10 +185,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          types:
-            action.payload.baseTypes !== undefined
-              ? action.payload.baseTypes
-              : state.baseData.types,
+          types: baseDataChecker(state.baseData.types, action.payload.baseTypes),
         },
       };
     case PayloadTypes.sortingPokemon:
@@ -224,10 +207,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          pokemons:
-            action.payload.basePokemons !== undefined
-              ? action.payload.basePokemons
-              : state.baseData.pokemons,
+          pokemons: baseDataChecker(state.baseData.pokemons, action.payload.basePokemons),
         },
         sorting: {
           ...state.sorting,
@@ -253,10 +233,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          moves:
-            action.payload.baseMoves !== undefined
-              ? action.payload.baseMoves
-              : state.baseData.moves,
+          moves: baseDataChecker(state.baseData.moves, action.payload.baseMoves),
         },
         sorting: {
           ...state.sorting,
@@ -282,10 +259,7 @@ export const dataReducer = (state: GlobalState, action: Actions) => {
         },
         baseData: {
           ...state.baseData,
-          types:
-            action.payload.baseTypes !== undefined
-              ? action.payload.baseTypes
-              : state.baseData.types,
+          types: baseDataChecker(state.baseData.types, action.payload.baseTypes),
         },
         sorting: {
           ...state.sorting,
