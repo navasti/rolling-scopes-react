@@ -50,17 +50,23 @@ export const sortCommon = <T extends Details[]>(array: T) => ({
 
 export const sortPokemon = (array: Array<PokemonDetails>) => ({
   ...sortCommon(array),
-  byWeight: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.weight - a.weight),
-  byHeight: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.height - a.height),
+  byWeight: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.weight) - Number(a.weight)),
+  byHeight: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.height) - Number(a.height)),
   byBaseExperience: () =>
-    array.sort((a, b) => a.id - b.id).sort((a, b) => b.base_experience - a.base_experience),
+    array
+      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => Number(b.base_experience) - Number(a.base_experience)),
 });
 
 export const sortMove = (array: Array<PokemonMoveDetails>) => ({
   ...sortCommon(array),
-  byPP: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.pp - a.pp),
-  byPower: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.power - a.power),
-  byAccuracy: () => array.sort((a, b) => a.id - b.id).sort((a, b) => b.accuracy - a.accuracy),
+  byPP: () => array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.pp) - Number(a.pp)),
+  byPower: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.power) - Number(a.power)),
+  byAccuracy: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.accuracy) - Number(a.accuracy)),
 });
 
 export const sortType = (array: Array<PokemonTypeDetails>) => ({

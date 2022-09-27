@@ -11,9 +11,9 @@ export const PokemonCardDetails = ({ pokemon }: Props) => {
   const { abilities, types, base_experience, height, stats, weight, name, sprites } = pokemon;
 
   const singleLineData = [
-    { id: 1, label: 'Weight', value: weight },
-    { id: 2, label: 'Height', value: height },
-    { id: 3, label: 'Base experience', value: base_experience },
+    { id: 1, label: 'Weight', value: Number(weight) },
+    { id: 2, label: 'Height', value: Number(height) },
+    { id: 3, label: 'Base experience', value: Number(base_experience) },
   ];
 
   return (
@@ -29,7 +29,7 @@ export const PokemonCardDetails = ({ pokemon }: Props) => {
         <S.BaseInformationTitle>{name}</S.BaseInformationTitle>
       </S.BaseInformationWrapper>
 
-      <div>
+      <S.Details>
         {singleLineData.map(({ id, label, value }) => (
           <S.DetailProperty key={id}>
             <b>{label}:</b> {value}
@@ -57,7 +57,7 @@ export const PokemonCardDetails = ({ pokemon }: Props) => {
             </p>
           ))}
         </S.DetailWrapper>
-      </div>
+      </S.Details>
     </S.CardWrapper>
   );
 };

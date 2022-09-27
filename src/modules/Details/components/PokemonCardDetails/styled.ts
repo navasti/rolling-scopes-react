@@ -38,6 +38,10 @@ export const DetailTitle = styled.span`
   font-weight: 600;
 `;
 
+export const Details = styled.div`
+  min-width: 270px;
+`;
+
 export const DetailProperty = styled.p`
   margin-top: 5px;
 `;
