@@ -35,8 +35,10 @@ type MatchedData = MatchedPokemon | MatchedMove | MatchedType;
 
 export const Details = ({ componentName, location }: Props) => {
   const [matchedData, setMatchedData] = useState<MatchedData>();
-  const { allDataResults } = useAppContext().state;
   const { id, resourceType } = useParams();
+  const {
+    state: { allDataResults },
+  } = useAppContext();
 
   useEffect(() => {
     const { move, pokemon, type } = AvailableCardDetails;

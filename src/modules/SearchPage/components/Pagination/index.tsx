@@ -12,7 +12,7 @@ type Props = {
 };
 export const Pagination = (props: Props) => {
   const { totalPageCount, currentPage, nextPage, previousPage, specificPage } = props;
-  const paginationRange = usePaginationRange({
+  const { paginationRange } = usePaginationRange({
     totalPageCount,
     currentPage,
   });
@@ -23,7 +23,7 @@ export const Pagination = (props: Props) => {
         👈
       </S.PaginationButton>
 
-      {paginationRange?.map((item, index) =>
+      {paginationRange.map((item, index) =>
         item === DOTS ? (
           <S.PaginationButton key={index}>{DOTS}</S.PaginationButton>
         ) : (

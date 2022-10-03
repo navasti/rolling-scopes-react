@@ -21,7 +21,9 @@ export const SearchPage = ({ componentName, location }: Props) => {
     value && setInputValue(value);
   }, []);
 
-  const { allDataResults, resultsAmount, isLoading, activeTab } = useAppContext().state;
+  const {
+    state: { allDataResults, resultsAmount, isLoading, activeTab },
+  } = useAppContext();
   const { dispatch } = useAppContext();
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
