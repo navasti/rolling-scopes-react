@@ -1,21 +1,34 @@
 import { AvailableTabs, TABS } from 'appConstants';
-import { Lengths } from 'types';
+import { useAppContext } from 'contexts';
+import { useGlobalData } from 'hooks';
+import { PayloadTypes } from 'types';
 import * as S from './styled';
 
-type Props = {
-  onClick: (tab: AvailableTabs) => void;
-  activeTab: AvailableTabs;
-  options: typeof TABS;
-  isLoading: boolean;
-  lengths: Lengths;
-};
+export const Tabs = () => {
+  const onClick = (option: AvailableTabs) =>
+    dispatch({ type: PayloadTypes.activeTab, payload: option });
+  const { totalResults } = useGlobalData();
 
-export const Tabs = ({ activeTab, lengths, isLoading, options, onClick }: Props) => {
+  const {
+    dispatch,
+    state: { isLoading, activeTab },
+  } = useAppContext();
+
   return (
     <S.TabsWrapper>
-      {options.map((option) => (
+      {TABS.map((option) => (
         <S.Tab active={option === activeTab} key={option} onClick={() => onClick(option)}>
-          {option} {!isLoading && `(${lengths[option]})`}
+          {option}{' '}
+          {!isLoading &&
+            `(${
+              option === AvailableTabs.pokemons
+                ? totalResults.pokemons
+                : option === AvailableTabs.moves
+                ? totalResults.moves
+                : option === AvailableTabs.types
+                ? totalResults.types
+                : 0
+            })`}
         </S.Tab>
       ))}
     </S.TabsWrapper>

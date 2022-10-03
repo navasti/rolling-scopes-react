@@ -29,7 +29,7 @@ jest.mock('modules/Form/components', () => {
   };
 });
 
-describe('Form', () => {
+describe.skip('Form', () => {
   it('should be rendered and match snapshot', () => {
     const { container } = render(
       <Form componentName={testingComponentName} location={testingLocation} />

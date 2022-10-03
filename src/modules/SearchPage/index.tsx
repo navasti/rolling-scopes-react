@@ -1,20 +1,12 @@
-import { PokemonTypeDetails, PokemonMoveDetails, PokemonDetails, Lengths } from 'types';
-import { AvailableTabs, API, INPUT_VALUE_KEY, TABS } from 'appConstants';
+import { MoveSorting, PokemonSorting, SearchResults, TypeSorting, PayloadTypes } from 'types';
+import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
-import { SearchBar, Tabs, Cards } from './components';
+import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
+import { sortMove, sortPokemon, sortType } from 'utils';
+import { useAppContext } from 'contexts';
+import { Loader } from 'components';
 import { Layout } from 'modules';
 import * as S from './styled';
-import {
-  fetchPokemonByParameter,
-  fetchMoveByParameter,
-  fetchTypeByParameter,
-  fetchPokemonDetails,
-  fetchPokemonBase,
-  fetchMoveDetails,
-  fetchTypeDetails,
-  fetchTypeBase,
-  fetchMoveBase,
-} from 'utils';
 
 type Props = {
   componentName: string;
@@ -22,64 +14,59 @@ type Props = {
 };
 
 export const SearchPage = ({ componentName, location }: Props) => {
-  const [lengths, setLengths] = useState<Lengths>({ moves: 0, pokemons: 0, types: 0 });
-  const [activeTab, setActiveTab] = useState<AvailableTabs>(AvailableTabs.pokemons);
-  const [pokemons, setPokemons] = useState<Array<PokemonDetails>>([]);
-  const [moves, setMoves] = useState<Array<PokemonMoveDetails>>([]);
-  const [types, setTypes] = useState<Array<PokemonTypeDetails>>([]);
   const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
-    if (inputValue && inputValue.trim().length > 0) {
-      setInputValue(inputValue);
-      fetchAndSetSpecificData(inputValue).then(() => setIsLoading(false));
-    } else fetchAndSetAllData().then(() => setIsLoading(false));
+    const value = window.localStorage.getItem(INPUT_VALUE_KEY);
+    value && setInputValue(value);
   }, []);
 
-  const fetchAndSetSpecificData = async (value: string) => {
-    const type = await fetchTypeByParameter(`${API.TYPE}/${value}`);
-    const move = await fetchMoveByParameter(`${API.MOVE}/${value}`);
-    const pokemon = await fetchPokemonByParameter(`${API.POKEMON}/${value}`);
-    setPokemons(pokemon ? [pokemon] : []);
-    setTypes(type ? [type] : []);
-    setMoves(move ? [move] : []);
-    setLengths({
-      pokemons: pokemon ? 1 : 0,
-      moves: move ? 1 : 0,
-      types: type ? 1 : 0,
-    });
-  };
-
-  const fetchAndSetAllData = async () => {
-    const pokemons = (await fetchPokemonBase(`${API.POKEMON}${API.POKEMON_LIMIT}`)) || [];
-    const pokemonsDetailed = (await fetchPokemonDetails(pokemons)) || [];
-    const moves = (await fetchMoveBase(`${API.MOVE}${API.MOVE_LIMIT}`)) || [];
-    const movesDetailed = (await fetchMoveDetails(moves)) || [];
-    const types = (await fetchTypeBase(`${API.TYPE}${API.TYPE_LIMIT}`)) || [];
-    const typesDetailed = (await fetchTypeDetails(types)) || [];
-    setPokemons(pokemonsDetailed);
-    setTypes(typesDetailed);
-    setMoves(movesDetailed);
-    setLengths({
-      pokemons: pokemonsDetailed.length,
-      moves: movesDetailed.length,
-      types: typesDetailed.length,
-    });
-  };
+  const {
+    state: { allDataResults, resultsAmount, isLoading, activeTab },
+  } = useAppContext();
+  const { dispatch } = useAppContext();
 
   const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
     if (key === 'Enter') {
-      setIsLoading(true);
-      !!inputValue.trim().length
-        ? await fetchAndSetSpecificData(inputValue)
-        : await fetchAndSetAllData();
-      setIsLoading(false);
+      const isValueValid = !!inputValue.trim().length;
+      const searchResults: SearchResults = {
+        moves: null,
+        pokemons: null,
+        types: null,
+      };
+      if (isValueValid) {
+        searchResults.types = sortType(allDataResults.types)
+          .byId()
+          .filter((item) => item.name.includes(inputValue));
+        searchResults.moves = sortMove(allDataResults.moves)
+          .byId()
+          .filter((item) => item.name.includes(inputValue));
+        searchResults.pokemons = sortPokemon(allDataResults.pokemons)
+          .byId()
+          .filter((item) => item.name.includes(inputValue));
+      }
+      const { moves, pokemons, types } = searchResults;
+      dispatch({
+        type: PayloadTypes.searchData,
+        payload: {
+          searchResults,
+          currentPageResults: {
+            pokemons: (pokemons || allDataResults.pokemons).slice(0, resultsAmount.pokemons),
+            types: (types || allDataResults.types).slice(0, resultsAmount.types),
+            moves: (moves || allDataResults.moves).slice(0, resultsAmount.moves),
+          },
+          currentPage: { moves: 1, pokemons: 1, types: 1 },
+          sorting: {
+            pokemons: PokemonSorting.none,
+            moves: MoveSorting.none,
+            types: TypeSorting.none,
+          },
+        },
+      });
     }
   };
 
-  const onChange = async ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setInputValue(target.value);
     window.localStorage.setItem(INPUT_VALUE_KEY, target.value);
   };
@@ -89,25 +76,16 @@ export const SearchPage = ({ componentName, location }: Props) => {
       <S.SearchPageView>
         <SearchBar
           label="Local Storage Input"
+          inputDisabled={isLoading}
           inputValue={inputValue}
-          isLoading={isLoading}
           onKeyDown={onKeyDown}
           onChange={onChange}
         />
-        <Tabs
-          onClick={(tab: AvailableTabs) => setActiveTab(tab)}
-          isLoading={isLoading}
-          activeTab={activeTab}
-          lengths={lengths}
-          options={TABS}
-        />
-        <Cards
-          isLoading={isLoading}
-          activeTab={activeTab}
-          pokemons={pokemons}
-          types={types}
-          moves={moves}
-        />
+        <Tabs />
+        {isLoading && <Loader />}
+        {!isLoading && activeTab === AvailableTabs.pokemons && <PokemonView />}
+        {!isLoading && activeTab === AvailableTabs.moves && <MoveView />}
+        {!isLoading && activeTab === AvailableTabs.types && <TypeView />}
       </S.SearchPageView>
     </Layout>
   );

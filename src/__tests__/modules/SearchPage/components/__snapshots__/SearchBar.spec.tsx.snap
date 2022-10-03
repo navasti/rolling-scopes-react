@@ -3,16 +3,16 @@
 exports[`SearchBar search bar should display passed label, input value and match snapshot 1`] = `
 <div>
   <div
-    class="sc-iBkjds fMQFEF"
+    class="sc-bBrHrO jrHWRb"
   >
     <label
-      class="sc-papXJ hEepGp"
+      class="sc-cxabCf cnuyDT"
       for="storage-input"
     >
       search-bar-label
     </label>
     <div
-      class="sc-ftvSup EzrIp"
+      class="sc-ivTmOn jWKPgk"
     >
       <svg
         data-testid="search-icon"
@@ -20,7 +20,7 @@ exports[`SearchBar search bar should display passed label, input value and match
         search.svg
       </svg>
       <input
-        class="sc-jqUVSM rVoCU"
+        class="sc-llJcti cHKmYK"
         id="storage-input"
         placeholder="Type here"
         type="text"
@@ -29,15 +29,15 @@ exports[`SearchBar search bar should display passed label, input value and match
     </div>
   </div>
   <div
-    class="sc-kDDrLX gLOAkp"
+    class="sc-iIPllB fBkesa"
   >
     <span
-      class="sc-iqcoie liFuUK"
+      class="sc-gicCDI bkbDix"
     >
       Type and press enter to search for specific pokemon, type or move.
     </span>
     <span
-      class="sc-iqcoie liFuUK"
+      class="sc-gicCDI bkbDix"
     >
       Clear input and press enter to search for all pokemons, types and moves.
     </span>

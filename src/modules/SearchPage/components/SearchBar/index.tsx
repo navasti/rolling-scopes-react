@@ -1,17 +1,17 @@
+import { SEARCH_BAR_INSTRUCTIONS } from 'appConstants';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import { SearchIcon } from 'assets/images/svg';
 import * as S from './styled';
-import { SEARCH_BAR_INSTRUCTIONS } from 'appConstants';
 
 type Props = {
   label: string;
-  isLoading: boolean;
   inputValue: string;
+  inputDisabled: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export const SearchBar = ({ inputValue, label, isLoading, onChange, onKeyDown }: Props) => {
+export const SearchBar = ({ inputValue, label, inputDisabled, onChange, onKeyDown }: Props) => {
   return (
     <>
       <S.SearchBar>
@@ -20,8 +20,8 @@ export const SearchBar = ({ inputValue, label, isLoading, onChange, onKeyDown }:
           <SearchIcon data-testid="search-icon" />
           <S.Input
             placeholder="Type here"
+            disabled={inputDisabled}
             onKeyDown={onKeyDown}
-            disabled={isLoading}
             onChange={onChange}
             value={inputValue}
             id="storage-input"

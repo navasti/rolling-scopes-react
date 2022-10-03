@@ -1,23 +1,23 @@
-import { PokemonDetails } from 'types';
-import * as S from './styled';
+import { AvailableCardDetails, PokemonDetails } from 'types';
+import questionmark from 'assets/images/questionmark.png';
+import { useNavigate } from 'react-router-dom';
+import * as S from '../styled';
 
 type Props = {
-  handlePokemonSelect: (selectedPokemon: PokemonDetails) => void;
-  handleOpenModal: () => void;
   pokemon: PokemonDetails;
 };
 
-export const PokemonCard = ({ pokemon, handlePokemonSelect, handleOpenModal }: Props) => {
-  const onClick = () => {
-    handlePokemonSelect(pokemon);
-    handleOpenModal();
+export const PokemonCard = ({ pokemon }: Props) => {
+  const navigation = useNavigate();
+  const handleCardClick = () => {
+    navigation(`details/${AvailableCardDetails.pokemon}/${pokemon.id}`, { replace: true });
   };
   return (
     <>
-      <S.Card onClick={onClick} align="left" stretch>
+      <S.Card onClick={handleCardClick} align="left" stretch>
         <S.ImageWrapper>
           <S.Image
-            src={pokemon.sprites.front_default}
+            src={pokemon.sprites.front_default || questionmark}
             data-testid="pokemon-card"
             alt={pokemon.name}
             height="85"

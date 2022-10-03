@@ -1,5 +1,14 @@
-import { DateTime } from 'luxon';
 export * from './api';
+import { DateTime } from 'luxon';
+import {
+  Details,
+  MoveBaseData,
+  TypeBaseData,
+  PokemonDetails,
+  PokemonBaseData,
+  PokemonMoveDetails,
+  PokemonTypeDetails,
+} from 'types';
 
 export const getTodayDate = (): string => {
   const { day, month, year } = DateTime.now();
@@ -15,3 +24,67 @@ export const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.
 export const appendComma = (length: number, index: number, label: string) => {
   return `${label}${length === index + 1 ? '' : ', '}`;
 };
+
+type BaseDataToCheck = PokemonBaseData | TypeBaseData | MoveBaseData | null;
+export const baseDataChecker = (stateData: BaseDataToCheck, payloadData?: BaseDataToCheck) =>
+  payloadData !== undefined ? payloadData : stateData;
+
+export const range = (start: number, end: number) => {
+  const length = end - start + 1;
+  return Array.from({ length }, (_, index) => index + start);
+};
+
+export const prepareBaseData = <T>(details?: T | undefined) => {
+  const result = details ? [details] : [];
+  return {
+    currentPageResults: result,
+    count: result.length,
+    previous: null,
+    results: [],
+    next: null,
+  };
+};
+
+export const prepareBaseSortingData = <T>(details?: T | undefined) => {
+  const result = details ? [details] : [];
+  return {
+    currentPageResults: result,
+    count: result.length,
+    results: [],
+  };
+};
+
+export const sortCommon = <T extends Details[]>(array: T) => ({
+  byId: () => array.sort((a, b) => a.id - b.id),
+  alphabetical: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => a.name.localeCompare(b.name)),
+});
+
+export const sortPokemon = (array: Array<PokemonDetails>) => ({
+  ...sortCommon(array),
+  byWeight: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.weight) - Number(a.weight)),
+  byHeight: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.height) - Number(a.height)),
+  byBaseExperience: () =>
+    array
+      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => Number(b.base_experience) - Number(a.base_experience)),
+});
+
+export const sortMove = (array: Array<PokemonMoveDetails>) => ({
+  ...sortCommon(array),
+  byPP: () => array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.pp) - Number(a.pp)),
+  byPower: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.power) - Number(a.power)),
+  byAccuracy: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => Number(b.accuracy) - Number(a.accuracy)),
+});
+
+export const sortType = (array: Array<PokemonTypeDetails>) => ({
+  ...sortCommon(array),
+  byMovesAmount: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => b.moves.length - a.moves.length),
+  byPokemonsAmount: () =>
+    array.sort((a, b) => a.id - b.id).sort((a, b) => b.pokemon.length - a.pokemon.length),
+});
