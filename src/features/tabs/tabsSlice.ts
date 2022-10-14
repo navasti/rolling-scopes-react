@@ -7,7 +7,7 @@ export const initialState: TabsState = {
 };
 
 const tabsSlice = createSlice({
-  name: 'resources',
+  name: 'tabs',
   initialState,
   reducers: {
     activeTabSync: (state, action: PayloadAction<AvailableTabs>) => {

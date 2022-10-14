@@ -6,6 +6,9 @@ import {
   fetchAndMapMoves,
   fetchCurrentData,
   fetchAndMapTypes,
+  pokemonSortObject,
+  moveSortObject,
+  typeSortObject,
   fetchAllData,
   sortPokemon,
   isPokemon,
@@ -13,9 +16,6 @@ import {
   sortMove,
   isMove,
   isType,
-  pokemonSortObject,
-  moveSortObject,
-  typeSortObject,
 } from 'utils';
 import {
   ResultsAmountPayload,
