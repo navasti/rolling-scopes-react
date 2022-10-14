@@ -2,12 +2,15 @@ export * from './api';
 import { DateTime } from 'luxon';
 import {
   Details,
+  MoveSorting,
+  TypeSorting,
   MoveBaseData,
   TypeBaseData,
   PokemonDetails,
+  PokemonSorting,
   PokemonBaseData,
-  PokemonMoveDetails,
   PokemonTypeDetails,
+  PokemonMoveDetails,
 } from 'types';
 
 export const getTodayDate = (): string => {
@@ -87,4 +90,31 @@ export const sortType = (array: Array<PokemonTypeDetails>) => ({
     array.sort((a, b) => a.id - b.id).sort((a, b) => b.moves.length - a.moves.length),
   byPokemonsAmount: () =>
     array.sort((a, b) => a.id - b.id).sort((a, b) => b.pokemon.length - a.pokemon.length),
+});
+
+export const isPokemon = (resourceType: string) => resourceType === 'pokemons';
+export const isMove = (resourceType: string) => resourceType === 'moves';
+export const isType = (resourceType: string) => resourceType === 'types';
+
+export const moveSortObject = (moves: Array<PokemonMoveDetails>) => ({
+  [MoveSorting.alphabetical]: sortMove(moves).alphabetical,
+  [MoveSorting.accuracy]: sortMove(moves).byAccuracy,
+  [MoveSorting.power]: sortMove(moves).byPower,
+  [MoveSorting.none]: sortMove(moves).byId,
+  [MoveSorting.pp]: sortMove(moves).byPP,
+});
+
+export const typeSortObject = (types: Array<PokemonTypeDetails>) => ({
+  [TypeSorting.pokemonsAmount]: sortType(types).byPokemonsAmount,
+  [TypeSorting.alphabetical]: sortType(types).alphabetical,
+  [TypeSorting.movesAmount]: sortType(types).byMovesAmount,
+  [TypeSorting.none]: sortType(types).byId,
+});
+
+export const pokemonSortObject = (pokemons: Array<PokemonDetails>) => ({
+  [PokemonSorting.baseExperience]: sortPokemon(pokemons).byBaseExperience,
+  [PokemonSorting.alphabetical]: sortPokemon(pokemons).alphabetical,
+  [PokemonSorting.weight]: sortPokemon(pokemons).byWeight,
+  [PokemonSorting.height]: sortPokemon(pokemons).byHeight,
+  [PokemonSorting.none]: sortPokemon(pokemons).byId,
 });

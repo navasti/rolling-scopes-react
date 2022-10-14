@@ -104,7 +104,7 @@ export const fetchAllData = async (): Promise<Partial<AllMappedData> | undefined
   }
 };
 
-export const getCurrentDataByParam = async (value: string, allData?: Partial<AllMappedData>) => {
+export const fetchParameterizedData = async (value: string, allData?: Partial<AllMappedData>) => {
   try {
     const types = (allData?.types?.mapped || []).filter((item) => item.name.includes(value));
     const moves = (allData?.moves?.mapped || []).filter((item) => item.name.includes(value));

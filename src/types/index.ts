@@ -2,7 +2,7 @@ import { AvailableTabs, FEMALE, Fields, Limits, MALE, TABS } from 'appConstants'
 import { ChangeEvent, KeyboardEvent, RefObject } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-export * from './appReducer';
+export * from './slices';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;

@@ -1,32 +1,30 @@
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { activeTabSync } from 'features/tabs/tabsSlice';
 import { AvailableTabs, TABS } from 'appConstants';
-import { useAppContext } from 'contexts';
-import { useGlobalData } from 'hooks';
-import { PayloadTypes } from 'types';
+import { useResources } from 'hooks';
 import * as S from './styled';
 
 export const Tabs = () => {
-  const onClick = (option: AvailableTabs) =>
-    dispatch({ type: PayloadTypes.activeTab, payload: option });
-  const { totalResults } = useGlobalData();
-
-  const {
-    dispatch,
-    state: { isLoading, activeTab },
-  } = useAppContext();
-
+  const dispatch = useAppDispatch();
+  const activeTab = useAppSelector((state) => state.tabs.activeTab);
+  const { isLoading, totalPokemonResults, totalMoveResults, totalTypeResults } = useResources();
   return (
     <S.TabsWrapper>
       {TABS.map((option) => (
-        <S.Tab active={option === activeTab} key={option} onClick={() => onClick(option)}>
+        <S.Tab
+          active={option === activeTab}
+          key={option}
+          onClick={() => dispatch(activeTabSync(option))}
+        >
           {option}{' '}
           {!isLoading &&
             `(${
               option === AvailableTabs.pokemons
-                ? totalResults.pokemons
+                ? totalPokemonResults
                 : option === AvailableTabs.moves
-                ? totalResults.moves
+                ? totalMoveResults
                 : option === AvailableTabs.types
-                ? totalResults.types
+                ? totalTypeResults
                 : 0
             })`}
         </S.Tab>

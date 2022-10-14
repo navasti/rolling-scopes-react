@@ -5,7 +5,7 @@ type Props = {
   name: string;
   value: string;
   options: Array<string>;
-  onChange: (sorting: PokemonSorting | MoveSorting | TypeSorting) => void;
+  onChange: (sorting: MoveSorting | TypeSorting | PokemonSorting) => void;
 };
 
 export const SortingSelector = ({ name, options, value, onChange }: Props) => {
@@ -15,7 +15,7 @@ export const SortingSelector = ({ name, options, value, onChange }: Props) => {
       <S.Select
         value={value}
         onChange={({ target: { value } }) =>
-          onChange(value as PokemonSorting | MoveSorting | TypeSorting)
+          onChange(value as MoveSorting | TypeSorting | MoveSorting)
         }
       >
         {options.map((option) => (

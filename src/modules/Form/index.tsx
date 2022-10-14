@@ -1,7 +1,8 @@
-import { CustomPokemon, FormFields, MessageType, PayloadTypes } from 'types';
+import { CustomPokemon, FormFields, MessageType } from 'types';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { addCustomPokemon } from 'features/form/formSlice';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAppContext } from 'contexts';
 import { useState } from 'react';
 import { Layout } from 'modules';
 import * as S from './styled';
@@ -35,10 +36,8 @@ export const Form = ({ componentName, location }: Props) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [initialEnter, setInitialEnter] = useState(true);
 
-  const {
-    dispatch,
-    state: { customPokemons },
-  } = useAppContext();
+  const dispatch = useAppDispatch();
+  const { customPokemons } = useAppSelector((state) => state.form);
 
   const {
     formState: { errors },
@@ -65,7 +64,7 @@ export const Form = ({ componentName, location }: Props) => {
       name,
     };
     setShowSuccessMessage(true);
-    dispatch({ type: PayloadTypes.formPokemons, payload: customPokemon });
+    dispatch(addCustomPokemon(customPokemon));
     reset(DEFAULT_VALUES, { keepValues: false });
   };
 

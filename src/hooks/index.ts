@@ -1,3 +1,2 @@
-export * from './usePaginationRange';
-export * from './useGlobalData';
-export * from './useResources';
+export { usePaginationRange } from './usePaginationRange';
+export { useResources } from './useResources';

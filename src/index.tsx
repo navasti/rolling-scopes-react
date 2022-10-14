@@ -2,7 +2,8 @@ import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
 import { GlobalStyles } from 'commonStyles';
 import ReactDOM from 'react-dom/client';
-import { AppProvider } from 'contexts';
+import { Provider } from 'react-redux';
+import { store } from 'app/store';
 import { App } from 'modules';
 
 const root = ReactDOM.createRoot(document.getElementById('app-root') as HTMLElement);
@@ -10,9 +11,9 @@ const root = ReactDOM.createRoot(document.getElementById('app-root') as HTMLElem
 root.render(
   <BrowserRouter>
     <GlobalStyles />
-    <AppProvider>
+    <Provider store={store}>
       <App />
-    </AppProvider>
+    </Provider>
   </BrowserRouter>
 );
 

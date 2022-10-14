@@ -1,48 +1,60 @@
 import { SortingSelector, Pagination, ResultsSelector } from 'modules/SearchPage/components';
 import { PokemonCard } from './components/PokemonCard';
-import { useGlobalData, useResources } from 'hooks';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useAppContext } from 'contexts';
+import { useAppSelector } from 'app/hooks';
 import { PokemonSorting } from 'types';
+import { useResources } from 'hooks';
 import { Loader } from 'components';
 import * as S from './styled';
 
 export const PokemonView = () => {
-  const { handleSorting, handleResultsAmount, nextPage, previousPage, specificPage } =
-    useResources('pokemons');
   const options = Object.values(PokemonSorting);
-  const { totalPageCounts } = useGlobalData();
-  const { state } = useAppContext();
+
+  const { pokemonResultsAmount, currentPokemonPage, currentPokemons, pokemonSorting } =
+    useAppSelector((state) => state.resources);
+
+  const {
+    isLoading,
+    totalPokemonPages,
+    handlePokemonSorting,
+    handleNextPokemonPage,
+    handleSpecificPokemonPage,
+    handlePreviousPokemonPage,
+    handlePokemonResultsAmount,
+  } = useResources();
 
   return (
     <S.PokemonView>
       <S.SelectorsWrapper>
         <SortingSelector
-          name="pokemon"
+          onChange={handlePokemonSorting}
+          value={pokemonSorting}
           options={options}
-          onChange={handleSorting}
-          value={state.sorting.pokemons}
+          name="pokemon"
         />
         <ResultsSelector
+          onClick={handlePokemonResultsAmount}
           options={RESULTS_AMOUNT.POKEMON}
-          onClick={handleResultsAmount}
-          value={state.resultsAmount.pokemons}
+          value={pokemonResultsAmount}
         />
       </S.SelectorsWrapper>
       <Pagination
-        totalPageCount={totalPageCounts.pokemons}
-        currentPage={state.currentPage.pokemons}
-        previousPage={previousPage}
-        specificPage={specificPage}
-        nextPage={nextPage}
+        previousPage={handlePreviousPokemonPage}
+        specificPage={handleSpecificPokemonPage}
+        totalPageCount={totalPokemonPages}
+        currentPage={currentPokemonPage}
+        nextPage={handleNextPokemonPage}
       />
-      {!state.currentPageResults.pokemons.length && <S.TextCenter>No pokemons found</S.TextCenter>}
-      {state.isLoading && <Loader />}
-      <S.CardsWrapper visible={!state.isLoading}>
-        {state.currentPageResults.pokemons.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} />
-        ))}
-      </S.CardsWrapper>
+      {!currentPokemons.length && !isLoading && <S.TextCenter>No pokemons found</S.TextCenter>}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <S.CardsWrapper>
+          {currentPokemons.map((pokemon) => (
+            <PokemonCard key={pokemon.id} pokemon={pokemon} />
+          ))}
+        </S.CardsWrapper>
+      )}
     </S.PokemonView>
   );
 };
