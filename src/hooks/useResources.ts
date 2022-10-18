@@ -1,17 +1,37 @@
 import { MoveSorting, PokemonSorting, Status, TypeSorting } from 'types';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { MouseEvent } from 'react';
 import {
-  resultsAmountAsync,
-  previousPageAsync,
-  resultsAmountSync,
-  specificPageAsync,
-  previousPageSync,
-  specificPageSync,
-  nextPageAsync,
-  nextPageSync,
-  sortingAsync,
-  sortingSync,
+  pokemonResultsAmountAsync,
+  pokemonResultsAmountSync,
+  pokemonPreviousPageAsync,
+  pokemonSpecificPageAsync,
+  pokemonPreviousPageSync,
+  pokemonSpecificPageSync,
+  moveResultsAmountAsync,
+  typeResultsAmountAsync,
+  typeResultsAmountSync,
+  moveResultsAmountSync,
+  movePreviousPageAsync,
+  moveSpecificPageAsync,
+  typeSpecificPageAsync,
+  typePreviousPageAsync,
+  typePreviousPageSync,
+  typeSpecificPageSync,
+  moveSpecificPageSync,
+  movePreviousPageSync,
+  pokemonNextPageAsync,
+  pokemonNextPageSync,
+  pokemonSortingAsync,
+  pokemonSortingSync,
+  moveNextPageAsync,
+  typeNextPageAsync,
+  typeSortingAsync,
+  typeNextPageSync,
+  moveNextPageSync,
+  moveSortingAsync,
+  moveSortingSync,
+  typeSortingSync,
 } from 'features/resources/resourcesSlice';
 
 export const useResources = () => {
@@ -47,41 +67,45 @@ export const useResources = () => {
     (searchPokemonResults?.length || allPokemons.length) / pokemonResultsAmount
   );
 
+  const pokemons = [...(searchPokemonResults?.length ? searchPokemonResults : allPokemons)];
+  const moves = [...(searchMoveResults?.length ? searchMoveResults : allMoves)];
+  const types = [...(searchTypeResults?.length ? searchTypeResults : allTypes)];
+
   const totalMoveResults = searchMoveResults ? searchMoveResults.length : allMoves.length;
   const totalTypeResults = searchTypeResults ? searchTypeResults.length : allTypes.length;
   const totalPokemonResults = searchPokemonResults
     ? searchPokemonResults.length
     : allPokemons.length;
 
-  const handleMoveSorting = (sorting: MoveSorting | TypeSorting | PokemonSorting) => {
+  const handleMoveSorting = (sorting: string) => {
     if (sorting === MoveSorting.none && !searchMoveResults?.length) {
-      dispatch(sortingAsync({ resourceType: 'moves', resultsAmount: moveResultsAmount }));
+      dispatch(moveSortingAsync(moveResultsAmount));
     } else {
-      dispatch(sortingSync({ resourceType: 'moves', sorting: sorting }));
+      dispatch(moveSortingSync({ moves, sorting: sorting as MoveSorting }));
     }
   };
 
   const handleMoveResultsAmount = (resultsAmount: number) => {
     if (moveSorting === MoveSorting.none && !searchMoveResults?.length) {
-      dispatch(resultsAmountAsync({ resourceType: 'moves', resultsAmount }));
+      dispatch(moveResultsAmountAsync(resultsAmount));
     } else {
-      dispatch(resultsAmountSync({ resourceType: 'moves', resultsAmount }));
+      dispatch(moveResultsAmountSync({ resultsAmount, moves }));
     }
   };
 
   const handleNextMovePage = () => {
     if (moveSorting === MoveSorting.none && baseMoves?.next && !searchMoveResults?.length) {
-      dispatch(nextPageAsync({ resourceType: 'moves', next: baseMoves.next }));
+      dispatch(moveNextPageAsync(baseMoves.next));
     } else {
-      dispatch(nextPageSync({ resourceType: 'moves' }));
+      dispatch(moveNextPageSync(moves));
     }
   };
 
   const handlePreviousMovePage = () => {
     if (moveSorting === MoveSorting.none && baseMoves?.previous && !searchMoveResults?.length) {
-      dispatch(previousPageAsync({ resourceType: 'moves', previous: baseMoves.previous }));
+      dispatch(movePreviousPageAsync(baseMoves.previous));
     } else {
-      dispatch(previousPageSync({ resourceType: 'moves' }));
+      dispatch(movePreviousPageSync(moves));
     }
   };
 
@@ -89,40 +113,38 @@ export const useResources = () => {
     const page = Number(event.currentTarget.textContent);
     if (!Number.isNaN(page)) {
       if (moveSorting === MoveSorting.none && !searchMoveResults?.length) {
-        dispatch(
-          specificPageAsync({ resourceType: 'moves', resultsAmount: moveResultsAmount, page })
-        );
+        dispatch(moveSpecificPageAsync({ resultsAmount: moveResultsAmount, page }));
       } else {
-        dispatch(specificPageSync({ resourceType: 'moves', page }));
+        dispatch(moveSpecificPageSync({ moves, page }));
       }
     }
   };
 
-  const handlePokemonSorting = (sorting: MoveSorting | TypeSorting | PokemonSorting) => {
-    if (sorting === MoveSorting.none && !searchPokemonResults?.length) {
-      dispatch(sortingAsync({ resourceType: 'pokemons', resultsAmount: pokemonResultsAmount }));
+  const handlePokemonSorting = (sorting: string) => {
+    if (sorting === PokemonSorting.none && !searchPokemonResults?.length) {
+      dispatch(pokemonSortingAsync(pokemonResultsAmount));
     } else {
-      dispatch(sortingSync({ sorting, resourceType: 'pokemons' }));
+      dispatch(pokemonSortingSync({ pokemons, sorting: sorting as PokemonSorting }));
     }
   };
 
   const handlePokemonResultsAmount = (resultsAmount: number) => {
     if (pokemonSorting === PokemonSorting.none && !searchPokemonResults?.length) {
-      dispatch(resultsAmountAsync({ resourceType: 'pokemons', resultsAmount }));
+      dispatch(pokemonResultsAmountAsync(resultsAmount));
     } else {
-      dispatch(resultsAmountSync({ resourceType: 'pokemons', resultsAmount }));
+      dispatch(pokemonResultsAmountSync({ pokemons, resultsAmount }));
     }
   };
 
   const handleNextPokemonPage = () => {
     if (
       pokemonSorting === PokemonSorting.none &&
-      basePokemons?.next &&
-      !searchPokemonResults?.length
+      !searchPokemonResults?.length &&
+      basePokemons?.next
     ) {
-      dispatch(nextPageAsync({ resourceType: 'pokemons', next: basePokemons.next }));
+      dispatch(pokemonNextPageAsync(basePokemons.next));
     } else {
-      dispatch(nextPageSync({ resourceType: 'pokemons' }));
+      dispatch(pokemonNextPageSync(pokemons));
     }
   };
 
@@ -132,9 +154,9 @@ export const useResources = () => {
       basePokemons?.previous &&
       !searchPokemonResults?.length
     ) {
-      dispatch(previousPageAsync({ resourceType: 'pokemons', previous: basePokemons.previous }));
+      dispatch(pokemonPreviousPageAsync(basePokemons.previous));
     } else {
-      dispatch(previousPageSync({ resourceType: 'pokemons' }));
+      dispatch(pokemonPreviousPageSync(pokemons));
     }
   };
 
@@ -142,44 +164,42 @@ export const useResources = () => {
     const page = Number(event.currentTarget.textContent);
     if (!Number.isNaN(page)) {
       if (pokemonSorting === PokemonSorting.none && !searchPokemonResults?.length) {
-        dispatch(
-          specificPageAsync({ resourceType: 'pokemons', resultsAmount: pokemonResultsAmount, page })
-        );
+        dispatch(pokemonSpecificPageAsync({ resultsAmount: pokemonResultsAmount, page }));
       } else {
-        dispatch(specificPageSync({ resourceType: 'pokemons', page }));
+        dispatch(pokemonSpecificPageSync({ pokemons, page }));
       }
     }
   };
 
-  const handleTypeSorting = (sorting: MoveSorting | TypeSorting | PokemonSorting) => {
+  const handleTypeSorting = (sorting: string) => {
     if (sorting === TypeSorting.none && !searchTypeResults?.length) {
-      dispatch(sortingAsync({ resourceType: 'types', resultsAmount: typeResultsAmount }));
+      dispatch(typeSortingAsync(typeResultsAmount));
     } else {
-      dispatch(sortingSync({ resourceType: 'types', sorting: sorting }));
+      dispatch(typeSortingSync({ types, sorting: sorting as TypeSorting }));
     }
   };
 
   const handleTypesResultsAmount = (resultsAmount: number) => {
     if (typeSorting === TypeSorting.none && !searchTypeResults?.length) {
-      dispatch(resultsAmountAsync({ resourceType: 'types', resultsAmount }));
+      dispatch(typeResultsAmountAsync(resultsAmount));
     } else {
-      dispatch(resultsAmountSync({ resourceType: 'types', resultsAmount }));
+      dispatch(typeResultsAmountSync({ types, resultsAmount }));
     }
   };
 
   const handleNextTypePage = () => {
     if (typeSorting === TypeSorting.none && baseTypes?.next && !searchTypeResults?.length) {
-      dispatch(nextPageAsync({ resourceType: 'types', next: baseTypes.next }));
+      dispatch(typeNextPageAsync(baseTypes.next));
     } else {
-      dispatch(nextPageSync({ resourceType: 'types' }));
+      dispatch(typeNextPageSync(types));
     }
   };
 
   const handlePreviousTypePage = () => {
     if (typeSorting === TypeSorting.none && baseTypes?.previous && !searchTypeResults?.length) {
-      dispatch(previousPageAsync({ resourceType: 'types', previous: baseTypes.previous }));
+      dispatch(typePreviousPageAsync(baseTypes.previous));
     } else {
-      dispatch(previousPageSync({ resourceType: 'types' }));
+      dispatch(typePreviousPageSync(types));
     }
   };
 
@@ -187,11 +207,9 @@ export const useResources = () => {
     const page = Number(event.currentTarget.textContent);
     if (!Number.isNaN(page)) {
       if (typeSorting === TypeSorting.none && !searchTypeResults?.length) {
-        dispatch(
-          specificPageAsync({ resourceType: 'types', resultsAmount: typeResultsAmount, page })
-        );
+        dispatch(typeSpecificPageAsync({ resultsAmount: typeResultsAmount, page }));
       } else {
-        dispatch(specificPageSync({ resourceType: 'types', page }));
+        dispatch(typeSpecificPageSync({ types, page }));
       }
     }
   };

@@ -1,8 +1,7 @@
 import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage/components';
+import { useResources, useAppSelector } from 'hooks';
 import { MoveCard } from './components/MoveCard';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useAppSelector } from 'app/hooks';
-import { useResources } from 'hooks';
 import { MoveSorting } from 'types';
 import { Loader } from 'components';
 import * as S from './styled';

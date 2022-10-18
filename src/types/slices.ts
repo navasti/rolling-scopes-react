@@ -63,17 +63,6 @@ export type PreviousPageParams = {
   previous: string;
 };
 
-export type NextPagePayload = {
-  resourceType: 'pokemons' | 'moves' | 'types';
-};
-export type PreviousPagePayload = {
-  resourceType: 'pokemons' | 'moves' | 'types';
-};
-export type SpecificPagePayload = {
-  resourceType: 'pokemons' | 'moves' | 'types';
-  page: number;
-};
-
 export type SpecificPageParams = {
   resourceType: 'pokemons' | 'moves' | 'types';
   resultsAmount: number;
@@ -86,16 +75,6 @@ export type SearchResultsParams = {
   moveResultsAmount: number;
 };
 
-export type SortingPayload = {
-  sorting: PokemonSorting | MoveSorting | TypeSorting;
-  resourceType: 'pokemons' | 'moves' | 'types';
-};
-
-export type ResultsAmountPayload = {
-  resourceType: 'pokemons' | 'moves' | 'types';
-  resultsAmount: number;
-};
-
 export type SearchResultsPayload = {
   inputValue: string;
 };
@@ -106,4 +85,47 @@ export type TabsState = {
 
 export type FormState = {
   customPokemons: Array<CustomPokemon & { id: string }>;
+};
+
+export type PokemonSortingPayload = {
+  pokemons: Array<PokemonDetails>;
+  sorting: PokemonSorting;
+};
+
+export type MoveSortingPayload = {
+  moves: Array<PokemonMoveDetails>;
+  sorting: MoveSorting;
+};
+
+export type TypeSortingPayload = {
+  types: Array<PokemonTypeDetails>;
+  sorting: TypeSorting;
+};
+
+export type PokemonResultsPayload = {
+  pokemons: Array<PokemonDetails>;
+  resultsAmount: number;
+};
+
+export type MoveResultsPayload = {
+  moves: Array<PokemonMoveDetails>;
+  resultsAmount: number;
+};
+
+export type TypeResultsPayload = {
+  types: Array<PokemonTypeDetails>;
+  resultsAmount: number;
+};
+
+export type PokemonSpeficicPagePayload = {
+  pokemons: Array<PokemonDetails>;
+  page: number;
+};
+export type MoveSpeficicPagePayload = {
+  moves: Array<PokemonMoveDetails>;
+  page: number;
+};
+export type TypeSpeficicPagePayload = {
+  types: Array<PokemonTypeDetails>;
+  page: number;
 };

@@ -6,8 +6,8 @@ export const initialState: TabsState = {
   activeTab: AvailableTabs.pokemons,
 };
 
-const tabsSlice = createSlice({
-  name: 'tabs',
+const userSettingsSlice = createSlice({
+  name: 'userSettings',
   initialState,
   reducers: {
     activeTabSync: (state, action: PayloadAction<AvailableTabs>) => {
@@ -16,6 +16,6 @@ const tabsSlice = createSlice({
   },
 });
 
-const { actions, reducer } = tabsSlice;
+const { actions, reducer } = userSettingsSlice;
 export const { activeTabSync } = actions;
 export default reducer;

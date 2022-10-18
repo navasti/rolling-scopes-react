@@ -5,8 +5,8 @@ const initialState: FormState = {
   customPokemons: [],
 };
 
-const formSlice = createSlice({
-  name: 'form',
+const customPokemonSlice = createSlice({
+  name: 'customPokemon',
   initialState,
   reducers: {
     addCustomPokemon: (state, action: PayloadAction<CustomPokemon & { id: string }>) => {
@@ -15,7 +15,7 @@ const formSlice = createSlice({
   },
 });
 
-const { actions, reducer } = formSlice;
+const { actions, reducer } = customPokemonSlice;
 
 export const { addCustomPokemon } = actions;
 export default reducer;

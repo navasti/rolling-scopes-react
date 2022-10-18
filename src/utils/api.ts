@@ -4,7 +4,6 @@ import {
   PokemonTypeDetails,
   PokemonBaseData,
   PokemonDetails,
-  AllMappedData,
   MoveBaseData,
   TypeBaseData,
 } from 'types';
@@ -93,33 +92,25 @@ export const fetchAndMapTypes = async <T extends TypeBaseData>(url: string) => {
   }
 };
 
-export const fetchAllData = async (): Promise<Partial<AllMappedData> | undefined> => {
+export const fetchParameterizedData = async (value: string) => {
   try {
     const pokemons = await fetchAndMapPokemons(API.ALL_POKEMONS);
     const moves = await fetchAndMapMoves(API.ALL_MOVES);
     const types = await fetchAndMapTypes(API.ALL_TYPES);
-    return { pokemons, moves, types };
-  } catch (error) {
-    handleCatch(error);
-  }
-};
-
-export const fetchParameterizedData = async (value: string, allData?: Partial<AllMappedData>) => {
-  try {
-    const types = (allData?.types?.mapped || []).filter((item) => item.name.includes(value));
-    const moves = (allData?.moves?.mapped || []).filter((item) => item.name.includes(value));
-    const pokemons = (allData?.pokemons?.mapped || []).filter((item) => item.name.includes(value));
+    const typeResults = (types?.mapped || []).filter((item) => item.name.includes(value));
+    const moveResults = (moves?.mapped || []).filter((item) => item.name.includes(value));
+    const pokemonResults = (pokemons?.mapped || []).filter((item) => item.name.includes(value));
     return {
-      searchResults: { pokemons, moves, types },
+      searchResults: { pokemons: pokemonResults, moves: moveResults, types: typeResults },
       currentPageResults: {
-        pokemons: pokemons.slice(0, Limits.pokemon),
-        moves: moves.slice(0, Limits.move),
-        types: types.slice(0, Limits.type),
+        pokemons: pokemonResults.slice(0, Limits.pokemon),
+        moves: moveResults.slice(0, Limits.move),
+        types: typeResults.slice(0, Limits.type),
       },
       allDataResults: {
-        pokemons: allData?.pokemons?.mapped || [],
-        moves: allData?.moves?.mapped || [],
-        types: allData?.types?.mapped || [],
+        pokemons: pokemons?.mapped || [],
+        moves: moves?.mapped || [],
+        types: types?.mapped || [],
       },
     };
   } catch (error) {
@@ -127,8 +118,11 @@ export const fetchParameterizedData = async (value: string, allData?: Partial<Al
   }
 };
 
-export const fetchCurrentData = async (allData?: Partial<AllMappedData>) => {
+export const fetchCurrentData = async () => {
   try {
+    const pokemons = await fetchAndMapPokemons(API.ALL_POKEMONS);
+    const moves = await fetchAndMapMoves(API.ALL_MOVES);
+    const types = await fetchAndMapTypes(API.ALL_TYPES);
     const pokemonsData = await fetchAndMapPokemons(`${API.POKEMON}${API.POKEMON_LIMIT}`);
     const movesData = await fetchAndMapMoves(`${API.MOVE}${API.MOVE_LIMIT}`);
     const typesData = await fetchAndMapTypes(`${API.TYPE}${API.TYPE_LIMIT}`);
@@ -144,9 +138,9 @@ export const fetchCurrentData = async (allData?: Partial<AllMappedData>) => {
         types: typesData?.mapped || [],
       },
       allDataResults: {
-        pokemons: allData?.pokemons?.mapped || [],
-        types: allData?.types?.mapped || [],
-        moves: allData?.moves?.mapped || [],
+        pokemons: pokemons?.mapped || [],
+        types: types?.mapped || [],
+        moves: moves?.mapped || [],
       },
     };
   } catch (error) {

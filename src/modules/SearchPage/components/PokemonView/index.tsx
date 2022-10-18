@@ -1,9 +1,8 @@
 import { SortingSelector, Pagination, ResultsSelector } from 'modules/SearchPage/components';
 import { PokemonCard } from './components/PokemonCard';
+import { useResources, useAppSelector } from 'hooks';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useAppSelector } from 'app/hooks';
 import { PokemonSorting } from 'types';
-import { useResources } from 'hooks';
 import { Loader } from 'components';
 import * as S from './styled';
 

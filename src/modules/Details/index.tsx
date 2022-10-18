@@ -1,6 +1,7 @@
 import { MoveCardDetails, PokemonCardDetails, TypeCardDetails } from './components';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useAppSelector } from 'hooks';
 import { Layout } from 'modules';
 import * as S from './styled';
 import {
@@ -9,7 +10,6 @@ import {
   PokemonTypeDetails,
   PokemonDetails,
 } from 'types';
-import { useAppSelector } from 'app/hooks';
 
 type Props = {
   componentName: string;

@@ -3,7 +3,7 @@ import reportWebVitals from './reportWebVitals';
 import { GlobalStyles } from 'commonStyles';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from 'app/store';
+import { store } from 'toolkit';
 import { App } from 'modules';
 
 const root = ReactDOM.createRoot(document.getElementById('app-root') as HTMLElement);

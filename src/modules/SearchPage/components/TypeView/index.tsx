@@ -1,8 +1,7 @@
 import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage/components';
+import { useResources, useAppSelector } from 'hooks';
 import { TypeCard } from './components/TypeCard';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useAppSelector } from 'app/hooks';
-import { useResources } from 'hooks';
 import { TypeSorting } from 'types';
 import { Loader } from 'components';
 import * as S from './styled';
@@ -18,8 +17,8 @@ export const TypeView = () => {
     totalTypePages,
     handleTypeSorting,
     handleNextTypePage,
-    handlePreviousTypePage,
     handleSpecificTypePage,
+    handlePreviousTypePage,
     handleTypesResultsAmount,
   } = useResources();
 

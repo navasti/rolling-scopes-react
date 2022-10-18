@@ -1,8 +1,8 @@
-import { setAllDataAsync, setParameterizedDataAsync } from 'features/resources/resourcesSlice';
+import { allDataAsync, parameterizedDataAsync } from 'features/resources/resourcesSlice';
 import { SearchPage, About, NotFound, Form, Details } from 'modules';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { INPUT_VALUE_KEY } from 'appConstants';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch } from 'hooks';
 import { useEffect } from 'react';
 
 export const App = () => {
@@ -11,9 +11,9 @@ export const App = () => {
   useEffect(() => {
     const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
     if (!!inputValue?.trim()) {
-      dispatch(setParameterizedDataAsync(inputValue));
+      dispatch(parameterizedDataAsync(inputValue));
     } else {
-      dispatch(setAllDataAsync());
+      dispatch(allDataAsync());
     }
   }, [dispatch]);
 

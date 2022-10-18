@@ -1,13 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import resourcesReducer from 'features/resources/resourcesSlice';
-import tabsReducer from 'features/tabs/tabsSlice';
-import formReducer from 'features/form/formSlice';
+import userSettingsReducer from 'features/userSettings/userSettingsSlice';
+import customPokemonsReducer from 'features/customPokemon/customPokemonSlice';
 
 export const store = configureStore({
   reducer: {
     resources: resourcesReducer,
-    form: formReducer,
-    tabs: tabsReducer,
+    customPokemons: customPokemonsReducer,
+    userSettings: userSettingsReducer,
   },
 });
 

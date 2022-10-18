@@ -1,8 +1,8 @@
 import { searchResultsAsync, searchResultsSync } from 'features/resources/resourcesSlice';
 import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector, useResources } from 'hooks';
 import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Layout } from 'modules';
 import * as S from './styled';
 
@@ -15,8 +15,8 @@ export const SearchPage = ({ componentName, location }: Props) => {
   const [inputValue, setInputValue] = useState('');
   const dispatch = useAppDispatch();
 
-  const activeTab = useAppSelector((state) => state.tabs.activeTab);
-
+  const { isLoading } = useResources();
+  const activeTab = useAppSelector((state) => state.userSettings.activeTab);
   const { moveResultsAmount, typeResultsAmount, pokemonResultsAmount } = useAppSelector(
     (state) => state.resources
   );
@@ -48,7 +48,7 @@ export const SearchPage = ({ componentName, location }: Props) => {
       <S.SearchPageView>
         <SearchBar
           label="Local Storage Input"
-          inputDisabled={false}
+          inputDisabled={isLoading}
           inputValue={inputValue}
           onKeyDown={onKeyDown}
           onChange={onChange}

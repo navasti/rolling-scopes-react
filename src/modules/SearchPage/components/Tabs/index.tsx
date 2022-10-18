@@ -1,12 +1,12 @@
-import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { activeTabSync } from 'features/tabs/tabsSlice';
+import { activeTabSync } from 'features/userSettings/userSettingsSlice';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { AvailableTabs, TABS } from 'appConstants';
 import { useResources } from 'hooks';
 import * as S from './styled';
 
 export const Tabs = () => {
   const dispatch = useAppDispatch();
-  const activeTab = useAppSelector((state) => state.tabs.activeTab);
+  const activeTab = useAppSelector((state) => state.userSettings.activeTab);
   const { isLoading, totalPokemonResults, totalMoveResults, totalTypeResults } = useResources();
   return (
     <S.TabsWrapper>
