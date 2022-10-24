@@ -1,18 +1,26 @@
 import { SortingSelector, ResultsSelector, Pagination } from 'modules/SearchPage/components';
-import { useGlobalData, useResources } from 'hooks';
+import { useResources, useAppSelector } from 'hooks';
 import { TypeCard } from './components/TypeCard';
 import { RESULTS_AMOUNT } from 'appConstants';
-import { useAppContext } from 'contexts';
-import { Loader } from 'components';
 import { TypeSorting } from 'types';
+import { Loader } from 'components';
 import * as S from './styled';
 
 export const TypeView = () => {
-  const { handleSorting, handleResultsAmount, nextPage, previousPage, specificPage } =
-    useResources('types');
-  const { totalPageCounts } = useGlobalData();
   const options = Object.values(TypeSorting);
-  const { state } = useAppContext();
+
+  const { typeResultsAmount, currentTypes, typeSorting, currentTypePage } = useAppSelector(
+    (state) => state.resources
+  );
+  const {
+    isLoading,
+    totalTypePages,
+    handleTypeSorting,
+    handleNextTypePage,
+    handleSpecificTypePage,
+    handlePreviousTypePage,
+    handleTypesResultsAmount,
+  } = useResources();
 
   return (
     <S.TypeView>
@@ -20,29 +28,32 @@ export const TypeView = () => {
         <SortingSelector
           name="type"
           options={options}
-          value={state.sorting.types}
-          onChange={handleSorting}
+          value={typeSorting}
+          onChange={handleTypeSorting}
         />
         <ResultsSelector
+          onClick={handleTypesResultsAmount}
           options={RESULTS_AMOUNT.TYPE}
-          onClick={handleResultsAmount}
-          value={state.resultsAmount.types}
+          value={typeResultsAmount}
         />
       </S.SelectorsWrapper>
       <Pagination
-        totalPageCount={totalPageCounts.types}
-        currentPage={state.currentPage.types}
-        previousPage={previousPage}
-        specificPage={specificPage}
-        nextPage={nextPage}
+        currentPage={currentTypePage}
+        totalPageCount={totalTypePages}
+        previousPage={handlePreviousTypePage}
+        specificPage={handleSpecificTypePage}
+        nextPage={handleNextTypePage}
       />
-      {!state.currentPageResults.types?.length && <S.TextCenter>No types found</S.TextCenter>}
-      {state.isLoading && <Loader />}
-      <S.CardsWrapper visible={!state.isLoading}>
-        {state.currentPageResults.types.map((type) => (
-          <TypeCard key={type.id} type={type} />
-        ))}
-      </S.CardsWrapper>
+      {!currentTypes?.length && !isLoading && <S.TextCenter>No types found</S.TextCenter>}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <S.CardsWrapper>
+          {currentTypes.map((type) => (
+            <TypeCard key={type.id} type={type} />
+          ))}
+        </S.CardsWrapper>
+      )}
     </S.TypeView>
   );
 };

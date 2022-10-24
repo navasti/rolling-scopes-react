@@ -2,7 +2,7 @@ import { AvailableTabs, FEMALE, Fields, Limits, MALE, TABS } from 'appConstants'
 import { ChangeEvent, KeyboardEvent, RefObject } from 'react';
 import { UseFormRegisterReturn } from 'react-hook-form';
 
-export * from './appReducer';
+export * from './slices';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;
@@ -378,4 +378,35 @@ export type ErrorsObject = {
   gender: null | string;
   name: null | string;
   type: null | string;
+};
+
+export type CurrentDataThunk = {
+  currentPageResults: CurrentPageResults;
+  allDataResults: AllDataResults;
+  searchResults: SearchResults;
+};
+
+export type AllDataThunk = {
+  currentPageResults: CurrentPageResults;
+  allDataResults: AllDataResults;
+  baseData: BaseData;
+};
+
+export type ScpecificPageParams = { resultsAmount: number; page: number };
+
+export type PokemonResultsThunk = { data: MappedPokemons; resultsAmount: number };
+export type MoveResultsThunk = { data: MappedMoves; resultsAmount: number };
+export type TypeResultsThunk = { data: MappedTypes; resultsAmount: number };
+
+export type PokemonSpecificPageThunk = { data: MappedPokemons; page: number };
+export type MoveSpecificPageThunk = { data: MappedMoves; page: number };
+export type TypeSpecificPageThunk = { data: MappedTypes; page: number };
+
+export type SearchResultsThunk = {
+  pokemonResultsAmount: number;
+  typeResultsAmount: number;
+  moveResultsAmount: number;
+  pokemons: MappedPokemons;
+  moves: MappedMoves;
+  types: MappedTypes;
 };

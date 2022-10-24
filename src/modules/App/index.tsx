@@ -1,52 +1,21 @@
-import { fetchAllData, fetchCurrentData, getCurrentDataByParam, handleCatch } from 'utils';
+import { allDataAsync, parameterizedDataAsync } from 'features/resources/resourcesSlice';
 import { SearchPage, About, NotFound, Form, Details } from 'modules';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { INPUT_VALUE_KEY } from 'appConstants';
-import { useAppContext } from 'contexts';
-import { PayloadTypes } from 'types';
+import { useAppDispatch } from 'hooks';
 import { useEffect } from 'react';
 
 export const App = () => {
-  const { dispatch, setIsLoading } = useAppContext();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const inputValue = window.localStorage.getItem(INPUT_VALUE_KEY);
     if (!!inputValue?.trim()) {
-      fetchAllData()
-        .then((allData) => getCurrentDataByParam(inputValue, allData))
-        .then((data) => {
-          if (data?.allDataResults) {
-            dispatch({
-              type: PayloadTypes.currentParamData,
-              payload: {
-                currentPageResults: data.currentPageResults,
-                allDataResults: data.allDataResults,
-                searchResults: data.searchResults,
-              },
-            });
-            setIsLoading(false);
-          }
-        })
-        .catch((error) => handleCatch(error));
+      dispatch(parameterizedDataAsync(inputValue));
     } else {
-      fetchAllData()
-        .then((allData) => fetchCurrentData(allData))
-        .then((data) => {
-          if (data?.allDataResults) {
-            dispatch({
-              type: PayloadTypes.currentData,
-              payload: {
-                baseData: data.baseData,
-                allDataResults: data.allDataResults,
-                currentPageResults: data.currentPageResults,
-              },
-            });
-            setIsLoading(false);
-          }
-        })
-        .catch((error) => handleCatch(error));
+      dispatch(allDataAsync());
     }
-  }, [dispatch, setIsLoading]);
+  }, [dispatch]);
 
   return (
     <Routes>

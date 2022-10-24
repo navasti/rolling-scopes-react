@@ -19,18 +19,16 @@ export const TextCenter = styled.p`
   text-align: center;
 `;
 
-export const CardsWrapper = styled.div<{ visible: boolean }>`
+export const CardsWrapper = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.3s ease-in;
   display: grid;
   width: 100%;
   gap: 10px;
 `;
 
-export const SmallerCardsWrapper = styled.div<{ visible: boolean }>`
+export const SmallerCardsWrapper = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  opacity: ${({ visible }) => (visible ? 1 : 0)};
   transition: opacity 0.3s ease-in;
   display: grid;
   width: 100%;
