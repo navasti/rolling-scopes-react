@@ -44,27 +44,27 @@ export enum Status {
 }
 
 export type SortingThunkParams = {
-  resourceType: 'pokemons' | 'moves' | 'types';
+  resourceType: AvailableTabs;
   resultsAmount: number;
 };
 
 export type ResultsAmountParams = {
-  resourceType: 'pokemons' | 'moves' | 'types';
+  resourceType: AvailableTabs;
   resultsAmount: number;
 };
 
 export type NextPageParams = {
-  resourceType: 'pokemons' | 'moves' | 'types';
+  resourceType: AvailableTabs;
   next: string;
 };
 
 export type PreviousPageParams = {
-  resourceType: 'pokemons' | 'moves' | 'types';
+  resourceType: AvailableTabs;
   previous: string;
 };
 
 export type SpecificPageParams = {
-  resourceType: 'pokemons' | 'moves' | 'types';
+  resourceType: AvailableTabs;
   resultsAmount: number;
   page: number;
 };

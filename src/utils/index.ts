@@ -92,10 +92,6 @@ export const sortType = (array: Array<PokemonTypeDetails>) => ({
     array.sort((a, b) => a.id - b.id).sort((a, b) => b.pokemon.length - a.pokemon.length),
 });
 
-export const isPokemon = (resourceType: string) => resourceType === 'pokemons';
-export const isMove = (resourceType: string) => resourceType === 'moves';
-export const isType = (resourceType: string) => resourceType === 'types';
-
 export const moveSortObject = (moves: Array<PokemonMoveDetails>) => ({
   [MoveSorting.alphabetical]: sortMove(moves).alphabetical,
   [MoveSorting.accuracy]: sortMove(moves).byAccuracy,
