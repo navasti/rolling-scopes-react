@@ -2,6 +2,8 @@
 
 Project created as part of the Rolling Scopes School course
 
+Link to the modules: https://github.com/rolling-scopes-school/tasks/tree/master/react/modules
+
 ## Getting Started
 
 Install all dependencies:
