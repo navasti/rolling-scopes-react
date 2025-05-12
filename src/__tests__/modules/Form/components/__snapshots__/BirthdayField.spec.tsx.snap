@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BirthdayField should be rendered and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-bczRLJ kPaMot"
+  >
+    *Birthday
+    <input
+      max="2022-08-09"
+      name="birthday"
+      type="date"
+    />
+  </label>
+  <span
+    data-testid="message-mock"
+    style="opacity: 0; text-align: left; color: red;"
+  />
+</div>
+`;

@@ -1,23 +1,27 @@
+import { SEARCH_BAR_INSTRUCTIONS } from 'appConstants';
+import { ChangeEvent, KeyboardEvent } from 'react';
+import { SearchIcon } from 'assets/images/svg';
 import * as S from './styled';
-import { SearchIcon } from 'assets/images';
-import React, { ChangeEvent } from 'react';
 
 type Props = {
   label: string;
   inputValue: string;
+  inputDisabled: boolean;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
 };
 
-export class SearchBar extends React.Component<Props, unknown> {
-  render() {
-    const { inputValue, label, onChange } = this.props;
-    return (
+export const SearchBar = ({ inputValue, label, inputDisabled, onChange, onKeyDown }: Props) => {
+  return (
+    <>
       <S.SearchBar>
         <S.Label htmlFor="storage-input">{label}</S.Label>
         <S.InputWrapper>
-          <SearchIcon />
+          <SearchIcon data-testid="search-icon" />
           <S.Input
             placeholder="Type here"
+            disabled={inputDisabled}
+            onKeyDown={onKeyDown}
             onChange={onChange}
             value={inputValue}
             id="storage-input"
@@ -25,6 +29,11 @@ export class SearchBar extends React.Component<Props, unknown> {
           />
         </S.InputWrapper>
       </S.SearchBar>
-    );
-  }
-}
+      <S.InputInstructions>
+        {SEARCH_BAR_INSTRUCTIONS.map((instruction) => (
+          <S.InputInstruction key={instruction}>{instruction}</S.InputInstruction>
+        ))}
+      </S.InputInstructions>
+    </>
+  );
+};

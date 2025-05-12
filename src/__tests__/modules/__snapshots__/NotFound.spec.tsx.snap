@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NotFound component should match snapshot and not found text should be visible 1`] = `
+<div>
+  <div>
+    <p>
+      <span
+        data-testid="component-mock"
+      >
+        NotFound
+      </span>
+      <span
+        data-testid="location-mock"
+      >
+        /404
+      </span>
+    </p>
+    <main>
+      <div
+        class="sc-bczRLJ kBMGpg"
+      >
+        <p
+          class="sc-gsnTZi ejVgEr"
+        >
+          404. Unfortunately page was not found
+        </p>
+      </div>
+    </main>
+  </div>
+</div>
+`;
