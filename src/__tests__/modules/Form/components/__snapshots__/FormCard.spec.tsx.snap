@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormCard should be rendered and match snapshot 1`] = `
+<div>
+  <div
+    class="sc-ftvSup gMTpqP"
+  >
+    <div
+      class="sc-papXJ hdrgJG"
+    >
+      <img
+        height="100"
+        src="questionmark.png"
+        width="100"
+      />
+    </div>
+    <div
+      class="sc-jqUVSM kaNsMT"
+    >
+      <p>
+        Name
+        : 
+        <span>
+          Charmander
+        </span>
+      </p>
+      <p>
+        Gender
+        : 
+        <span>
+          Male
+        </span>
+      </p>
+      <p>
+        Main type
+        : 
+        <span>
+          Fire
+        </span>
+      </p>
+      <p>
+        Birthday
+        : 
+        <span>
+          01-01-1999
+        </span>
+      </p>
+      <p>
+        Shiny
+        : 
+        <span>
+          Yes
+        </span>
+      </p>
+    </div>
+  </div>
+</div>
+`;

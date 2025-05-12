@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal modal should match the snapshot 1`] = `
+<div
+  data-testid="modal-mock"
+  id="modal-root"
+>
+  <div
+    class="sc-gsnTZi kOjvcg"
+  >
+    <div
+      class="sc-dkzDqf jCvLml"
+    >
+      <header
+        class="sc-hKMtZM cuhbOU"
+      >
+        <span
+          class="sc-gKXOVf iuBSNt"
+        >
+          Title
+        </span>
+        <button
+          class="sc-eCYdqJ iPyUzY"
+        >
+          <svg>
+            times.svg
+          </svg>
+        </button>
+      </header>
+      <div
+        class="sc-jSMfEi ihWpvY"
+      >
+        <div
+          data-testid="modal-content"
+        >
+          Content
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

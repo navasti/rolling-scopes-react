@@ -1,0 +1,142 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form should be rendered and match snapshot 1`] = `
+<div>
+  <div>
+    <p>
+      <span
+        data-testid="component-mock"
+      >
+        Test
+      </span>
+      <span
+        data-testid="location-mock"
+      >
+        /test
+      </span>
+    </p>
+    <main>
+      <div
+        class="sc-bczRLJ ckBqkA"
+      >
+        <span
+          class="sc-gsnTZi KSJOv"
+        >
+          Create custom pokemon!
+        </span>
+        <form
+          class="sc-dkzDqf jQzErX"
+        >
+          <label
+            for="name"
+          >
+            <input
+              data-testid="name-mock"
+              id="name"
+              type="text"
+            />
+          </label>
+          <label
+            for="type"
+          >
+            <select
+              data-testid="type-mock"
+              id="type"
+            />
+          </label>
+          <div
+            class="sc-gKXOVf bEMisw"
+          >
+            <div
+              class="sc-iBkjds kGGQgE"
+            >
+              *Gender
+              <div
+                class="sc-ftvSup lbyCAw"
+              >
+                <label
+                  for="gender"
+                >
+                  <input
+                    data-testid="gender-mock"
+                    id="gender"
+                    type="radio"
+                    value="female"
+                  />
+                </label>
+                <label
+                  for="gender"
+                >
+                  <input
+                    data-testid="gender-mock"
+                    id="gender"
+                    type="radio"
+                    value="male"
+                  />
+                </label>
+              </div>
+            </div>
+            <span
+              data-testid="message-mock"
+              style="opacity: 0; text-align: left; color: red;"
+            />
+          </div>
+          <label
+            for="birth"
+          >
+            <input
+              data-testid="birth-mock"
+              id="birth"
+              type="date"
+            />
+          </label>
+          <label
+            for="avatar"
+          >
+            <input
+              data-testid="avatar-mock"
+              id="avatar"
+              type="file"
+            />
+          </label>
+          <label
+            for="shiny"
+          >
+            <input
+              data-testid="shiny-mock"
+              id="shiny"
+              type="checkbox"
+            />
+          </label>
+          <label
+            for="consent"
+          >
+            <input
+              data-testid="consent-mock"
+              id="consent"
+              type="checkbox"
+            />
+          </label>
+          <button
+            class="sc-eCYdqJ blCYfq"
+            disabled=""
+            type="submit"
+          >
+            Submit
+          </button>
+          <span
+            data-testid="message-mock"
+            style="opacity: 0; text-align: center; color: green;"
+          >
+            Pokemon added successfuly
+          </span>
+        </form>
+        <hr />
+        <div
+          class="sc-jSMfEi iqEWfA"
+        />
+      </div>
+    </main>
+  </div>
+</div>
+`;
