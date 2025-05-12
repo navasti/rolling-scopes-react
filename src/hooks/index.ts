@@ -1,3 +1,3 @@
-export * from './usePaginationRange';
-export * from './useGlobalData';
-export * from './useResources';
+export { useAppDispatch, useAppSelector } from './toolkitHooks';
+export { usePaginationRange } from './usePaginationRange';
+export { useResources } from './useResources';
