@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PokemonCard pokemon card should be rendered and match snapshot 1`] = `
+<div>
+  <div
+    class="sc-dkzDqf eitniG"
+  >
+    <div
+      class="sc-hKMtZM jcSmlG"
+    >
+      <img
+        alt="bulbasaur"
+        class="sc-eCYdqJ gbXGPj"
+        data-testid="pokemon-card"
+        height="85"
+        role="img"
+        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"
+        width="85"
+      />
+      <div
+        class="sc-gKXOVf dOkNJe"
+      >
+        <span
+          class="sc-jSMfEi jXKmd"
+        >
+          Base:
+        </span>
+        <p>
+          Name: 
+          bulbasaur
+        </p>
+        <p>
+          Types: 
+          <span>
+            fire
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

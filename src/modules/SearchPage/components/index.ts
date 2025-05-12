@@ -1,2 +1,8 @@
+export { SortingSelector } from './SortingSelector';
+export { ResultsSelector } from './ResultsSelector';
+export { PokemonView } from './PokemonView';
+export { Pagination } from './Pagination';
 export { SearchBar } from './SearchBar';
-export { Card } from './Card';
+export { MoveView } from './MoveView';
+export { TypeView } from './TypeView';
+export { Tabs } from './Tabs';

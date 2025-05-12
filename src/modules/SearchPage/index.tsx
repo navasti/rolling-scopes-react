@@ -1,9 +1,8 @@
-import { fetchDetailedPokemons, fetchPokemons } from 'utils';
-import { API_URL, INPUT_VALUE_KEY } from 'appConstants';
-import { SearchBar, Card } from './components';
-import React, { ChangeEvent } from 'react';
-import { PokemonDetails } from 'types';
-import { Loader } from 'components';
+import { searchResultsAsync, searchResultsSync } from 'features/resources/resourcesSlice';
+import { SearchBar, Tabs, PokemonView, MoveView, TypeView } from './components';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector, useResources } from 'hooks';
+import { AvailableTabs, INPUT_VALUE_KEY } from 'appConstants';
 import { Layout } from 'modules';
 import * as S from './styled';
 
@@ -12,56 +11,53 @@ type Props = {
   location: string;
 };
 
-type State = {
-  pokemons: Array<PokemonDetails>;
-  inputValue: string;
-  isLoading: boolean;
-};
+export const SearchPage = ({ componentName, location }: Props) => {
+  const [inputValue, setInputValue] = useState('');
+  const dispatch = useAppDispatch();
 
-export class SearchPage extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      inputValue: '',
-      pokemons: [],
-    };
-  }
-  componentDidMount() {
+  const { isLoading } = useResources();
+  const activeTab = useAppSelector((state) => state.userSettings.activeTab);
+  const { moveResultsAmount, typeResultsAmount, pokemonResultsAmount } = useAppSelector(
+    (state) => state.resources
+  );
+
+  useEffect(() => {
     const value = window.localStorage.getItem(INPUT_VALUE_KEY);
-    if (value != null) {
-      this.setState({ inputValue: value });
+    value && setInputValue(value);
+  }, []);
+
+  const onKeyDown = async ({ key }: KeyboardEvent<HTMLInputElement>) => {
+    if (key === 'Enter') {
+      if (!!inputValue.trim().length) {
+        dispatch(searchResultsSync({ inputValue }));
+      } else {
+        dispatch(
+          searchResultsAsync({ moveResultsAmount, pokemonResultsAmount, typeResultsAmount })
+        );
+      }
     }
-    fetchPokemons(API_URL)
-      .then((pokemons) => fetchDetailedPokemons(pokemons))
-      .then((pokemons) => this.setState({ pokemons }))
-      .finally(() => setTimeout(() => this.setState({ isLoading: false }), 1000));
-  }
-  onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    this.setState({ inputValue: value });
-    window.localStorage.setItem(INPUT_VALUE_KEY, value);
   };
-  render() {
-    const { inputValue, isLoading, pokemons } = this.state;
-    const { componentName, location } = this.props;
-    return (
-      <Layout componentName={componentName} location={location}>
-        <S.SearchPageView>
-          <SearchBar onChange={this.onChange} label="Local Storage Input" inputValue={inputValue} />
-          {!isLoading && !pokemons.length ? (
-            <S.CommonMessage>No pokemons found</S.CommonMessage>
-          ) : (
-            <S.CardsWrapper isLoading={isLoading}>
-              {isLoading ? (
-                <Loader />
-              ) : (
-                pokemons.map((pokemon) => <Card key={pokemon.id} pokemon={pokemon} />)
-              )}
-            </S.CardsWrapper>
-          )}
-        </S.SearchPageView>
-      </Layout>
-    );
-  }
-}
+
+  const onChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(target.value);
+    window.localStorage.setItem(INPUT_VALUE_KEY, target.value);
+  };
+
+  return (
+    <Layout componentName={componentName} location={location}>
+      <S.SearchPageView>
+        <SearchBar
+          label="Local Storage Input"
+          inputDisabled={isLoading}
+          inputValue={inputValue}
+          onKeyDown={onKeyDown}
+          onChange={onChange}
+        />
+        <Tabs />
+        {activeTab === AvailableTabs.pokemons && <PokemonView />}
+        {activeTab === AvailableTabs.moves && <MoveView />}
+        {activeTab === AvailableTabs.types && <TypeView />}
+      </S.SearchPageView>
+    </Layout>
+  );
+};
