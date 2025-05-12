@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TypeField should be rendered and match snapshot 1`] = `
+<div>
+  <label
+    class="sc-bczRLJ gtzopV"
+    for="type"
+  >
+    *Main type
+    <select
+      id="type"
+      name="type"
+    >
+      <option
+        value=""
+      />
+      <option
+        value="fire"
+      >
+        fire
+      </option>
+      <option
+        value="grass"
+      >
+        grass
+      </option>
+      <option
+        value="poison"
+      >
+        poison
+      </option>
+      <option
+        value="flying"
+      >
+        flying
+      </option>
+      <option
+        value="ground"
+      >
+        ground
+      </option>
+      <option
+        value="psycho"
+      >
+        psycho
+      </option>
+      <option
+        value="water"
+      >
+        water
+      </option>
+      <option
+        value="ice"
+      >
+        ice
+      </option>
+    </select>
+  </label>
+  <span
+    data-testid="message-mock"
+    style="opacity: 0; text-align: left; color: red;"
+  />
+</div>
+`;

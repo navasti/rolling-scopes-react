@@ -3,18 +3,18 @@ import { PokemonDetails, PokemonMoveDetails, PokemonTypeDetails } from 'types';
 import { Modal } from 'components';
 
 type Props = {
-  handleModalOpened: (isModalOpened: boolean) => void;
-  selectedType?: PokemonTypeDetails;
-  selectedMove?: PokemonMoveDetails;
-  selectedPokemon?: PokemonDetails;
+  selectedType?: PokemonTypeDetails | null;
+  selectedMove?: PokemonMoveDetails | null;
+  selectedPokemon?: PokemonDetails | null;
+  handleCloseModal: () => void;
   isModalOpened: boolean;
 };
 
 export const DetailsModal = (props: Props) => {
-  const { handleModalOpened, isModalOpened, selectedMove, selectedPokemon, selectedType } = props;
+  const { handleCloseModal, isModalOpened, selectedMove, selectedPokemon, selectedType } = props;
   const title = selectedPokemon?.name || selectedMove?.name || selectedType?.name || '';
   return (
-    <Modal handleModalOpened={handleModalOpened} opened={isModalOpened} title={title}>
+    <Modal handleCloseModal={handleCloseModal} opened={isModalOpened} title={title}>
       {selectedPokemon ? (
         <PokemonModalContent selectedPokemon={selectedPokemon} />
       ) : selectedMove ? (

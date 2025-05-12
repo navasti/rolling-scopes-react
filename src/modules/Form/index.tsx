@@ -1,12 +1,22 @@
-import { FIELDS_VALIDATION_BY_NAME, FEMALE, MALE, ErrorMessages } from 'appConstants';
-import { CheckFields, CustomPokemon, ErrorsObject, TextFields } from 'types';
-import React, { createRef, FormEvent, RefObject } from 'react';
+import { addCustomPokemon } from 'features/customPokemon/customPokemonSlice';
+import { CustomPokemon, FormFields, MessageType } from 'types';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useState } from 'react';
 import { Layout } from 'modules';
 import * as S from './styled';
 import { uuid } from 'utils';
 import {
+  FORM_VALIDATION_SCHEMA,
+  SUCCESS_MESSAGE,
+  DEFAULT_VALUES,
+  Fields,
+  FEMALE,
+  MALE,
+} from 'appConstants';
+import {
   BirthdayField,
-  ErrorMessage,
   ConsentField,
   GenderField,
   AvatarField,
@@ -14,6 +24,7 @@ import {
   TypeField,
   NameField,
   FormCard,
+  Message,
 } from './components';
 
 type Props = {
@@ -21,190 +32,119 @@ type Props = {
   location: string;
 };
 
-type State = {
-  pokemons: Array<CustomPokemon & { id: string }>;
-  initialEnter: boolean;
-  errors: ErrorsObject;
-};
+export const Form = ({ componentName, location }: Props) => {
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [initialEnter, setInitialEnter] = useState(true);
 
-export class Form extends React.Component<Props, State> {
-  femaleInputRef: RefObject<HTMLInputElement>;
-  successMessage: RefObject<HTMLSpanElement>;
-  birthdayField: RefObject<HTMLInputElement>;
-  isShinyField: RefObject<HTMLInputElement>;
-  consentField: RefObject<HTMLInputElement>;
-  maleInputRef: RefObject<HTMLInputElement>;
-  avatarField: RefObject<HTMLInputElement>;
-  typeField: RefObject<HTMLSelectElement>;
-  nameField: RefObject<HTMLInputElement>;
+  const dispatch = useAppDispatch();
+  const { customPokemons } = useAppSelector((state) => state.customPokemons);
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      pokemons: [],
-      initialEnter: true,
-      errors: {
-        birthday: null,
-        consent: null,
-        gender: null,
-        name: null,
-        type: null,
-      },
-    };
-    this.successMessage = createRef();
-    this.femaleInputRef = createRef();
-    this.birthdayField = createRef();
-    this.consentField = createRef();
-    this.isShinyField = createRef();
-    this.maleInputRef = createRef();
-    this.avatarField = createRef();
-    this.typeField = createRef();
-    this.nameField = createRef();
-  }
+  const {
+    formState: { errors },
+    handleSubmit,
+    clearErrors,
+    register,
+    reset,
+    watch,
+  } = useForm<FormFields>({
+    resolver: yupResolver(FORM_VALIDATION_SCHEMA),
+    defaultValues: DEFAULT_VALUES,
+    reValidateMode: 'onSubmit',
+  });
 
-  removeError = (field: TextFields | CheckFields) => {
-    if (this.state.initialEnter) this.setState({ initialEnter: false });
-    const errors = { ...this.state.errors };
-    errors[field] = null;
-    this.setState({ errors });
-  };
-
-  validate = (fields: Array<React.RefObject<HTMLInputElement | HTMLSelectElement>>) => {
-    const errors = { ...this.state.errors };
-    const textFields = FIELDS_VALIDATION_BY_NAME.TEXT.map((textField) =>
-      fields.find((field) => field.current?.name === textField)
-    );
-    const checkFields = FIELDS_VALIDATION_BY_NAME.CHECK.map((checkField) =>
-      fields.filter((field) => field.current?.name === checkField)
-    );
-    checkFields.forEach((checkField) => {
-      const valid = checkField.some((field) => (field.current as HTMLInputElement)?.checked);
-      const name = checkField[0]?.current?.name
-        ? (checkField[0].current.name as CheckFields)
-        : null;
-      if (!valid && name) errors[name] = ErrorMessages[name];
-    });
-    textFields.forEach((textField) => {
-      const name = textField?.current?.name ? (textField.current.name as TextFields) : null;
-      const value = textField?.current?.value;
-      const valid = value && value.trim().length >= 2;
-      if (!valid && name) errors[name] = ErrorMessages[name];
-    });
-    return errors;
-  };
-
-  prepareCustomPokemon = () => {
-    const shiny = !!this.isShinyField.current?.checked;
-    const female = this.femaleInputRef?.current?.checked;
-    const file = this.avatarField.current?.files?.[0] || null;
+  const onSubmit: SubmitHandler<FormFields> = (fieldValues) => {
+    const { shiny, avatar, gender, name, type, birthday } = fieldValues;
     const customPokemon: CustomPokemon & { id: string } = {
-      birthday: this.birthdayField?.current?.value || '',
-      type: this.typeField?.current?.value || '',
-      name: this.nameField?.current?.value || '',
-      gender: female ? FEMALE : MALE,
-      avatar: file,
+      avatar: !!avatar?.length ? avatar[0] : null,
       id: uuid(),
+      birthday,
+      gender,
       shiny,
+      type,
+      name,
     };
-    return customPokemon;
+    setShowSuccessMessage(true);
+    dispatch(addCustomPokemon(customPokemon));
+    reset(DEFAULT_VALUES, { keepValues: false });
   };
 
-  handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const fields = [
-      this.nameField,
-      this.typeField,
-      this.avatarField,
-      this.isShinyField,
-      this.consentField,
-      this.birthdayField,
-      this.maleInputRef,
-      this.femaleInputRef,
-    ];
-    const errors = this.validate(fields);
-    if (Object.values(errors).some((error) => error != null)) {
-      this.setState({ errors });
-    } else {
-      const customPokemon = this.prepareCustomPokemon();
-      this.setState({
-        pokemons: [...this.state.pokemons, customPokemon],
-      });
-      fields.forEach((field) => {
-        const current = field.current;
-        if (current) {
-          if (current.type === 'radio' || current.type === 'checkbox') {
-            (current as HTMLInputElement).checked = false;
-          } else current.value = '';
-        }
-      });
-    }
+  watch(() => initialEnter && setInitialEnter(false));
+
+  const onChange = (field: Fields) => {
+    !!errors[field]?.message && clearErrors(field);
+    !!showSuccessMessage && setShowSuccessMessage(false);
   };
 
-  render() {
-    const { location, componentName } = this.props;
-    return (
-      <Layout location={location} componentName={componentName}>
-        <S.CommonView>
-          <S.FormHeading>Create custom pokemon!</S.FormHeading>
-          <S.Form onSubmit={this.handleSubmit}>
-            <NameField
-              onChange={this.removeError}
-              errors={this.state.errors}
-              ref={this.nameField}
+  return (
+    <Layout location={location} componentName={componentName}>
+      <S.CommonView>
+        <S.FormHeading>Create custom pokemon!</S.FormHeading>
+        <S.Form onSubmit={handleSubmit(onSubmit)}>
+          <NameField
+            error={errors.name?.message}
+            {...register(Fields.name, {
+              onChange: () => onChange(Fields.name),
+            })}
+          />
+          <TypeField
+            error={errors.type?.message}
+            {...register(Fields.type, { onChange: () => onChange(Fields.type) })}
+          />
+          <S.GenderWrapper>
+            <S.RadioWrapper>
+              *Gender
+              <S.RadioFields>
+                <GenderField
+                  {...register(Fields.gender, { onChange: () => onChange(Fields.gender) })}
+                  value={FEMALE}
+                />
+                <GenderField
+                  {...register(Fields.gender, { onChange: () => onChange(Fields.gender) })}
+                  value={MALE}
+                />
+              </S.RadioFields>
+            </S.RadioWrapper>
+            <Message
+              message={errors.gender?.message || ''}
+              visible={!!errors.gender?.message}
+              type={MessageType.error}
             />
-            <TypeField
-              onChange={this.removeError}
-              errors={this.state.errors}
-              ref={this.typeField}
-            />
-            <S.GenderWrapper>
-              <S.RadioWrapper>
-                *Gender
-                <S.RadioFields>
-                  <GenderField
-                    name={FEMALE}
-                    ref={this.femaleInputRef}
-                    onChange={this.removeError}
-                  />
-                  <GenderField name={MALE} ref={this.maleInputRef} onChange={this.removeError} />
-                </S.RadioFields>
-              </S.RadioWrapper>
-              <ErrorMessage
-                visible={!!this.state.errors.gender}
-                message={this.state.errors.gender}
-              />
-            </S.GenderWrapper>
-            <BirthdayField
-              ref={this.birthdayField}
-              errors={this.state.errors}
-              onChange={this.removeError}
-            />
-            <AvatarField ref={this.avatarField} />
-            <ShinyField ref={this.isShinyField} />
-            <ConsentField
-              ref={this.consentField}
-              errors={this.state.errors}
-              onChange={this.removeError}
-            />
-            <S.SubmitButton
-              disabled={
-                this.state.initialEnter ||
-                Object.values(this.state.errors).some((error) => error != null)
-              }
-              type="submit"
-            >
-              Submit
-            </S.SubmitButton>
-            <S.SuccessMessage ref={this.successMessage}>Pokemon added successfuly</S.SuccessMessage>
-          </S.Form>
-          <hr />
-          <S.CardsGrid>
-            {this.state.pokemons.map((pokemon) => (
-              <FormCard key={pokemon.id} customPokemon={pokemon} />
-            ))}
-          </S.CardsGrid>
-        </S.CommonView>
-      </Layout>
-    );
-  }
-}
+          </S.GenderWrapper>
+          <BirthdayField
+            {...register(Fields.birthday, { onChange: () => onChange(Fields.birthday) })}
+            error={errors.birthday?.message}
+          />
+          <AvatarField
+            error={errors.avatar?.message}
+            {...register(Fields.avatar, { onChange: () => onChange(Fields.avatar) })}
+          />
+          <ShinyField {...register(Fields.shiny, { onChange: () => onChange(Fields.shiny) })} />
+          <ConsentField
+            error={errors.consent?.message}
+            {...register(Fields.consent, { onChange: () => onChange(Fields.consent) })}
+          />
+          <S.SubmitButton
+            disabled={
+              initialEnter || Object.values(errors).some((error) => error.message !== undefined)
+            }
+            type="submit"
+          >
+            Submit
+          </S.SubmitButton>
+          <Message
+            visible={showSuccessMessage}
+            type={MessageType.success}
+            message={SUCCESS_MESSAGE}
+            center
+          />
+        </S.Form>
+        <hr />
+        <S.CardsGrid>
+          {customPokemons.map((pokemon) => (
+            <FormCard key={pokemon.id} customPokemon={pokemon} />
+          ))}
+        </S.CardsGrid>
+      </S.CommonView>
+    </Layout>
+  );
+};

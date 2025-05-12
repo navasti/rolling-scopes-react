@@ -1,21 +1,32 @@
-import { AvailableTabs, tabs } from 'appConstants';
-import { Lengths } from 'types';
+import { activeTabSync } from 'features/userSettings/userSettingsSlice';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { AvailableTabs, TABS } from 'appConstants';
+import { useResources } from 'hooks';
 import * as S from './styled';
 
-type Props = {
-  onClick: (tab: AvailableTabs) => void;
-  activeTab: AvailableTabs;
-  options: typeof tabs;
-  isLoading: boolean;
-  lengths: Lengths;
-};
-
-export const Tabs = ({ activeTab, lengths, isLoading, options, onClick }: Props) => {
+export const Tabs = () => {
+  const dispatch = useAppDispatch();
+  const activeTab = useAppSelector((state) => state.userSettings.activeTab);
+  const { isLoading, totalPokemonResults, totalMoveResults, totalTypeResults } = useResources();
   return (
     <S.TabsWrapper>
-      {options.map((option) => (
-        <S.Tab active={option === activeTab} key={option} onClick={() => onClick(option)}>
-          {option} {!isLoading && `(${lengths[option]})`}
+      {TABS.map((option) => (
+        <S.Tab
+          active={option === activeTab}
+          key={option}
+          onClick={() => dispatch(activeTabSync(option))}
+        >
+          {option}{' '}
+          {!isLoading &&
+            `(${
+              option === AvailableTabs.pokemons
+                ? totalPokemonResults
+                : option === AvailableTabs.moves
+                ? totalMoveResults
+                : option === AvailableTabs.types
+                ? totalTypeResults
+                : 0
+            })`}
         </S.Tab>
       ))}
     </S.TabsWrapper>
