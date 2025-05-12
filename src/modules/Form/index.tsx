@@ -1,5 +1,7 @@
+import { addCustomPokemon } from 'features/customPokemon/customPokemonSlice';
 import { CustomPokemon, FormFields, MessageType } from 'types';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppDispatch, useAppSelector } from 'hooks';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useState } from 'react';
 import { Layout } from 'modules';
@@ -31,9 +33,11 @@ type Props = {
 };
 
 export const Form = ({ componentName, location }: Props) => {
-  const [pokemons, setPokemons] = useState<Array<CustomPokemon & { id: string }>>([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [initialEnter, setInitialEnter] = useState(true);
+
+  const dispatch = useAppDispatch();
+  const { customPokemons } = useAppSelector((state) => state.customPokemons);
 
   const {
     formState: { errors },
@@ -60,7 +64,7 @@ export const Form = ({ componentName, location }: Props) => {
       name,
     };
     setShowSuccessMessage(true);
-    setPokemons([...pokemons, customPokemon]);
+    dispatch(addCustomPokemon(customPokemon));
     reset(DEFAULT_VALUES, { keepValues: false });
   };
 
@@ -136,7 +140,7 @@ export const Form = ({ componentName, location }: Props) => {
         </S.Form>
         <hr />
         <S.CardsGrid>
-          {pokemons.map((pokemon) => (
+          {customPokemons.map((pokemon) => (
             <FormCard key={pokemon.id} customPokemon={pokemon} />
           ))}
         </S.CardsGrid>

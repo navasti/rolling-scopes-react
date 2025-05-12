@@ -1,18 +1,113 @@
 import { AvailableTabs, FEMALE, Fields, Limits, MALE, TABS } from 'appConstants';
-import { UseFormRegisterReturn } from 'react-hook-form';
 import { ChangeEvent, KeyboardEvent, RefObject } from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
+
+export * from './slices';
 
 export type TextFields = Fields.name | Fields.birthday | Fields.type;
 export type CheckFields = Fields.consent | Fields.gender;
-export type Lengths = PrepareLengths<typeof TABS>;
-export type PrepareLengths<Arr extends typeof TABS> = {
-  [P in Arr[number] as P]: number;
-};
 
 export enum MessageType {
   error = 'error',
   success = 'success',
 }
+
+export enum AvailableCardDetails {
+  pokemon = 'pokemon',
+  move = 'move',
+  type = 'type',
+}
+
+export enum MoveSorting {
+  none = 'none',
+  alphabetical = 'alphabetical',
+  accuracy = 'accuracy',
+  power = 'power',
+  pp = 'pp',
+}
+
+export enum PokemonSorting {
+  none = 'none',
+  alphabetical = 'alphabetical',
+  baseExperience = 'base experience',
+  height = 'height',
+  weight = 'weight',
+}
+
+export enum TypeSorting {
+  none = 'none',
+  pokemonsAmount = 'pokemons amount',
+  alphabetical = 'alphabetical',
+  movesAmount = 'moves amount',
+}
+
+export type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};
+
+export type MappedTypes = {
+  base: TypeBaseData | null;
+  mapped: PokemonTypeDetails[];
+};
+
+export type MappedPokemons = {
+  base: PokemonBaseData | null;
+  mapped: PokemonDetails[];
+};
+
+export type MappedMoves = {
+  base: MoveBaseData | null;
+  mapped: PokemonMoveDetails[];
+};
+
+export type AllMappedData = {
+  pokemons: MappedPokemons;
+  moves: MappedMoves;
+  types: MappedTypes;
+};
+
+export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
+
+export type SearchResults = {
+  pokemons: Array<PokemonDetails> | null;
+  types: Array<PokemonTypeDetails> | null;
+  moves: Array<PokemonMoveDetails> | null;
+};
+
+export type AllDataResults = {
+  pokemons: Array<PokemonDetails>;
+  moves: Array<PokemonMoveDetails>;
+  types: Array<PokemonTypeDetails>;
+};
+
+export type CurrentPageResults = {
+  pokemons: Array<PokemonDetails>;
+  moves: Array<PokemonMoveDetails>;
+  types: Array<PokemonTypeDetails>;
+};
+
+export type BaseData = {
+  pokemons: PokemonBaseData | null;
+  moves: MoveBaseData | null;
+  types: TypeBaseData | null;
+};
+
+export type Sorting = {
+  pokemons: PokemonSorting;
+  moves: MoveSorting;
+  types: TypeSorting;
+};
+
+export type CurrentPage = { pokemons: number; moves: number; types: number };
+
+export type ResultsAmount = { pokemons: number; moves: number; types: number };
+
+export type PokemonBaseData = {
+  previous: null | string;
+  results: Array<Pokemon>;
+  next: null | string;
+  count: number;
+};
 
 export type MessageProps = {
   message: string | null;
@@ -20,8 +115,6 @@ export type MessageProps = {
   visible: boolean;
   center?: boolean;
 };
-
-export type Details = PokemonDetails | PokemonMoveDetails | PokemonTypeDetails;
 
 export type CardsProps = {
   types: Array<PokemonTypeDetails>;
@@ -41,7 +134,6 @@ export type TabsProps = {
   activeTab: AvailableTabs;
   options: typeof TABS;
   isLoading: boolean;
-  lengths: Lengths;
 };
 
 export type SearchBarProps = {
@@ -77,33 +169,72 @@ export type LimitParams = {
 
 export type PokemonDetails = {
   abilities: Array<Ability>;
-  base_experience: number;
+  base_experience: number | null;
   types: Array<Type>;
   stats: Array<Stat>;
   sprites: Sprites;
-  height: number;
-  weight: number;
+  height: number | null;
+  weight: number | null;
   name: string;
   id: number;
 };
 
-export type PokemonData = {
-  previous: null | string;
-  results: Array<Pokemon>;
-  next: null | string;
-  count: number;
-};
-
-export type TypesData = {
+export type TypeBaseData = {
   previous: null | string;
   results: Array<PokemonType>;
   next: null | string;
   count: number;
 };
 
-export type MovesData = {
-  results: Array<PokemonMove>;
+export type BaseSearchMovesData = {
+  currentPageResults?: Array<PokemonMoveDetails>;
+  results: Array<PokemonMoveDetails>;
   previous: null | string;
+  next: null | string;
+  count: number;
+};
+
+export type BaseSearchPokemonsData = {
+  currentPageResults?: Array<PokemonDetails>;
+  results: Array<PokemonDetails>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+
+export type BaseSearchTypesData = {
+  currentPageResults?: Array<PokemonTypeDetails>;
+  results: Array<PokemonTypeDetails>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+
+export type BaseSortingData = {
+  pokemons: BaseSearchPokemonsData;
+  moves: BaseSearchMovesData;
+  types: BaseSearchTypesData;
+};
+
+export type BasePokemonsData = {
+  currentPageResults?: Array<PokemonDetails>;
+  previous: null | string;
+  results: Array<Pokemon>;
+  next: null | string;
+  count: number;
+};
+
+export type BaseTypesData = {
+  currentPageResults?: Array<PokemonTypeDetails>;
+  results: Array<PokemonType>;
+  previous: null | string;
+  next: null | string;
+  count: number;
+};
+
+export type MoveBaseData = {
+  previous: null | string;
+  results: Array<PokemonMove>;
   next: null | string;
   count: number;
 };
@@ -143,11 +274,11 @@ export type PokemonMove = {
 export type PokemonMoveDetails = {
   learned_by_pokemon: Array<Pokemon>;
   type: PokemonType;
-  accuracy: number;
-  priority: number;
-  power: number;
+  accuracy: number | null;
+  priority: number | null;
+  power: number | null;
   name: string;
-  pp: number;
+  pp: number | null;
   id: number;
 };
 
@@ -212,8 +343,8 @@ export type Type = {
 };
 
 export type Sprites = {
-  back_default: string;
-  front_default: string;
+  back_default: string | null;
+  front_default: string | null;
 };
 
 export type CommonFieldType = {
@@ -247,4 +378,35 @@ export type ErrorsObject = {
   gender: null | string;
   name: null | string;
   type: null | string;
+};
+
+export type CurrentDataThunk = {
+  currentPageResults: CurrentPageResults;
+  allDataResults: AllDataResults;
+  searchResults: SearchResults;
+};
+
+export type AllDataThunk = {
+  currentPageResults: CurrentPageResults;
+  allDataResults: AllDataResults;
+  baseData: BaseData;
+};
+
+export type ScpecificPageParams = { resultsAmount: number; page: number };
+
+export type PokemonResultsThunk = { data: MappedPokemons; resultsAmount: number };
+export type MoveResultsThunk = { data: MappedMoves; resultsAmount: number };
+export type TypeResultsThunk = { data: MappedTypes; resultsAmount: number };
+
+export type PokemonSpecificPageThunk = { data: MappedPokemons; page: number };
+export type MoveSpecificPageThunk = { data: MappedMoves; page: number };
+export type TypeSpecificPageThunk = { data: MappedTypes; page: number };
+
+export type SearchResultsThunk = {
+  pokemonResultsAmount: number;
+  typeResultsAmount: number;
+  moveResultsAmount: number;
+  pokemons: MappedPokemons;
+  moves: MappedMoves;
+  types: MappedTypes;
 };
